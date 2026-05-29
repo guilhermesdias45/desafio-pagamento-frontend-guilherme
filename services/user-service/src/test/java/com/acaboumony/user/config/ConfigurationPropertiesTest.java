@@ -1,6 +1,5 @@
 package com.acaboumony.user.config;
 
-import com.acaboumony.user.UserServiceApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,33 +11,21 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Verifies that all {@code @ConfigurationProperties} beans are correctly bound from
  * application properties at context startup.
  *
- * <p>Uses {@code @TestPropertySource} with dummy values to satisfy mandatory fields without
- * requiring Docker or real RSA keys.</p>
+ * <p>Loads only {@link JwtConfig} (the {@code @EnableConfigurationProperties} holder) so no
+ * infrastructure, repositories, or RSA key parsing is triggered.</p>
  */
-@SpringBootTest(classes = UserServiceApplication.class)
+@SpringBootTest(classes = JwtConfig.class)
 @TestPropertySource(properties = {
-        // JWT
         "jwt.private-key=test-private-key-base64-dummy",
         "jwt.public-key=test-public-key-base64-dummy",
         "jwt.access-token-expiration-seconds=900",
         "jwt.refresh-token-expiration-seconds=604800",
         "jwt.two-factor-token-expiration-seconds=300",
-        // TOTP
         "totp.aes-key=0000000000000000000000000000000000000000000000000000000000000000",
         "totp.issuer=AcabouoMonyTest",
-        // Internal
         "internal.secret=test-internal-secret-value",
-        // Security login
         "security.login.max-attempts=5",
-        "security.login.lockout-duration-minutes=30",
-        // Disable auto-config that needs real infrastructure
-        "spring.autoconfigure.exclude=" +
-                "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration," +
-                "org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration," +
-                "org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration," +
-                "org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration," +
-                "org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration",
-        "spring.jpa.hibernate.ddl-auto=none"
+        "security.login.lockout-duration-minutes=30"
 })
 class ConfigurationPropertiesTest {
 

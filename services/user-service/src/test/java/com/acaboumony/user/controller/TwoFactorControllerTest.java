@@ -11,8 +11,12 @@ import com.acaboumony.user.exception.RecoveryCodeExhaustedException;
 import com.acaboumony.user.exception.RecoveryCodeInvalidException;
 import com.acaboumony.user.exception.TwoFactorAlreadyEnabledException;
 import com.acaboumony.user.result.AuthResult;
+import com.acaboumony.user.config.InternalSecretProperties;
+import com.acaboumony.user.config.SecurityConfig;
+import com.acaboumony.user.config.TestSecurityConfig;
 import com.acaboumony.user.security.JwtAuthenticationToken;
 import com.acaboumony.user.security.JwtClaims;
+import com.acaboumony.user.security.JwtTokenValidator;
 import com.acaboumony.user.service.TwoFactorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -20,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -39,14 +45,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(
         controllers = TwoFactorController.class,
-        excludeAutoConfiguration = SecurityAutoConfiguration.class
+        excludeAutoConfiguration = SecurityAutoConfiguration.class,
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
 )
-@Import(GlobalExceptionHandler.class)
+@Import({GlobalExceptionHandler.class, TestSecurityConfig.class})
 class TwoFactorControllerTest {
 
     @Autowired MockMvc mvc;
     @Autowired ObjectMapper mapper;
     @MockBean TwoFactorService twoFactorService;
+    @MockBean InternalSecretProperties internalSecretProperties;
+    @MockBean JwtTokenValidator jwtTokenValidator;
 
     private JwtAuthenticationToken mockJwt() {
         UUID userId = UUID.randomUUID();

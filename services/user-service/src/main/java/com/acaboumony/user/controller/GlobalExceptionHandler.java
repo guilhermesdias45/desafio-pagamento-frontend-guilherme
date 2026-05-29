@@ -7,7 +7,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -61,15 +63,30 @@ public class GlobalExceptionHandler {
                 })
                 .toList();
 
+        String errorCode = resolveValidationErrorCode(ex.getBindingResult());
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Validation failed");
         pd.setType(URI.create("about:blank"));
-        pd.setProperty("errorCode", "VALIDATION_FAILED");
+        pd.setProperty("errorCode", errorCode);
         pd.setProperty("fieldErrors", fieldErrors);
         pd.setProperty("retryable", false);
         pd.setInstance(URI.create(req.getRequestURI()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .header("Content-Type", "application/problem+json")
                 .body(pd);
+    }
+
+    /**
+     * Promotes a single business error code to the top-level errorCode when ALL constraint
+     * violations share the same ALL_CAPS_WITH_UNDERSCORES code (e.g. INVALID_ROLE,
+     * MISSING_MERCHANT_DATA). Falls back to VALIDATION_FAILED for mixed or generic messages.
+     */
+    private String resolveValidationErrorCode(BindingResult bindingResult) {
+        List<String> distinct = bindingResult.getAllErrors().stream()
+                .map(ObjectError::getDefaultMessage)
+                .filter(m -> m != null && m.matches("[A-Z][A-Z0-9_]+"))
+                .distinct()
+                .toList();
+        return distinct.size() == 1 ? distinct.get(0) : "VALIDATION_FAILED";
     }
 
     private HttpStatus mapStatus(String errorCode) {
