@@ -38,7 +38,7 @@ class IpBlacklistRuleTest {
     void shouldReturnZeroWhenIpNotBlacklisted() {
         when(setOps.isMember(anyString(), anyString())).thenReturn(false);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(0, rule.evaluate(request, redis));
@@ -48,7 +48,7 @@ class IpBlacklistRuleTest {
     void shouldReturnFortyWhenIpIsBlacklisted() {
         when(setOps.isMember(anyString(), anyString())).thenReturn(true);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(40, rule.evaluate(request, redis));
@@ -58,7 +58,7 @@ class IpBlacklistRuleTest {
     void shouldUseIpSpecificRedisKey() {
         when(setOps.isMember(anyString(), anyString())).thenReturn(true);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "10.0.0.5", null, null, null
         );
         rule.evaluate(request, redis);

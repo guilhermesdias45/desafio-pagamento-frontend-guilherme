@@ -34,7 +34,7 @@ class FraudControllerTest {
     @Test
     void scoreEndpoint_shouldReturnFraudScore() throws Exception {
         FraudAnalysisRequest request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
         );
 
@@ -67,7 +67,7 @@ class FraudControllerTest {
     @Test
     void scoreEndpoint_withBlockedTransaction_shouldReturnBlockDecision() throws Exception {
         FraudAnalysisRequest request = new FraudAnalysisRequest(
-            "txn_002", UUID.randomUUID(), 5000L,
+            "txn_002", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "10.0.0.5", null, null, null
         );
 

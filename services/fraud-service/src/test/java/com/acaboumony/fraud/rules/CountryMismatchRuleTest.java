@@ -38,7 +38,7 @@ class CountryMismatchRuleTest {
     void shouldReturnZeroWhenIpAndCustomerCountryMatch() {
         when(valueOps.get(anyString())).thenReturn("BR");
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(0, rule.evaluate(request, redis));
@@ -49,7 +49,7 @@ class CountryMismatchRuleTest {
         when(valueOps.get(startsWith("fraud:country:ip:"))).thenReturn("US");
         when(valueOps.get(startsWith("fraud:country:customer:"))).thenReturn("BR");
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(20, rule.evaluate(request, redis));
@@ -59,7 +59,7 @@ class CountryMismatchRuleTest {
     void shouldReturnZeroWhenIpCountryUnknown() {
         when(valueOps.get(anyString())).thenReturn(null);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(0, rule.evaluate(request, redis));

@@ -59,7 +59,7 @@ class FraudDetectionServiceTest {
         ruleEngine = new RuleEngineService(redis);
         fraudDetection = new FraudDetectionService(ruleEngine, claudeAnalyzer, alertRepository, redis, eventProducer);
         request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
         );
     }
@@ -84,7 +84,7 @@ class FraudDetectionServiceTest {
         when(valueOps.get(startsWith("fraud:purchase_count:"))).thenReturn(null);
 
         var firstPurchaseMax = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 99_999L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 99_999L,
             "visa", "192.168.1.1", null, null, null
         );
 
@@ -101,7 +101,7 @@ class FraudDetectionServiceTest {
         when(setOps.isMember(anyString(), anyString())).thenReturn(false);
 
         var borderlineRequest = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
         );
 
@@ -118,7 +118,7 @@ class FraudDetectionServiceTest {
         when(valueOps.get(anyString())).thenReturn("1");
 
         var attackRequest = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "10.0.0.5", null, null, null
         );
 
@@ -155,7 +155,7 @@ class FraudDetectionServiceTest {
         when(claudeAnalyzer.getContextualAdjustment(any(), anyInt())).thenReturn(-10);
 
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "10.0.0.5", null, null, null
         );
 
@@ -167,7 +167,7 @@ class FraudDetectionServiceTest {
     @Test
     void globalTimeout_shouldReturnFallbackScore50() {
         mockNoTrigger();
-        when(zSetOps.count(anyString(), anyDouble(), anyDouble())).thenReturn(5L);
+        when(zSetOps.count(anyString(), anyDouble(), anyDouble())).thenReturn(3L);
         when(setOps.isMember(startsWith("fraud:ip_blacklist:"), anyString())).thenReturn(true);
 
         doAnswer(invocation -> {

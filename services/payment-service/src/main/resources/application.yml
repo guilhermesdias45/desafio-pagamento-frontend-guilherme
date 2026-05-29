@@ -14,9 +14,39 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9094}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        enable.idempotence: true
+    consumer:
+      group-id: payment-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        isolation.level: read_committed
+        auto.offset.reset: earliest
 
 server:
   port: 8082
+
+mercadopago:
+  access-token: ${MERCADOPAGO_ACCESS_TOKEN}
+
+fraud:
+  service:
+    url: ${FRAUD_SERVICE_URL:http://localhost:8085}
+
+order:
+  service:
+    url: ${ORDER_SERVICE_URL:http://localhost:8081}
+
+user:
+  service:
+    url: ${USER_SERVICE_URL:http://localhost:8083}
 
 management:
   endpoints:

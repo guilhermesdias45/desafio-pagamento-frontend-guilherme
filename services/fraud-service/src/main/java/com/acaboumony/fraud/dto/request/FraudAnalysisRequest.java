@@ -9,6 +9,7 @@ import java.util.UUID;
 public record FraudAnalysisRequest(
     @NotBlank String transactionId,
     @NotNull UUID customerId,
+    @NotNull UUID merchantId,
     @NotNull @Positive Long amountInCents,
     @NotBlank String paymentMethodId,
     @NotBlank String ipAddress,

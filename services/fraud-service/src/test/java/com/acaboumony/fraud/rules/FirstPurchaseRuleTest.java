@@ -38,7 +38,7 @@ class FirstPurchaseRuleTest {
     void shouldReturnZeroWhenCustomerHasHistoryAndBelowMax() {
         when(valueOps.get(anyString())).thenReturn("5");
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 50000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 50000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(0, rule.evaluate(request, redis));
@@ -48,7 +48,7 @@ class FirstPurchaseRuleTest {
     void shouldReturnZeroWhenFirstPurchaseButLowValue() {
         when(valueOps.get(anyString())).thenReturn(null);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 10000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 10000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(0, rule.evaluate(request, redis));
@@ -58,7 +58,7 @@ class FirstPurchaseRuleTest {
     void shouldReturnTwentyWhenFirstPurchaseAndMaxValue() {
         when(valueOps.get(anyString())).thenReturn(null);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 99999L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 99999L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(20, rule.evaluate(request, redis));
@@ -68,7 +68,7 @@ class FirstPurchaseRuleTest {
     void shouldReturnTwentyWhenFirstPurchaseAndAboveMaxValue() {
         when(valueOps.get(anyString())).thenReturn(null);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 200000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 200000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(20, rule.evaluate(request, redis));
@@ -78,7 +78,7 @@ class FirstPurchaseRuleTest {
     void shouldReturnZeroWhenHasHistoryAndMaxValue() {
         when(valueOps.get(anyString())).thenReturn("1");
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 99999L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 99999L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(0, rule.evaluate(request, redis));
