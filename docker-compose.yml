@@ -102,10 +102,7 @@ services:
     command: >
       bash -c "
         echo 'Criando tópicos Kafka...' &&
-        kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic user.registered      --partitions 3 --replication-factor 1 &&
-        kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic user.login.success   --partitions 3 --replication-factor 1 &&
-        kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic user.login.blocked   --partitions 3 --replication-factor 1 &&
-        kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic user.2fa.enabled     --partitions 3 --replication-factor 1 &&
+        kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic user-events          --partitions 3 --replication-factor 1 &&
         kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic transaction.completed --partitions 6 --replication-factor 1 &&
         kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic transaction.failed    --partitions 3 --replication-factor 1 &&
         kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic fraud.detected        --partitions 3 --replication-factor 1 &&
@@ -176,7 +173,9 @@ services:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       JWT_PRIVATE_KEY: ${JWT_PRIVATE_KEY}
       JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY}
-      AES_SECRET_KEY: ${AES_SECRET_KEY}
+      TOTP_AES_KEY: ${TOTP_AES_KEY}
+      INTERNAL_SECRET: ${INTERNAL_SECRET}
+      TOTP_ISSUER: ${TOTP_ISSUER:-AcabouoMony}
       MAIL_HOST: ${MAIL_HOST}
       MAIL_PORT: ${MAIL_PORT:-587}
       MAIL_USERNAME: ${MAIL_USERNAME}

@@ -26,9 +26,18 @@ server:
   port: 8081
 
 jwt:
+  private-key: ${JWT_PRIVATE_KEY:dev-fixture-not-used-in-tests}
+  public-key: ${JWT_PUBLIC_KEY:dev-fixture-not-used-in-tests}
   access-token-expiration-seconds: 900
   refresh-token-expiration-seconds: 604800
   two-factor-token-expiration-seconds: 300
+
+totp:
+  issuer: ${TOTP_ISSUER:AcabouoMony}
+  aes-key: ${TOTP_AES_KEY:0000000000000000000000000000000000000000000000000000000000000000}
+
+internal:
+  secret: ${INTERNAL_SECRET:dev-internal-secret}
 
 security:
   login:
