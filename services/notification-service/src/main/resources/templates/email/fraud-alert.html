@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"/></head>
+<body style="font-family: Arial, sans-serif;">
+<h2>[FRAUD ALERT] Transação bloqueada</h2>
+<p><strong>Transaction ID:</strong> <span th:text="${transactionId}">txn_123</span></p>
+<p><strong>Customer ID:</strong> <span th:text="${customerId}">uuid</span></p>
+<p><strong>Score:</strong> <span th:text="${score}">0</span></p>
+<p><strong>Razões:</strong> <span th:text="${reasons}">—</span></p>
+<p><strong>Detectado em:</strong> <span th:text="${detectedAt}">2026-01-01</span></p>
+<p>Esta é uma notificação automática do sistema antifraude.</p>
+</body>
+</html>

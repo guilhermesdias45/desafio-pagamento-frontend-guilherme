@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"/></head>
+<body style="font-family: Arial, sans-serif;">
+<h2>Pagamento confirmado!</h2>
+<p>Seu pagamento no valor de <strong th:text="${formattedAmount}">R$ 0,00</strong> foi confirmado.</p>
+<p><strong>Forma de pagamento:</strong> <span th:text="${cardBrand}">visa</span> **** <span th:text="${cardLastFour}">4242</span></p>
+<p><strong>Parcelas:</strong> <span th:text="${installments}">1</span>x</p>
+<p><strong>Itens:</strong></p>
+<div th:utext="${itemsHtml}"></div>
+<p><strong>Pedido:</strong> <span th:text="${orderId}">123</span></p>
+<p>Obrigado por comprar conosco!</p>
+<p>Atenciosamente,<br/>Equipe Acabou o Mony</p>
+</body>
+</html>

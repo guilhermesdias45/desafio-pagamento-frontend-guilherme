@@ -7,6 +7,8 @@ import com.acaboumony.order.dto.request.CreateOrderRequest;
 import com.acaboumony.order.dto.request.ItemRequest;
 import com.acaboumony.order.dto.response.OrderDetailResponse;
 import com.acaboumony.order.dto.response.PagedResponse;
+import com.acaboumony.order.event.OrderCreatedEvent;
+import com.acaboumony.order.event.OrderEventProducer;
 import com.acaboumony.order.exception.InsufficientPermissionsException;
 import com.acaboumony.order.exception.OrderCannotBeCancelledException;
 import com.acaboumony.order.exception.OrderNotFoundException;
@@ -49,6 +51,8 @@ class OrderServiceTest {
     private OrderRepository orderRepository;
     @Mock
     private IdempotencyService idempotencyService;
+    @Mock
+    private OrderEventProducer orderEventProducer;
     @Captor
     private ArgumentCaptor<Order> orderCaptor;
 
@@ -63,7 +67,7 @@ class OrderServiceTest {
     @BeforeEach
     void setUp() {
         orderMapper = new OrderMapper();
-        orderService = new OrderService(orderRepository, idempotencyService, orderMapper);
+        orderService = new OrderService(orderRepository, idempotencyService, orderMapper, orderEventProducer);
         customerId = UUID.randomUUID();
         merchantId = UUID.randomUUID();
         idempotencyKey = UUID.randomUUID();
@@ -98,6 +102,7 @@ class OrderServiceTest {
             assertThat(success.order().status()).isEqualTo("PENDING");
             assertThat(success.order().items()).hasSize(2);
             verify(idempotencyService).markProcessed(idempotencyKey, success.order().orderId());
+            verify(orderEventProducer).publishOrderCreated(any());
         }
 
         @Test

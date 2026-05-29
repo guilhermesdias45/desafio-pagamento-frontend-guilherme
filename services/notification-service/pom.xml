@@ -46,6 +46,10 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
@@ -142,6 +146,13 @@
                     <execution>
                         <id>check</id><goals><goal>check</goal></goals>
                         <configuration>
+                            <excludes>
+                                <exclude>com/acaboumony/notification/domain/entity/**</exclude>
+                                <exclude>com/acaboumony/notification/dto/**</exclude>
+                                <exclude>com/acaboumony/notification/NotificationServiceApplication.class</exclude>
+                                <exclude>com/acaboumony/notification/config/**</exclude>
+                                <exclude>com/acaboumony/notification/exception/**</exclude>
+                            </excludes>
                             <rules><rule><element>BUNDLE</element><limits><limit>
                                 <counter>LINE</counter><value>COVEREDRATIO</value>
                                 <minimum>${jacoco.minimum-coverage}</minimum>

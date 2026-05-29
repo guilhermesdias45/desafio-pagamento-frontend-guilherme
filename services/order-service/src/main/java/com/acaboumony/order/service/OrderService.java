@@ -8,6 +8,8 @@ import com.acaboumony.order.dto.request.ItemRequest;
 import com.acaboumony.order.dto.response.OrderDetailResponse;
 import com.acaboumony.order.dto.response.OrderResponse;
 import com.acaboumony.order.dto.response.PagedResponse;
+import com.acaboumony.order.event.OrderCreatedEvent;
+import com.acaboumony.order.event.OrderEventProducer;
 import com.acaboumony.order.exception.InsufficientPermissionsException;
 import com.acaboumony.order.exception.OrderCannotBeCancelledException;
 import com.acaboumony.order.exception.OrderNotFoundException;
@@ -34,13 +36,16 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final IdempotencyService idempotencyService;
     private final OrderMapper orderMapper;
+    private final OrderEventProducer orderEventProducer;
 
     public OrderService(OrderRepository orderRepository,
                         IdempotencyService idempotencyService,
-                        OrderMapper orderMapper) {
+                        OrderMapper orderMapper,
+                        OrderEventProducer orderEventProducer) {
         this.orderRepository = orderRepository;
         this.idempotencyService = idempotencyService;
         this.orderMapper = orderMapper;
+        this.orderEventProducer = orderEventProducer;
     }
 
     @Transactional
@@ -84,6 +89,17 @@ public class OrderService {
         orderRepository.save(order);
 
         idempotencyService.markProcessed(idempotencyKey, orderId);
+
+        var event = new OrderCreatedEvent(
+                orderId, customerId, request.merchantId(), totalInCents,
+                request.items().stream()
+                        .map(i -> new OrderCreatedEvent.OrderItemEvent(
+                                i.productId(), i.description(), i.quantity(),
+                                i.unitPriceInCents(), i.unitPriceInCents() * i.quantity()))
+                        .toList(),
+                now
+        );
+        orderEventProducer.publishOrderCreated(event);
 
         return new CreateOrderResult.Success(orderMapper.toResponse(order), true);
     }

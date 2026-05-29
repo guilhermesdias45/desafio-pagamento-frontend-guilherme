@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"/></head>
+<body style="font-family: Arial, sans-serif;">
+<h2>Pedido confirmado</h2>
+<p>Seu pedido <strong>#<span th:text="${orderId}">123</span></strong> foi criado com sucesso!</p>
+<p><strong>Valor total:</strong> R$ <span th:text="${#numbers.formatDecimal(totalInCents / 100.0, 1, 2)}">0.00</span></p>
+<p><strong>Itens:</strong></p>
+<div th:utext="${itemsHtml}"></div>
+<p><strong>Data:</strong> <span th:text="${createdAt}">2026-01-01</span></p>
+<p>Aguardando pagamento para confirmar seu pedido.</p>
+<p>Atenciosamente,<br/>Equipe Acabou o Mony</p>
+</body>
+</html>

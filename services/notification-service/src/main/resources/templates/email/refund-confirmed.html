@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"/></head>
+<body style="font-family: Arial, sans-serif;">
+<h2>Estorno processado</h2>
+<p>Seu estorno no valor de <strong th:text="${formattedAmount}">R$ 0,00</strong> foi processado com sucesso.</p>
+<p><strong>ID de referência:</strong> <span th:text="${refundId}">ref_123</span></p>
+<p><strong>Prazo de crédito:</strong> até <span th:text="${estimatedArrivalDays}">5</span> dias úteis</p>
+<p>O valor será creditado na mesma forma de pagamento utilizada na compra.</p>
+<p>Atenciosamente,<br/>Equipe Acabou o Mony</p>
+</body>
+</html>

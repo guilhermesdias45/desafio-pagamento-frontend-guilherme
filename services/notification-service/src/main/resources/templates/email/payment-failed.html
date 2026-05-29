@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"/></head>
+<body style="font-family: Arial, sans-serif;">
+<h2>Pagamento não aprovado</h2>
+<p>Infelizmente seu pagamento de <strong th:text="${formattedAmount}">R$ 0,00</strong> não foi aprovado.</p>
+<p><strong>Motivo:</strong> <span th:text="${reason}">Motivo não informado</span></p>
+<p>Você pode tentar novamente com outra forma de pagamento.</p>
+<p>Atenciosamente,<br/>Equipe Acabou o Mony</p>
+</body>
+</html>
