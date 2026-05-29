@@ -6,7 +6,7 @@ import com.acaboumony.user.dto.request.RegisterRequest;
 import com.acaboumony.user.dto.response.RegisterResponse;
 import com.acaboumony.user.exception.RefreshTokenInvalidException;
 import com.acaboumony.user.result.AuthResult;
-import com.acaboumony.user.security.JwtAuthenticationToken;
+import com.acaboumony.user.security.JwtClaims;
 import com.acaboumony.user.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -81,10 +81,10 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(
-            @AuthenticationPrincipal JwtAuthenticationToken jwt,
+            @AuthenticationPrincipal JwtClaims claims,
             @CookieValue(name = "refreshToken", required = false) String token) {
-        if (token != null) {
-            authService.logout(UUID.fromString(jwt.getName()), token);
+        if (token != null && claims != null) {
+            authService.logout(claims.sub(), token);
         }
         return ResponseEntity.noContent().build();
     }

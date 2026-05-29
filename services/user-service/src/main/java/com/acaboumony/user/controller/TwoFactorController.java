@@ -6,7 +6,7 @@ import com.acaboumony.user.dto.request.TwoFactorDisableRequest;
 import com.acaboumony.user.dto.request.TwoFactorVerifyRequest;
 import com.acaboumony.user.dto.response.TwoFactorSetupResponse;
 import com.acaboumony.user.result.AuthResult;
-import com.acaboumony.user.security.JwtAuthenticationToken;
+import com.acaboumony.user.security.JwtClaims;
 import com.acaboumony.user.service.TwoFactorService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.UUID;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 
@@ -36,14 +34,14 @@ public class TwoFactorController {
     }
 
     @PostMapping("/setup")
-    public TwoFactorSetupResponse setup(@AuthenticationPrincipal JwtAuthenticationToken jwt) {
-        return twoFactorService.setup(UUID.fromString(jwt.getName()));
+    public TwoFactorSetupResponse setup(@AuthenticationPrincipal JwtClaims claims) {
+        return twoFactorService.setup(claims.sub());
     }
 
     @PostMapping("/confirm")
-    public ResponseEntity<Void> confirm(@AuthenticationPrincipal JwtAuthenticationToken jwt,
+    public ResponseEntity<Void> confirm(@AuthenticationPrincipal JwtClaims claims,
                                         @Valid @RequestBody TwoFactorConfirmRequest req) {
-        twoFactorService.confirm(UUID.fromString(jwt.getName()), req.code());
+        twoFactorService.confirm(claims.sub(), req.code());
         return ResponseEntity.ok().build();
     }
 
@@ -55,9 +53,9 @@ public class TwoFactorController {
     }
 
     @PostMapping("/disable")
-    public ResponseEntity<Void> disable(@AuthenticationPrincipal JwtAuthenticationToken jwt,
+    public ResponseEntity<Void> disable(@AuthenticationPrincipal JwtClaims claims,
                                         @Valid @RequestBody TwoFactorDisableRequest req) {
-        twoFactorService.disable(UUID.fromString(jwt.getName()), req.password(), req.code());
+        twoFactorService.disable(claims.sub(), req.password(), req.code());
         return ResponseEntity.noContent().build();
     }
 
