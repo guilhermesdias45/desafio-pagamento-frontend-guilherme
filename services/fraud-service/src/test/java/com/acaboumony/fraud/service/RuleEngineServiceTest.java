@@ -42,7 +42,7 @@ class RuleEngineServiceTest {
         lenient().when(redis.opsForSet()).thenReturn(setOps);
         ruleEngine = new RuleEngineService(redis);
         request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
         );
     }
@@ -61,9 +61,10 @@ class RuleEngineServiceTest {
         when(zSetOps.count(anyString(), anyDouble(), anyDouble())).thenReturn(3L);
 
         var result = ruleEngine.calculateBaseScore(request);
-        assertEquals(30, result.score());
-        assertEquals(1, result.reasons().size());
+        assertEquals(40, result.score());
+        assertEquals(2, result.reasons().size());
         assertTrue(result.reasons().contains("VELOCITY_EXCEEDED"));
+        assertTrue(result.reasons().contains("MERCHANT_PATTERN"));
     }
 
     @Test
@@ -83,10 +84,11 @@ class RuleEngineServiceTest {
         when(setOps.isMember(startsWith("fraud:ip_blacklist:"), anyString())).thenReturn(true);
 
         var result = ruleEngine.calculateBaseScore(request);
-        assertEquals(70, result.score());
+        assertEquals(90, result.score());
         assertTrue(result.reasons().contains("VELOCITY_EXCEEDED"));
+        assertTrue(result.reasons().contains("MERCHANT_PATTERN"));
         assertTrue(result.reasons().contains("IP_BLACKLISTED"));
-        assertEquals(2, result.reasons().size());
+        assertEquals(3, result.reasons().size());
     }
 
     @Test
@@ -98,7 +100,7 @@ class RuleEngineServiceTest {
         when(setOps.isMember(startsWith("fraud:devices:"), anyString())).thenReturn(false);
 
         var highAmountRequest = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 200_000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 200_000L,
             "visa", "10.0.0.5", "new-device", null, null
         );
 

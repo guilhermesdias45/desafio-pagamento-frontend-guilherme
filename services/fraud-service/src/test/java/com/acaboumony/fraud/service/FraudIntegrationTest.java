@@ -80,7 +80,7 @@ class FraudIntegrationTest {
         when(setOps.isMember(anyString(), anyString())).thenReturn(false);
 
         FraudAnalysisRequest request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", "device-123", null, null
         );
 
@@ -98,7 +98,7 @@ class FraudIntegrationTest {
         when(setOps.isMember(startsWith("fraud:ip_blacklist:"), anyString())).thenReturn(true);
 
         FraudAnalysisRequest request = new FraudAnalysisRequest(
-            "txn_002", customerId, 5000L,
+            "txn_002", customerId, UUID.randomUUID(), 5000L,
             "visa", "10.0.0.5", null, null, null
         );
 

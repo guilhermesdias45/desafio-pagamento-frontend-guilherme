@@ -28,7 +28,7 @@ class UnusualHourRuleTest {
         var clock = Clock.fixed(Instant.parse("2026-05-29T14:00:00Z"), ZoneOffset.UTC);
         var rule = new UnusualHourRule(clock);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 50000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 50000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(0, rule.evaluate(request, redis));
@@ -39,7 +39,7 @@ class UnusualHourRuleTest {
         var clock = Clock.fixed(Instant.parse("2026-05-29T03:00:00Z"), ZoneOffset.UTC);
         var rule = new UnusualHourRule(clock);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 10000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 10000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(0, rule.evaluate(request, redis));
@@ -50,7 +50,7 @@ class UnusualHourRuleTest {
         var clock = Clock.fixed(Instant.parse("2026-05-29T03:00:00Z"), ZoneOffset.UTC);
         var rule = new UnusualHourRule(clock);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 30000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 30000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(0, rule.evaluate(request, redis));
@@ -61,7 +61,7 @@ class UnusualHourRuleTest {
         var clock = Clock.fixed(Instant.parse("2026-05-29T03:00:00Z"), ZoneOffset.UTC);
         var rule = new UnusualHourRule(clock);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 30001L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 30001L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(10, rule.evaluate(request, redis));
@@ -72,7 +72,7 @@ class UnusualHourRuleTest {
         var clock = Clock.fixed(Instant.parse("2026-05-29T02:00:00Z"), ZoneOffset.UTC);
         var rule = new UnusualHourRule(clock);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 30001L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 30001L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(10, rule.evaluate(request, redis));
@@ -83,7 +83,7 @@ class UnusualHourRuleTest {
         var clock = Clock.fixed(Instant.parse("2026-05-29T04:59:00Z"), ZoneOffset.UTC);
         var rule = new UnusualHourRule(clock);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 30001L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 30001L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(10, rule.evaluate(request, redis));

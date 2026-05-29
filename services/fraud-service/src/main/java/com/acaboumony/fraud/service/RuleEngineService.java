@@ -25,7 +25,8 @@ public class RuleEngineService {
             new CardAbuseRule(),
             new UnusualHourRule(),
             new FirstPurchaseRule(),
-            new IpChangeRule()
+            new IpChangeRule(),
+            new MerchantPatternRule()
         );
     }
 

@@ -114,9 +114,13 @@ public class FraudDetectionService {
     }
 
     private void recordVelocity(FraudAnalysisRequest request) {
-        String key = "fraud:velocity:" + request.customerId();
-        redis.opsForZSet().add(key, request.transactionId(), (double) System.currentTimeMillis());
-        redis.expire(key, VELOCITY_TTL_MINUTES, TimeUnit.MINUTES);
+        String customerKey = "fraud:velocity:" + request.customerId();
+        redis.opsForZSet().add(customerKey, request.transactionId(), (double) System.currentTimeMillis());
+        redis.expire(customerKey, VELOCITY_TTL_MINUTES, TimeUnit.MINUTES);
+
+        String merchantKey = "fraud:merchant_velocity:" + request.merchantId();
+        redis.opsForZSet().add(merchantKey, request.transactionId(), (double) System.currentTimeMillis());
+        redis.expire(merchantKey, VELOCITY_TTL_MINUTES, TimeUnit.MINUTES);
     }
 
     private void autoBlacklistIp(FraudAnalysisRequest request) {

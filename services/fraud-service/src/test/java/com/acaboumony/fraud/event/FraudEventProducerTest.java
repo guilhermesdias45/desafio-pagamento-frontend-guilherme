@@ -10,15 +10,13 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import java.util.concurrent.CompletableFuture;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -31,11 +29,11 @@ class FraudEventProducerTest {
     private KafkaTemplate<String, Object> kafkaTemplate;
 
     @Captor
-    private ArgumentCaptor<FraudEventProducer.FraudEvent> eventCaptor;
+    private ArgumentCaptor<FraudEventProducer.FraudDetectedEvent> eventCaptor;
 
     private FraudEventProducer producer;
     private final FraudAnalysisRequest request = new FraudAnalysisRequest(
-        "txn_001", UUID.randomUUID(), 5000L,
+        "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
         "visa", "192.168.1.1", null, null, null
     );
     private final FraudScore score = new FraudScore(85, "BLOCK", List.of("IP_BLACKLISTED"), 100L);
@@ -54,10 +52,12 @@ class FraudEventProducerTest {
 
         verify(kafkaTemplate).send(eq("fraud.detected"), eq("txn_001"), eventCaptor.capture());
         var event = eventCaptor.getValue();
-        assertEquals("FRAUD_DETECTED", event.type());
         assertEquals("txn_001", event.transactionId());
+        assertEquals(request.customerId(), event.customerId());
         assertEquals(85, event.score());
+        assertEquals("BLOCK", event.decision());
         assertEquals(List.of("IP_BLACKLISTED"), event.reasons());
+        assertNotNull(event.detectedAt());
     }
 
     @Test
@@ -69,10 +69,12 @@ class FraudEventProducerTest {
 
         verify(kafkaTemplate).send(eq("fraud.review"), eq("txn_001"), eventCaptor.capture());
         var event = eventCaptor.getValue();
-        assertEquals("FRAUD_REVIEW", event.type());
         assertEquals("txn_001", event.transactionId());
+        assertEquals(request.customerId(), event.customerId());
         assertEquals(85, event.score());
+        assertEquals("BLOCK", event.decision());
         assertEquals(List.of("IP_BLACKLISTED"), event.reasons());
+        assertNotNull(event.detectedAt());
     }
 
     @Test

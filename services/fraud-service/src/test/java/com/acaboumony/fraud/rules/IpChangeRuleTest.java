@@ -38,7 +38,7 @@ class IpChangeRuleTest {
     void shouldReturnZeroWhenIpHasNotChanged() {
         when(valueOps.get(anyString())).thenReturn("192.168.1.1");
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(0, rule.evaluate(request, redis));
@@ -51,7 +51,7 @@ class IpChangeRuleTest {
             .thenReturn("10.0.0.1")
             .thenReturn(String.valueOf(oneMinuteAgo));
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(25, rule.evaluate(request, redis));
@@ -64,7 +64,7 @@ class IpChangeRuleTest {
             .thenReturn("10.0.0.1")
             .thenReturn(String.valueOf(fiveMinutesAgo));
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(0, rule.evaluate(request, redis));
@@ -74,7 +74,7 @@ class IpChangeRuleTest {
     void shouldReturnZeroWhenNoPreviousIpData() {
         when(valueOps.get(anyString())).thenReturn(null);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 5000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(0, rule.evaluate(request, redis));

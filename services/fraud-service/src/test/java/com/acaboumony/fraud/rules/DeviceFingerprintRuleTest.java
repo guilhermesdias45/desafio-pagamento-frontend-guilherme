@@ -38,7 +38,7 @@ class DeviceFingerprintRuleTest {
     void shouldReturnZeroWhenDeviceKnown() {
         when(setOps.isMember(anyString(), anyString())).thenReturn(true);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 100000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 100000L,
             "visa", "192.168.1.1", "device-hash-123", null, null
         );
         assertEquals(0, rule.evaluate(request, redis));
@@ -48,7 +48,7 @@ class DeviceFingerprintRuleTest {
     void shouldReturnZeroWhenValueBelowThreshold() {
         when(setOps.isMember(anyString(), anyString())).thenReturn(false);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 30000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 30000L,
             "visa", "192.168.1.1", "device-hash-123", null, null
         );
         assertEquals(0, rule.evaluate(request, redis));
@@ -58,7 +58,7 @@ class DeviceFingerprintRuleTest {
     void shouldReturnFifteenWhenNewDeviceAndHighValue() {
         when(setOps.isMember(anyString(), anyString())).thenReturn(false);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 100000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 100000L,
             "visa", "192.168.1.1", "device-hash-123", null, null
         );
         assertEquals(15, rule.evaluate(request, redis));
@@ -68,7 +68,7 @@ class DeviceFingerprintRuleTest {
     void shouldReturnFifteenWhenNewDeviceAndExactlyThreshold() {
         when(setOps.isMember(anyString(), anyString())).thenReturn(false);
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 50001L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 50001L,
             "visa", "192.168.1.1", "new-device", null, null
         );
         assertEquals(15, rule.evaluate(request, redis));
@@ -77,7 +77,7 @@ class DeviceFingerprintRuleTest {
     @Test
     void shouldReturnZeroWhenNoDeviceFingerprint() {
         var request = new FraudAnalysisRequest(
-            "txn_001", UUID.randomUUID(), 100000L,
+            "txn_001", UUID.randomUUID(), UUID.randomUUID(), 100000L,
             "visa", "192.168.1.1", null, null, null
         );
         assertEquals(0, rule.evaluate(request, redis));
