@@ -7,10 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.UUID;
-
 @Component
 public class FraudEventProducer {
 
@@ -26,12 +22,11 @@ public class FraudEventProducer {
 
     public void publishBlockEvent(FraudAnalysisRequest request, FraudScore score) {
         var event = new FraudEvent(
+            "FRAUD_DETECTED",
             request.transactionId(),
             request.customerId(),
             score.score(),
-            score.decision(),
-            score.reasons(),
-            Instant.now()
+            score.reasons()
         );
         kafka.send(TOPIC_FRAUD_DETECTED, request.transactionId(), event)
             .whenComplete((result, ex) -> {
@@ -43,12 +38,11 @@ public class FraudEventProducer {
 
     public void publishReviewEvent(FraudAnalysisRequest request, FraudScore score) {
         var event = new FraudEvent(
+            "FRAUD_REVIEW",
             request.transactionId(),
             request.customerId(),
             score.score(),
-            score.decision(),
-            score.reasons(),
-            Instant.now()
+            score.reasons()
         );
         kafka.send(TOPIC_FRAUD_REVIEW, request.transactionId(), event)
             .whenComplete((result, ex) -> {
@@ -59,11 +53,10 @@ public class FraudEventProducer {
     }
 
     public record FraudEvent(
+        String type,
         String transactionId,
-        UUID customerId,
+        java.util.UUID customerId,
         int score,
-        String decision,
-        List<String> reasons,
-        Instant detectedAt
+        java.util.List<String> reasons
     ) {}
 }
