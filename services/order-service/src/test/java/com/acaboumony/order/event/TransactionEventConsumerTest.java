@@ -3,6 +3,7 @@ package com.acaboumony.order.event;
 import com.acaboumony.order.domain.entity.Order;
 import com.acaboumony.order.domain.enums.OrderStatus;
 import com.acaboumony.order.repository.OrderRepository;
+import com.acaboumony.order.service.OrderCacheService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,8 @@ class TransactionEventConsumerTest {
 
     @Mock
     private OrderRepository orderRepository;
+    @Mock
+    private OrderCacheService orderCacheService;
 
     private TransactionEventConsumer consumer;
 
@@ -32,7 +35,7 @@ class TransactionEventConsumerTest {
 
     @BeforeEach
     void setUp() {
-        consumer = new TransactionEventConsumer(orderRepository);
+        consumer = new TransactionEventConsumer(orderRepository, orderCacheService);
         orderId = UUID.randomUUID();
         pendingOrder = new Order();
         pendingOrder.setId(orderId);

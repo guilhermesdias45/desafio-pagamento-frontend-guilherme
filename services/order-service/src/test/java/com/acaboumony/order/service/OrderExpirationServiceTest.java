@@ -2,6 +2,7 @@ package com.acaboumony.order.service;
 
 import com.acaboumony.order.domain.entity.Order;
 import com.acaboumony.order.domain.enums.OrderStatus;
+import com.acaboumony.order.event.OrderEventProducer;
 import com.acaboumony.order.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,18 +25,23 @@ class OrderExpirationServiceTest {
 
     @Mock
     private OrderRepository orderRepository;
+    @Mock
+    private OrderEventProducer orderEventProducer;
 
     private OrderExpirationService orderExpirationService;
 
     @BeforeEach
     void setUp() {
-        orderExpirationService = new OrderExpirationService(orderRepository);
+        orderExpirationService = new OrderExpirationService(orderRepository, orderEventProducer);
     }
 
     @Test
     void shouldExpireStaleOrders() {
         var expiredOrder = new Order();
         expiredOrder.setId(UUID.randomUUID());
+        expiredOrder.setCustomerId(UUID.randomUUID());
+        expiredOrder.setMerchantId(UUID.randomUUID());
+        expiredOrder.setTotalInCents(5000L);
         expiredOrder.setStatus(OrderStatus.PENDING);
 
         when(orderRepository.findByStatusAndExpiresAtBefore(eq(OrderStatus.PENDING), any()))
@@ -45,6 +51,7 @@ class OrderExpirationServiceTest {
         orderExpirationService.expireStaleOrders();
 
         verify(orderRepository).save(expiredOrder);
+        verify(orderEventProducer).publishOrderCancelled(any());
     }
 
     @Test
@@ -55,6 +62,7 @@ class OrderExpirationServiceTest {
         orderExpirationService.expireStaleOrders();
 
         verify(orderRepository, never()).save(any());
+        verify(orderEventProducer, never()).publishOrderCancelled(any());
     }
 
     @Test
@@ -65,5 +73,6 @@ class OrderExpirationServiceTest {
         orderExpirationService.expireStaleOrders();
 
         verify(orderRepository, never()).save(any());
+        verify(orderEventProducer, never()).publishOrderCancelled(any());
     }
 }

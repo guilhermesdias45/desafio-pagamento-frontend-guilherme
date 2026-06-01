@@ -25,12 +25,14 @@ class EmailServiceNullRecipientTest {
     private SpringTemplateEngine templateEngine;
     @Mock
     private NotificationLogRepository notificationLogRepository;
+    @Mock
+    private EmailRateLimiter emailRateLimiter;
 
     private EmailService emailService;
 
     @BeforeEach
     void setUp() {
-        emailService = new EmailService(mailSender, templateEngine, notificationLogRepository);
+        emailService = new EmailService(mailSender, templateEngine, notificationLogRepository, emailRateLimiter);
     }
 
     @Test

@@ -53,6 +53,8 @@ class OrderServiceTest {
     private IdempotencyService idempotencyService;
     @Mock
     private OrderEventProducer orderEventProducer;
+    @Mock
+    private OrderCacheService orderCacheService;
     @Captor
     private ArgumentCaptor<Order> orderCaptor;
 
@@ -60,6 +62,7 @@ class OrderServiceTest {
     private OrderService orderService;
 
     private UUID customerId;
+    private String customerEmail;
     private UUID merchantId;
     private UUID idempotencyKey;
     private CreateOrderRequest validRequest;
@@ -67,8 +70,9 @@ class OrderServiceTest {
     @BeforeEach
     void setUp() {
         orderMapper = new OrderMapper();
-        orderService = new OrderService(orderRepository, idempotencyService, orderMapper, orderEventProducer);
+        orderService = new OrderService(orderRepository, idempotencyService, orderMapper, orderEventProducer, orderCacheService);
         customerId = UUID.randomUUID();
+        customerEmail = "customer@test.com";
         merchantId = UUID.randomUUID();
         idempotencyKey = UUID.randomUUID();
         validRequest = new CreateOrderRequest(
@@ -93,7 +97,7 @@ class OrderServiceTest {
                     )
             );
 
-            var result = orderService.createOrder(customerId, idempotencyKey, request);
+            var result = orderService.createOrder(customerId, customerEmail, idempotencyKey, request);
 
             assertThat(result).isInstanceOf(CreateOrderResult.Success.class);
             var success = (CreateOrderResult.Success) result;
@@ -109,7 +113,7 @@ class OrderServiceTest {
         void shouldRejectEmptyOrder() {
             var request = new CreateOrderRequest(merchantId, List.of());
 
-            assertThatThrownBy(() -> orderService.createOrder(customerId, idempotencyKey, request))
+            assertThatThrownBy(() -> orderService.createOrder(customerId, customerEmail, idempotencyKey, request))
                     .isInstanceOf(EmptyOrderException.class)
                     .hasMessageContaining("at least one item");
         }
@@ -118,7 +122,7 @@ class OrderServiceTest {
         void shouldRejectNullItems() {
             var request = new CreateOrderRequest(merchantId, null);
 
-            assertThatThrownBy(() -> orderService.createOrder(customerId, idempotencyKey, request))
+            assertThatThrownBy(() -> orderService.createOrder(customerId, customerEmail, idempotencyKey, request))
                     .isInstanceOf(EmptyOrderException.class);
         }
 
@@ -129,7 +133,7 @@ class OrderServiceTest {
                     List.of(new ItemRequest("prod-1", "Item", 1, 0L))
             );
 
-            assertThatThrownBy(() -> orderService.createOrder(customerId, idempotencyKey, request))
+            assertThatThrownBy(() -> orderService.createOrder(customerId, customerEmail, idempotencyKey, request))
                     .isInstanceOf(InvalidItemPriceException.class);
         }
 
@@ -140,7 +144,7 @@ class OrderServiceTest {
                     List.of(new ItemRequest("prod-1", "Item", 1, 1_000_000L))
             );
 
-            assertThatThrownBy(() -> orderService.createOrder(customerId, idempotencyKey, request))
+            assertThatThrownBy(() -> orderService.createOrder(customerId, customerEmail, idempotencyKey, request))
                     .isInstanceOf(InvalidItemPriceException.class);
         }
 
@@ -151,7 +155,7 @@ class OrderServiceTest {
                     List.of(new ItemRequest("prod-1", "Item", 0, 1000L))
             );
 
-            assertThatThrownBy(() -> orderService.createOrder(customerId, idempotencyKey, request))
+            assertThatThrownBy(() -> orderService.createOrder(customerId, customerEmail, idempotencyKey, request))
                     .isInstanceOf(InvalidQuantityException.class);
         }
 
@@ -162,7 +166,7 @@ class OrderServiceTest {
                     List.of(new ItemRequest("prod-1", "Item", 1000, 1000L))
             );
 
-            assertThatThrownBy(() -> orderService.createOrder(customerId, idempotencyKey, request))
+            assertThatThrownBy(() -> orderService.createOrder(customerId, customerEmail, idempotencyKey, request))
                     .isInstanceOf(InvalidQuantityException.class);
         }
 
@@ -173,9 +177,9 @@ class OrderServiceTest {
             when(idempotencyService.isDuplicate(idempotencyKey)).thenReturn(true);
             when(idempotencyService.getExistingOrderId(idempotencyKey))
                     .thenReturn(Optional.of(order.getId()));
-            when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+            when(orderCacheService.findById(order.getId())).thenReturn(Optional.of(order));
 
-            var result = orderService.createOrder(customerId, idempotencyKey, validRequest);
+            var result = orderService.createOrder(customerId, customerEmail, idempotencyKey, validRequest);
 
             assertThat(result).isInstanceOf(CreateOrderResult.Duplicate.class);
             var dup = (CreateOrderResult.Duplicate) result;
@@ -190,7 +194,7 @@ class OrderServiceTest {
             when(idempotencyService.getExistingOrderId(idempotencyKey))
                     .thenReturn(Optional.empty());
 
-            var result = orderService.createOrder(customerId, idempotencyKey, validRequest);
+            var result = orderService.createOrder(customerId, customerEmail, idempotencyKey, validRequest);
 
             assertThat(result).isInstanceOf(CreateOrderResult.Duplicate.class);
             var dup = (CreateOrderResult.Duplicate) result;
@@ -210,7 +214,7 @@ class OrderServiceTest {
                     )
             );
 
-            var result = orderService.createOrder(customerId, idempotencyKey, request);
+            var result = orderService.createOrder(customerId, customerEmail, idempotencyKey, request);
 
             var success = (CreateOrderResult.Success) result;
             assertThat(success.order().totalInCents()).isEqualTo(3 * 1500L + 2 * 2990L);
@@ -221,7 +225,7 @@ class OrderServiceTest {
             when(idempotencyService.isDuplicate(idempotencyKey)).thenReturn(false);
             when(orderRepository.save(orderCaptor.capture())).thenAnswer(inv -> inv.getArgument(0));
 
-            orderService.createOrder(customerId, idempotencyKey, validRequest);
+            orderService.createOrder(customerId, customerEmail, idempotencyKey, validRequest);
 
             var saved = orderCaptor.getValue();
             assertThat(saved.getExpiresAt()).isNotNull();
@@ -237,7 +241,7 @@ class OrderServiceTest {
                     List.of(new ItemRequest("prod-1", "Item", 1_000, 1_000L))
             );
 
-            assertThatThrownBy(() -> orderService.createOrder(customerId, idempotencyKey, request))
+            assertThatThrownBy(() -> orderService.createOrder(customerId, customerEmail, idempotencyKey, request))
                     .isInstanceOf(InvalidQuantityException.class);
         }
     }
@@ -250,7 +254,7 @@ class OrderServiceTest {
             var now = Instant.now();
             var order = createOrderEntity(OrderStatus.PAID, now);
             order.setTransactionId("txn_123");
-            when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+            when(orderCacheService.findById(order.getId())).thenReturn(Optional.of(order));
 
             var result = orderService.getOrder(order.getId(), customerId, "CUSTOMER", null);
 
@@ -263,7 +267,7 @@ class OrderServiceTest {
         @Test
         void shouldThrowWhenNotFound() {
             var id = UUID.randomUUID();
-            when(orderRepository.findById(id)).thenReturn(Optional.empty());
+            when(orderCacheService.findById(id)).thenReturn(Optional.empty());
 
             assertThatThrownBy(() -> orderService.getOrder(id, customerId, "CUSTOMER", null))
                     .isInstanceOf(OrderNotFoundException.class);
@@ -273,7 +277,7 @@ class OrderServiceTest {
         void shouldAllowAdminAccess() {
             var now = Instant.now();
             var order = createOrderEntity(OrderStatus.PENDING, now);
-            when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+            when(orderCacheService.findById(order.getId())).thenReturn(Optional.of(order));
 
             var result = orderService.getOrder(order.getId(), UUID.randomUUID(), "ADMIN", null);
 
@@ -284,7 +288,7 @@ class OrderServiceTest {
         void shouldAllowMerchantAccess() {
             var now = Instant.now();
             var order = createOrderEntity(OrderStatus.PENDING, now);
-            when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+            when(orderCacheService.findById(order.getId())).thenReturn(Optional.of(order));
 
             var result = orderService.getOrder(order.getId(), UUID.randomUUID(), "MERCHANT", merchantId);
 
@@ -296,7 +300,7 @@ class OrderServiceTest {
             var now = Instant.now();
             var order = createOrderEntity(OrderStatus.PENDING, now);
             var otherUser = UUID.randomUUID();
-            when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+            when(orderCacheService.findById(order.getId())).thenReturn(Optional.of(order));
 
             assertThatThrownBy(() -> orderService.getOrder(order.getId(), otherUser, "CUSTOMER", null))
                     .isInstanceOf(InsufficientPermissionsException.class);
@@ -307,7 +311,7 @@ class OrderServiceTest {
             var now = Instant.now();
             var order = createOrderEntity(OrderStatus.PENDING, now);
             var otherMerchant = UUID.randomUUID();
-            when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+            when(orderCacheService.findById(order.getId())).thenReturn(Optional.of(order));
 
             assertThatThrownBy(() -> orderService.getOrder(order.getId(), UUID.randomUUID(), "MERCHANT", otherMerchant))
                     .isInstanceOf(InsufficientPermissionsException.class);

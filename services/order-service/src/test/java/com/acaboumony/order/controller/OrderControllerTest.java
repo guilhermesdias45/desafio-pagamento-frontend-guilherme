@@ -64,11 +64,12 @@ class OrderControllerTest {
                 List.of(new OrderResponse.ItemResponse("prod-1", "Item 1", 1, 1000L, 1000L)),
                 Instant.now().plusSeconds(900), Instant.now());
 
-        when(orderService.createOrder(eq(customerId), eq(idempotencyKey), any(CreateOrderRequest.class)))
+        when(orderService.createOrder(eq(customerId), any(), eq(idempotencyKey), any(CreateOrderRequest.class)))
                 .thenReturn(new CreateOrderResult.Success(response, true));
 
         mockMvc.perform(post("/api/v1/orders")
                         .header("X-User-Id", customerId)
+                        .header("X-User-Email", "customer@test.com")
                         .header("Idempotency-Key", idempotencyKey)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -94,11 +95,12 @@ class OrderControllerTest {
                 List.of(new OrderResponse.ItemResponse("prod-1", "Item 1", 1, 1000L, 1000L)),
                 Instant.now().plusSeconds(900), Instant.now());
 
-        when(orderService.createOrder(eq(customerId), eq(idempotencyKey), any(CreateOrderRequest.class)))
+        when(orderService.createOrder(eq(customerId), any(), eq(idempotencyKey), any(CreateOrderRequest.class)))
                 .thenReturn(new CreateOrderResult.Duplicate(response));
 
         mockMvc.perform(post("/api/v1/orders")
                         .header("X-User-Id", customerId)
+                        .header("X-User-Email", "customer@test.com")
                         .header("Idempotency-Key", idempotencyKey)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -206,6 +208,7 @@ class OrderControllerTest {
 
         mockMvc.perform(post("/api/v1/orders")
                         .header("X-User-Id", customerId)
+                        .header("X-User-Email", "customer@test.com")
                         .header("Idempotency-Key", UUID.randomUUID())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -223,11 +226,12 @@ class OrderControllerTest {
                 List.of(new ItemRequest("p1", "Cheap item", 1, 1000L))
         );
 
-        when(orderService.createOrder(eq(customerId), eq(idempotencyKey), any(CreateOrderRequest.class)))
+        when(orderService.createOrder(eq(customerId), any(), eq(idempotencyKey), any(CreateOrderRequest.class)))
                 .thenThrow(new OrderService.InvalidItemPriceException(1000L));
 
         mockMvc.perform(post("/api/v1/orders")
                         .header("X-User-Id", customerId)
+                        .header("X-User-Email", "customer@test.com")
                         .header("Idempotency-Key", idempotencyKey)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))

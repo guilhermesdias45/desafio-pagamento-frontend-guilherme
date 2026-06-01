@@ -21,4 +21,11 @@ public class OrderEventProducer {
         log.info("Publishing order.created event for orderId={}", event.orderId());
         kafkaTemplate.send(TOPIC_ORDER_CREATED, event.orderId().toString(), event);
     }
+
+    private static final String TOPIC_ORDER_CANCELLED = "order.cancelled";
+
+    public void publishOrderCancelled(OrderCancelledEvent event) {
+        log.info("Publishing order.cancelled event for orderId={}", event.orderId());
+        kafkaTemplate.send(TOPIC_ORDER_CANCELLED, event.orderId().toString(), event);
+    }
 }

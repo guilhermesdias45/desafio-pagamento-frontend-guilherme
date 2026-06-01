@@ -37,23 +37,26 @@ public class OrderService {
     private final IdempotencyService idempotencyService;
     private final OrderMapper orderMapper;
     private final OrderEventProducer orderEventProducer;
+    private final OrderCacheService orderCacheService;
 
     public OrderService(OrderRepository orderRepository,
                         IdempotencyService idempotencyService,
                         OrderMapper orderMapper,
-                        OrderEventProducer orderEventProducer) {
+                        OrderEventProducer orderEventProducer,
+                        OrderCacheService orderCacheService) {
         this.orderRepository = orderRepository;
         this.idempotencyService = idempotencyService;
         this.orderMapper = orderMapper;
         this.orderEventProducer = orderEventProducer;
+        this.orderCacheService = orderCacheService;
     }
 
     @Transactional
-    public CreateOrderResult createOrder(UUID customerId, UUID idempotencyKey, CreateOrderRequest request) {
+    public CreateOrderResult createOrder(UUID customerId, String customerEmail, UUID idempotencyKey, CreateOrderRequest request) {
         if (idempotencyService.isDuplicate(idempotencyKey)) {
             var existingOrderId = idempotencyService.getExistingOrderId(idempotencyKey);
             if (existingOrderId.isPresent()) {
-                var existingOrder = orderRepository.findById(existingOrderId.get())
+                var existingOrder = orderCacheService.findById(existingOrderId.get())
                         .orElseThrow(() -> new OrderNotFoundException(existingOrderId.get()));
                 return new CreateOrderResult.Duplicate(orderMapper.toResponse(existingOrder));
             }
@@ -91,7 +94,7 @@ public class OrderService {
         idempotencyService.markProcessed(idempotencyKey, orderId);
 
         var event = new OrderCreatedEvent(
-                orderId, customerId, request.merchantId(), totalInCents,
+                orderId, customerId, customerEmail, request.merchantId(), totalInCents,
                 request.items().stream()
                         .map(i -> new OrderCreatedEvent.OrderItemEvent(
                                 i.productId(), i.description(), i.quantity(),
@@ -105,7 +108,7 @@ public class OrderService {
     }
 
     public OrderDetailResponse getOrder(UUID orderId, UUID userId, String role, UUID merchantId) {
-        var order = orderRepository.findById(orderId)
+        var order = orderCacheService.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
         authorizeAccess(order, userId, role, merchantId);
         return orderMapper.toDetailResponse(order);
@@ -157,6 +160,7 @@ public class OrderService {
         order.setUpdatedAt(Instant.now());
         order.setExpiresAt(null);
         orderRepository.save(order);
+        orderCacheService.evict(orderId);
     }
 
     private void validateItems(List<ItemRequest> items) {

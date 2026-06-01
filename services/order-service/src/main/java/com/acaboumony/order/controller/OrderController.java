@@ -34,10 +34,11 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<ApiResponse<OrderResponse>> createOrder(
             @RequestHeader("X-User-Id") UUID customerId,
+            @RequestHeader("X-User-Email") String customerEmail,
             @RequestHeader("Idempotency-Key") UUID idempotencyKey,
             @Valid @RequestBody CreateOrderRequest request) {
 
-        var result = orderService.createOrder(customerId, idempotencyKey, request);
+        var result = orderService.createOrder(customerId, customerEmail, idempotencyKey, request);
 
         return switch (result) {
             case OrderService.CreateOrderResult.Success(var order, var created) ->

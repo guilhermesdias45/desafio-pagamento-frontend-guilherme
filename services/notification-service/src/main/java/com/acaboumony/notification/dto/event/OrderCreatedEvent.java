@@ -7,6 +7,7 @@ import java.util.UUID;
 public record OrderCreatedEvent(
         UUID orderId,
         UUID customerId,
+        String customerEmail,
         UUID merchantId,
         Long totalInCents,
         List<OrderItemEvent> items,

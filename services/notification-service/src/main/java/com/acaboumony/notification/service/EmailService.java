@@ -28,13 +28,16 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
     private final NotificationLogRepository notificationLogRepository;
+    private final EmailRateLimiter emailRateLimiter;
 
     public EmailService(JavaMailSender mailSender,
                         SpringTemplateEngine templateEngine,
-                        NotificationLogRepository notificationLogRepository) {
+                        NotificationLogRepository notificationLogRepository,
+                        EmailRateLimiter emailRateLimiter) {
         this.mailSender = mailSender;
         this.templateEngine = templateEngine;
         this.notificationLogRepository = notificationLogRepository;
+        this.emailRateLimiter = emailRateLimiter;
     }
 
     public void sendEmail(String to, String subject, String templateName,
@@ -45,6 +48,10 @@ public class EmailService {
         }
         if (isDuplicate(correlationId, templateName)) {
             log.info("Duplicate notification skipped: correlationId={}, eventType={}", correlationId, templateName);
+            return;
+        }
+        if (emailRateLimiter.isRateLimited(to)) {
+            log.warn("Rate limited: skipping email to {}, subject={}", to, subject);
             return;
         }
 
@@ -87,9 +94,15 @@ public class EmailService {
 
     private void sendMimeMessage(String to, String subject, String templateName,
                                  Map<String, Object> templateVariables) throws MessagingException {
-        var context = new Context();
-        context.setVariables(templateVariables);
-        var htmlContent = templateEngine.process("email/" + templateName, context);
+        String htmlContent;
+        try {
+            var context = new Context();
+            context.setVariables(templateVariables);
+            htmlContent = templateEngine.process("email/" + templateName, context);
+        } catch (Exception e) {
+            log.warn("Template {} failed, falling back to plain text: {}", templateName, e.getMessage());
+            htmlContent = buildPlainTextFallback(subject, templateVariables);
+        }
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -98,6 +111,18 @@ public class EmailService {
         helper.setText(htmlContent, true);
 
         mailSender.send(message);
+    }
+
+    private String buildPlainTextFallback(String subject, Map<String, Object> variables) {
+        var sb = new StringBuilder();
+        sb.append(subject).append("\n\n");
+        variables.forEach((key, value) -> {
+            if (value != null) {
+                sb.append(key).append(": ").append(value).append("\n");
+            }
+        });
+        sb.append("\n---\nEsta é uma mensagem automática do Acabou o Mony.");
+        return sb.toString().replace("\n", "<br/>");
     }
 
     private void markSuccess(String to, String eventType, String correlationId) {

@@ -1,6 +1,7 @@
 package com.acaboumony.notification.service;
 
 import com.acaboumony.notification.consumer.OrderEventConsumer;
+import com.acaboumony.notification.dto.event.OrderCancelledEvent;
 import com.acaboumony.notification.dto.event.OrderCreatedEvent;
 import com.acaboumony.notification.service.EmailService;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,8 +47,9 @@ class OrderEventConsumerTest {
     @Test
     void shouldProcessOrderCreatedEvent() {
         var orderId = UUID.randomUUID();
+        var customerEmail = "customer@test.com";
         var event = new OrderCreatedEvent(
-                orderId, UUID.randomUUID(), UUID.randomUUID(),
+                orderId, UUID.randomUUID(), customerEmail, UUID.randomUUID(),
                 5000L,
                 List.of(
                         new OrderCreatedEvent.OrderItemEvent("p1", "Product 1", 2, 1000L, 2000L),
@@ -66,7 +68,7 @@ class OrderEventConsumerTest {
                 correlationIdCaptor.capture()
         );
 
-        assertThat(toCaptor.getValue()).isNull();
+        assertThat(toCaptor.getValue()).isEqualTo(customerEmail);
         assertThat(subjectCaptor.getValue()).contains(orderId.toString());
         assertThat(templateCaptor.getValue()).isEqualTo("order-created");
         assertThat(correlationIdCaptor.getValue()).isEqualTo(orderId.toString());
@@ -85,15 +87,16 @@ class OrderEventConsumerTest {
     @Test
     void shouldHandleEmptyItems() {
         var orderId = UUID.randomUUID();
+        var customerEmail = "customer@test.com";
         var event = new OrderCreatedEvent(
-                orderId, UUID.randomUUID(), UUID.randomUUID(),
+                orderId, UUID.randomUUID(), customerEmail, UUID.randomUUID(),
                 0L, List.of(), Instant.now()
         );
 
         consumer.consumeOrderCreated(event);
 
         verify(emailService).sendEmail(
-                null,
+                customerEmail,
                 "Pedido confirmado — #" + orderId,
                 "order-created",
                 Map.of(
@@ -102,6 +105,26 @@ class OrderEventConsumerTest {
                         "itemsHtml", "",
                         "createdAt", event.createdAt().toString()
                 ),
+                orderId.toString()
+        );
+    }
+
+    @Test
+    void shouldProcessOrderCancelledEvent() {
+        var orderId = UUID.randomUUID();
+        var customerEmail = "customer@test.com";
+        var event = new OrderCancelledEvent(
+                orderId, UUID.randomUUID(), customerEmail, UUID.randomUUID(),
+                5000L, "Order expired", Instant.now()
+        );
+
+        consumer.consumeOrderCancelled(event);
+
+        verify(emailService).sendEmail(
+                customerEmail,
+                "Pedido cancelado — #" + orderId,
+                "order-created",
+                Map.of("orderId", orderId.toString(), "reason", "Order expired"),
                 orderId.toString()
         );
     }

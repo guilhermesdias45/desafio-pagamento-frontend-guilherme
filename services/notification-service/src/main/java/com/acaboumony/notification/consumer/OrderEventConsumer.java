@@ -1,5 +1,6 @@
 package com.acaboumony.notification.consumer;
 
+import com.acaboumony.notification.dto.event.OrderCancelledEvent;
 import com.acaboumony.notification.dto.event.OrderCreatedEvent;
 import com.acaboumony.notification.service.EmailService;
 import org.slf4j.Logger;
@@ -37,8 +38,25 @@ public class OrderEventConsumer {
                 "createdAt", event.createdAt().toString()
         );
         emailService.sendEmail(
-                null,
+                event.customerEmail(),
                 "Pedido confirmado — #" + event.orderId(),
+                "order-created",
+                variables,
+                event.orderId().toString()
+        );
+    }
+
+    @KafkaListener(topics = "order.cancelled", groupId = "notification-service-group")
+    public void consumeOrderCancelled(OrderCancelledEvent event) {
+        log.info("Received order.cancelled event for orderId={}", event.orderId());
+
+        var variables = Map.<String, Object>of(
+                "orderId", event.orderId().toString(),
+                "reason", event.reason()
+        );
+        emailService.sendEmail(
+                event.customerEmail(),
+                "Pedido cancelado — #" + event.orderId(),
                 "order-created",
                 variables,
                 event.orderId().toString()

@@ -39,12 +39,18 @@ class EmailServiceTest {
     private SpringTemplateEngine templateEngine;
     @Mock
     private NotificationLogRepository notificationLogRepository;
+    @Mock
+    private EmailRateLimiter emailRateLimiter;
 
     private EmailService emailService;
 
     @BeforeEach
     void setUp() {
-        emailService = new EmailService(mailSender, templateEngine, notificationLogRepository);
+        emailService = new EmailService(mailSender, templateEngine, notificationLogRepository, emailRateLimiter);
+    }
+
+    private void allowRateLimit() {
+        when(emailRateLimiter.isRateLimited(anyString())).thenReturn(false);
     }
 
     private void mockMimeMessage() {
@@ -56,6 +62,7 @@ class EmailServiceTest {
 
         @Test
         void shouldSendEmailSuccessfully() {
+            allowRateLimit();
             mockMimeMessage();
             when(templateEngine.process(anyString(), any())).thenReturn("<html>content</html>");
 
@@ -78,6 +85,7 @@ class EmailServiceTest {
 
         @Test
         void shouldRetryOnFailure() {
+            allowRateLimit();
             mockMimeMessage();
             when(templateEngine.process(anyString(), any())).thenReturn("<html>content</html>");
             doThrow(new MailSendException("SMTP unavailable"))
@@ -93,6 +101,7 @@ class EmailServiceTest {
 
         @Test
         void shouldThrowAfterMaxRetries() {
+            allowRateLimit();
             mockMimeMessage();
             when(templateEngine.process(anyString(), any())).thenReturn("<html>content</html>");
             doThrow(new MailSendException("SMTP unavailable"))
@@ -124,12 +133,43 @@ class EmailServiceTest {
 
         @Test
         void shouldSendWhenNoCorrelationId() {
+            allowRateLimit();
             mockMimeMessage();
             when(templateEngine.process(anyString(), any())).thenReturn("<html>content</html>");
 
             emailService.sendEmail("test@test.com", "Subject", "welcome", Map.of(), null);
 
             verify(mailSender).send(any(MimeMessage.class));
+        }
+    }
+
+    @Nested
+    class RateLimit {
+
+        @Test
+        void shouldSkipWhenRateLimited() {
+            when(emailRateLimiter.isRateLimited("test@test.com")).thenReturn(true);
+
+            emailService.sendEmail("test@test.com", "Subject", "welcome", Map.of(), "corr-1");
+
+            verify(mailSender, never()).send(any(MimeMessage.class));
+            verify(notificationLogRepository, never()).save(any());
+        }
+    }
+
+    @Nested
+    class TemplateFallback {
+
+        @Test
+        void shouldFallbackToPlainTextWhenTemplateFails() {
+            allowRateLimit();
+            mockMimeMessage();
+            when(templateEngine.process(anyString(), any())).thenThrow(new RuntimeException("Template error"));
+
+            emailService.sendEmail("test@test.com", "Subject", "broken-template", Map.of("key", "value"), "corr-1");
+
+            verify(mailSender).send(any(MimeMessage.class));
+            verify(notificationLogRepository).save(any(NotificationLog.class));
         }
     }
 }
