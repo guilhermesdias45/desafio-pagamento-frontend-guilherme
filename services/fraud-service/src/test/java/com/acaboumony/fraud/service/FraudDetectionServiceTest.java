@@ -57,7 +57,8 @@ class FraudDetectionServiceTest {
         lenient().when(redis.opsForValue()).thenReturn(valueOps);
         lenient().when(redis.opsForSet()).thenReturn(setOps);
         ruleEngine = new RuleEngineService(redis);
-        fraudDetection = new FraudDetectionService(ruleEngine, claudeAnalyzer, alertRepository, redis, eventProducer);
+        fraudDetection = new FraudDetectionService(ruleEngine, claudeAnalyzer, alertRepository, redis, eventProducer,
+            90, 70, 250L, 24L, 30, 5L);
         request = new FraudAnalysisRequest(
             "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
@@ -105,7 +106,7 @@ class FraudDetectionServiceTest {
             "visa", "192.168.1.1", null, null, null
         );
 
-        when(claudeAnalyzer.getContextualAdjustment(any(), anyInt())).thenReturn(0);
+        when(claudeAnalyzer.adjustWithReasoning(any(), anyInt())).thenReturn(new ClaudeContextAnalyzer.AdjustmentResult(0, null));
 
         var result = fraudDetection.score(borderlineRequest);
         assertNotNull(result);
@@ -152,7 +153,7 @@ class FraudDetectionServiceTest {
         when(zSetOps.count(anyString(), anyDouble(), anyDouble())).thenReturn(3L);
         when(setOps.isMember(startsWith("fraud:ip_blacklist:"), anyString())).thenReturn(true);
         when(valueOps.get(anyString())).thenReturn(null);
-        when(claudeAnalyzer.getContextualAdjustment(any(), anyInt())).thenReturn(-10);
+        when(claudeAnalyzer.adjustWithReasoning(any(), anyInt())).thenReturn(new ClaudeContextAnalyzer.AdjustmentResult(-10, null));
 
         var request = new FraudAnalysisRequest(
             "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
@@ -172,12 +173,31 @@ class FraudDetectionServiceTest {
 
         doAnswer(invocation -> {
             Thread.sleep(300);
-            return -10;
-        }).when(claudeAnalyzer).getContextualAdjustment(any(), anyInt());
+            return new ClaudeContextAnalyzer.AdjustmentResult(-10, null);
+        }).when(claudeAnalyzer).adjustWithReasoning(any(), anyInt());
 
         var result = fraudDetection.score(request);
         assertEquals(50, result.score());
         assertEquals("APPROVE", result.decision());
         assertTrue(result.reasons().contains("TIMEOUT_FALLBACK"));
+    }
+
+    @Test
+    void ce004_merchantHighVelocity_shouldAddMerchantPatternScore() {
+        UUID merchantId = UUID.randomUUID();
+        FraudAnalysisRequest merchantRequest = new FraudAnalysisRequest(
+            "txn_m1", UUID.randomUUID(), merchantId, 5000L,
+            "visa", "192.168.1.1", null, null, null
+        );
+
+        when(zSetOps.count(startsWith("fraud:merchant_velocity:" + merchantId), anyDouble(), anyDouble())).thenReturn(5L);
+        when(zSetOps.count(startsWith("fraud:velocity:"), anyDouble(), anyDouble())).thenReturn(0L);
+        when(valueOps.get(anyString())).thenReturn(null);
+        when(setOps.isMember(anyString(), anyString())).thenReturn(false);
+
+        var result = fraudDetection.score(merchantRequest);
+
+        assertTrue(result.score() >= 20, "Score should include MERCHANT_PATTERN (+20)");
+        assertTrue(result.reasons().contains("MERCHANT_PATTERN"));
     }
 }

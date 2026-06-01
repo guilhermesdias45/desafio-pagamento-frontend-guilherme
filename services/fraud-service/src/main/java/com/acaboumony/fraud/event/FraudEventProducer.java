@@ -28,6 +28,7 @@ public class FraudEventProducer {
         var event = new FraudDetectedEvent(
             request.transactionId(),
             request.customerId(),
+            request.merchantId(),
             score.score(),
             score.decision(),
             score.reasons(),
@@ -45,6 +46,7 @@ public class FraudEventProducer {
         var event = new FraudDetectedEvent(
             request.transactionId(),
             request.customerId(),
+            request.merchantId(),
             score.score(),
             score.decision(),
             score.reasons(),
@@ -61,6 +63,7 @@ public class FraudEventProducer {
     public record FraudDetectedEvent(
         String transactionId,
         UUID customerId,
+        UUID merchantId,
         int score,
         String decision,
         List<String> reasons,

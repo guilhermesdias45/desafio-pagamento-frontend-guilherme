@@ -9,6 +9,7 @@ import com.acaboumony.fraud.repository.FraudAlertRepository;
 import com.acaboumony.fraud.result.FraudResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +23,14 @@ public class FraudDetectionService {
 
     private static final Logger log = LoggerFactory.getLogger(FraudDetectionService.class);
 
-    static final int BLOCK_THRESHOLD = 90;
-    static final int REVIEW_THRESHOLD = 70;
-    static final long ANALYSIS_TIMEOUT_MS = 250L;
     static final int FALLBACK_SCORE = 50;
-    static final long IP_BLACKLIST_TTL_HOURS = 24;
-    static final int IP_BLACKLIST_MIN_SCORE = 30;
-    static final long VELOCITY_TTL_MINUTES = 5;
+
+    private final int blockThreshold;
+    private final int reviewThreshold;
+    private final long analysisTimeoutMs;
+    private final long ipBlacklistTtlHours;
+    private final int ipBlacklistMinScore;
+    private final long velocityTtlMinutes;
 
     private final RuleEngineService ruleEngine;
     private final ClaudeContextAnalyzer claudeAnalyzer;
@@ -40,12 +42,24 @@ public class FraudDetectionService {
                                  ClaudeContextAnalyzer claudeAnalyzer,
                                  FraudAlertRepository alertRepository,
                                  StringRedisTemplate redis,
-                                 FraudEventProducer eventProducer) {
+                                 FraudEventProducer eventProducer,
+                                 @Value("${fraud.block-threshold:90}") int blockThreshold,
+                                 @Value("${fraud.review-threshold:70}") int reviewThreshold,
+                                 @Value("${fraud.analysis-timeout-ms:250}") long analysisTimeoutMs,
+                                 @Value("${fraud.ip-blacklist-ttl-hours:24}") long ipBlacklistTtlHours,
+                                 @Value("${fraud.ip-blacklist-min-score:30}") int ipBlacklistMinScore,
+                                 @Value("${fraud.velocity-ttl-minutes:5}") long velocityTtlMinutes) {
         this.ruleEngine = ruleEngine;
         this.claudeAnalyzer = claudeAnalyzer;
         this.alertRepository = alertRepository;
         this.redis = redis;
         this.eventProducer = eventProducer;
+        this.blockThreshold = blockThreshold;
+        this.reviewThreshold = reviewThreshold;
+        this.analysisTimeoutMs = analysisTimeoutMs;
+        this.ipBlacklistTtlHours = ipBlacklistTtlHours;
+        this.ipBlacklistMinScore = ipBlacklistMinScore;
+        this.velocityTtlMinutes = velocityTtlMinutes;
     }
 
     public FraudScore score(FraudAnalysisRequest request) {
@@ -57,25 +71,28 @@ public class FraudDetectionService {
         int finalScore = base.score();
         List<String> reasons = base.reasons();
         int claudeAdjustment = 0;
+        String claudeReasoning = null;
 
-        if (finalScore >= REVIEW_THRESHOLD && finalScore < BLOCK_THRESHOLD) {
-            claudeAdjustment = claudeAnalyzer.getContextualAdjustment(request, finalScore);
+        if (finalScore >= reviewThreshold && finalScore < blockThreshold) {
+            var adjustmentResult = claudeAnalyzer.adjustWithReasoning(request, finalScore);
+            claudeAdjustment = adjustmentResult.adjustment();
+            claudeReasoning = adjustmentResult.reasoning();
             finalScore = Math.clamp(finalScore + claudeAdjustment, 0, 100);
         }
 
         if (reasons.contains("IP_BLACKLISTED")) {
-            finalScore = Math.max(finalScore, IP_BLACKLIST_MIN_SCORE);
+            finalScore = Math.max(finalScore, ipBlacklistMinScore);
         }
 
-        FraudDecision decision = finalScore >= BLOCK_THRESHOLD
+        FraudDecision decision = finalScore >= blockThreshold
             ? FraudDecision.BLOCK
-            : finalScore >= REVIEW_THRESHOLD
+            : finalScore >= reviewThreshold
                 ? FraudDecision.REVIEW
                 : FraudDecision.APPROVE;
 
         Duration analysisTime = Duration.between(start, Instant.now());
 
-        if (analysisTime.toMillis() > ANALYSIS_TIMEOUT_MS) {
+        if (analysisTime.toMillis() > analysisTimeoutMs) {
             log.warn("Analysis timeout for transaction {}: {}ms", request.transactionId(), analysisTime.toMillis());
             return new FraudScore(FALLBACK_SCORE, "APPROVE",
                 List.of("TIMEOUT_FALLBACK"), analysisTime.toMillis());
@@ -93,6 +110,7 @@ public class FraudDetectionService {
                 .decision(decision)
                 .reasons(reasons)
                 .claudeAdjustment(claudeAdjustment == 0 ? null : claudeAdjustment)
+                .claudeReasoning(claudeReasoning)
                 .build();
             alertRepository.save(alert);
         }
@@ -116,16 +134,23 @@ public class FraudDetectionService {
     private void recordVelocity(FraudAnalysisRequest request) {
         String customerKey = "fraud:velocity:" + request.customerId();
         redis.opsForZSet().add(customerKey, request.transactionId(), (double) System.currentTimeMillis());
-        redis.expire(customerKey, VELOCITY_TTL_MINUTES, TimeUnit.MINUTES);
+        redis.expire(customerKey, velocityTtlMinutes, TimeUnit.MINUTES);
 
         String merchantKey = "fraud:merchant_velocity:" + request.merchantId();
         redis.opsForZSet().add(merchantKey, request.transactionId(), (double) System.currentTimeMillis());
-        redis.expire(merchantKey, VELOCITY_TTL_MINUTES, TimeUnit.MINUTES);
+        redis.expire(merchantKey, velocityTtlMinutes, TimeUnit.MINUTES);
     }
 
     private void autoBlacklistIp(FraudAnalysisRequest request) {
         String key = "fraud:ip_blacklist:" + request.ipAddress();
         redis.opsForSet().add(key, request.ipAddress());
-        redis.expire(key, IP_BLACKLIST_TTL_HOURS, TimeUnit.HOURS);
+        redis.expire(key, ipBlacklistTtlHours, TimeUnit.HOURS);
+    }
+
+    static String anonymizeIp(String ip) {
+        if (ip == null) return null;
+        int lastDot = ip.lastIndexOf('.');
+        if (lastDot < 0) return ip;
+        return ip.substring(0, lastDot + 1) + "0";
     }
 }

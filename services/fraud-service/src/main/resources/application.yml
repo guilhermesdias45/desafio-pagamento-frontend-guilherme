@@ -28,6 +28,14 @@ server:
 anthropic:
   api-key: ${ANTHROPIC_API_KEY:}
 
+fraud:
+  block-threshold: ${FRAUD_BLOCK_THRESHOLD:90}
+  review-threshold: ${FRAUD_REVIEW_THRESHOLD:70}
+  analysis-timeout-ms: ${FRAUD_ANALYSIS_TIMEOUT_MS:250}
+  ip-blacklist-ttl-hours: ${FRAUD_IP_BLACKLIST_TTL_HOURS:24}
+  ip-blacklist-min-score: ${FRAUD_IP_BLACKLIST_MIN_SCORE:30}
+  velocity-ttl-minutes: ${FRAUD_VELOCITY_TTL_MINUTES:5}
+
 management:
   endpoints:
     web:
