@@ -1,5 +1,6 @@
 package com.acaboumony.payment.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.acaboumony.payment.client.FraudServiceClient;
 import com.acaboumony.payment.client.MercadoPagoGateway;
 import com.acaboumony.payment.client.OrderServiceClient;
@@ -25,7 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class TransactionService {
@@ -68,6 +71,16 @@ public class TransactionService {
             return fail("INVALID_CURRENCY", "Only BRL is supported", false, start);
         }
 
+        var rateLimitKey = "rate_limit:payment:" + request.customerId();
+        var currentCount = redis.opsForValue().increment(rateLimitKey);
+        if (currentCount != null && currentCount == 1) {
+            redis.expire(rateLimitKey, Duration.ofMinutes(1));
+        }
+        if (currentCount != null && currentCount > 100) {
+            log.warn("Rate limit exceeded for customer {}: {} requests in window", request.customerId(), currentCount);
+            return fail("RATE_LIMIT_EXCEEDED", "Too many transactions. Try again later.", true, start);
+        }
+
         var idempotencyKey = "idempotency:payment:" + request.idempotencyKey();
         Boolean alreadyProcessed = redis.opsForValue().setIfAbsent(idempotencyKey, "PENDING", Duration.ofHours(24));
         if (Boolean.FALSE.equals(alreadyProcessed)) {
@@ -83,11 +96,13 @@ public class TransactionService {
 
         var orderValidation = orderClient.validateOrder(request.orderId(), merchantId);
         if (!orderValidation.valid()) {
+            redis.delete(idempotencyKey);
             return fail(orderValidation.errorCode(), "Order validation failed", false, start);
         }
 
         var customerValidation = userClient.validateCustomer(request.customerId());
         if (!customerValidation.valid()) {
+            redis.delete(idempotencyKey);
             return fail(customerValidation.errorCode(), "Customer validation failed", false, start);
         }
 
@@ -101,6 +116,8 @@ public class TransactionService {
 
         if ("BLOCK".equals(fraudResult.decision())) {
             saveFailedTransaction(transactionId, request, merchantId, "SUSPECTED_FRAUD", start);
+            publishFailed(transactionId, request, customerEmail, "SUSPECTED_FRAUD", start);
+            redis.delete(idempotencyKey);
             return fail("SUSPECTED_FRAUD", "Transaction blocked by fraud analysis", false, start);
         }
 
@@ -111,11 +128,11 @@ public class TransactionService {
         );
 
         if (!gatewayResult.success()) {
-            saveFailedTransaction(transactionId, request, merchantId,
-                gatewayResult.isTimeout() ? "MP_GATEWAY_TIMEOUT" : "CARD_DECLINED", start);
             var errorCode = gatewayResult.isTimeout() ? "MP_GATEWAY_TIMEOUT" : "CARD_DECLINED";
-            var retryable = gatewayResult.isTimeout() || "CARD_DECLINED".equals(errorCode);
+            saveFailedTransaction(transactionId, request, merchantId, errorCode, start);
             publishFailed(transactionId, request, customerEmail, errorCode, start);
+            redis.delete(idempotencyKey);
+            var retryable = gatewayResult.isTimeout() || "CARD_DECLINED".equals(errorCode);
             return fail(errorCode, "Payment gateway error", retryable, start);
         }
 
@@ -144,19 +161,75 @@ public class TransactionService {
             request.orderId(), transaction.getProcessingTimeMs(), false);
     }
 
+    public Optional<TransactionResponse> findById(String transactionId, UUID merchantId) {
+        return transactionRepository.findByTransactionId(transactionId)
+            .map(tx -> {
+                if (!tx.getMerchantId().equals(merchantId)) {
+                    return null;
+                }
+                return mapper.toResponse(tx);
+            });
+    }
+
     public TransactionResponse findById(String transactionId) {
         return transactionRepository.findByTransactionId(transactionId)
             .map(mapper::toResponse)
             .orElse(null);
     }
 
-    public Page<TransactionResponse> findByCustomer(UUID customerId, Pageable pageable) {
-        return transactionRepository.findByCustomerIdOrderByCreatedAtDesc(customerId, pageable)
+    public Page<TransactionResponse> findByCustomer(UUID customerId, UUID merchantId, Pageable pageable) {
+        return transactionRepository
+            .findByCustomerIdAndMerchantIdOrderByCreatedAtDesc(customerId, merchantId, pageable)
             .map(mapper::toResponse);
     }
 
-    public void handlePaymentWebhook(Long mpPaymentId, String action) {
+    @Transactional
+    public void handlePaymentWebhook(Long mpPaymentId, String action, JsonNode payload) {
         log.info("Handling MP webhook: paymentId={}, action={}", mpPaymentId, action);
+
+        var transaction = transactionRepository.findByMpPaymentId(mpPaymentId);
+        if (transaction.isEmpty()) {
+            log.warn("No transaction found for mpPaymentId={}", mpPaymentId);
+            return;
+        }
+
+        var tx = transaction.get();
+
+        switch (action) {
+            case "payment.created" -> {
+                log.info("Payment {} created, status={}", mpPaymentId, tx.getStatus());
+            }
+            case "payment.updated" -> {
+                log.info("Payment {} updated — refreshing status", mpPaymentId);
+                var mpStatus = payload.path("data").path("status").asText("");
+                var newStatus = mapMpStatus(mpStatus);
+                if (newStatus != null && tx.getStatus() != newStatus) {
+                    tx.setStatus(newStatus);
+                    tx.setMpPaymentId(mpPaymentId);
+                    transactionRepository.save(tx);
+                    log.info("Transaction {} updated to {} via webhook", tx.getTransactionId(), newStatus);
+                }
+            }
+            case "payment.cancelled" -> {
+                if (tx.getStatus() == TransactionStatus.APPROVED ||
+                    tx.getStatus() == TransactionStatus.PARTIALLY_REFUNDED) {
+                    tx.setStatus(TransactionStatus.CANCELLED);
+                    transactionRepository.save(tx);
+                    log.info("Transaction {} cancelled via webhook", tx.getTransactionId());
+                }
+            }
+            default -> log.debug("Unhandled webhook action: {}", action);
+        }
+    }
+
+    private TransactionStatus mapMpStatus(String mpStatus) {
+        return switch (mpStatus) {
+            case "approved" -> TransactionStatus.APPROVED;
+            case "rejected" -> TransactionStatus.DECLINED;
+            case "in_process" -> TransactionStatus.PROCESSING;
+            case "cancelled" -> TransactionStatus.CANCELLED;
+            default -> null;
+        };
     }
 
     private void saveFailedTransaction(String transactionId, TransactionRequest request,

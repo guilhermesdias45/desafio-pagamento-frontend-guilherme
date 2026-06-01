@@ -13,6 +13,9 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    private Long version;
+
     @Column(name = "transaction_id", nullable = false, unique = true, length = 64)
     private String transactionId;
 

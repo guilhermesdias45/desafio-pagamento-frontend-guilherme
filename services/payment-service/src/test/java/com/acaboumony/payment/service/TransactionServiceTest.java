@@ -54,6 +54,11 @@ class TransactionServiceTest {
             new UserServiceClient.UserValidationResult(true, null));
     }
 
+    private void mockRedisForNewRequest() {
+        when(redis.opsForValue()).thenReturn(valueOps);
+        when(valueOps.increment(anyString())).thenReturn(1L);
+    }
+
     @Test
     void processTransaction_whenInvalidCurrency_returnsInvalidCurrency() {
         var request = new com.acaboumony.payment.dto.request.TransactionRequest(
@@ -69,8 +74,20 @@ class TransactionServiceTest {
     }
 
     @Test
+    void processTransaction_whenRateLimitExceeded_returns429() {
+        mockRedisForNewRequest();
+        when(valueOps.increment(anyString())).thenReturn(101L);
+
+        TransactionResult result = service.processTransaction(validRequest, "test@test.com", UUID.randomUUID(), "127.0.0.1");
+
+        assertInstanceOf(TransactionResult.Failed.class, result);
+        assertEquals("RATE_LIMIT_EXCEEDED", ((TransactionResult.Failed) result).errorCode());
+        assertTrue(((TransactionResult.Failed) result).retryable());
+    }
+
+    @Test
     void processTransaction_whenDuplicateIdempotencyKey_returnsConflict() {
-        when(redis.opsForValue()).thenReturn(valueOps);
+        mockRedisForNewRequest();
         when(valueOps.setIfAbsent(anyString(), anyString(), any(Duration.class)))
             .thenReturn(false);
         when(transactionRepository.findByIdempotencyKey(any()))
@@ -83,8 +100,8 @@ class TransactionServiceTest {
     }
 
     @Test
-    void processTransaction_whenFraudDetected_returnsSuspectedFraud() {
-        when(redis.opsForValue()).thenReturn(valueOps);
+    void processTransaction_whenFraudDetected_returnsSuspectedFraudAndPublishesEvent() {
+        mockRedisForNewRequest();
         when(valueOps.setIfAbsent(anyString(), anyString(), any(Duration.class)))
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
@@ -95,11 +112,12 @@ class TransactionServiceTest {
         assertInstanceOf(TransactionResult.Failed.class, result);
         assertEquals("SUSPECTED_FRAUD", ((TransactionResult.Failed) result).errorCode());
         assertFalse(((TransactionResult.Failed) result).retryable());
+        verify(eventProducer).publishFailed(any());
     }
 
     @Test
     void processTransaction_whenCardDeclined_returnsCardDeclined() {
-        when(redis.opsForValue()).thenReturn(valueOps);
+        mockRedisForNewRequest();
         when(valueOps.setIfAbsent(anyString(), anyString(), any(Duration.class)))
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
@@ -116,7 +134,7 @@ class TransactionServiceTest {
 
     @Test
     void processTransaction_whenMpTimeout_returnsGatewayTimeout() {
-        when(redis.opsForValue()).thenReturn(valueOps);
+        mockRedisForNewRequest();
         when(valueOps.setIfAbsent(anyString(), anyString(), any(Duration.class)))
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
@@ -133,7 +151,7 @@ class TransactionServiceTest {
 
     @Test
     void processTransaction_whenFraudServiceUnavailable_usesFallbackAndApproves() {
-        when(redis.opsForValue()).thenReturn(valueOps);
+        mockRedisForNewRequest();
         when(valueOps.setIfAbsent(anyString(), anyString(), any(Duration.class)))
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
@@ -149,7 +167,7 @@ class TransactionServiceTest {
 
     @Test
     void processTransaction_whenSuccess_returnsApproved() {
-        when(redis.opsForValue()).thenReturn(valueOps);
+        mockRedisForNewRequest();
         when(valueOps.setIfAbsent(anyString(), anyString(), any(Duration.class)))
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(

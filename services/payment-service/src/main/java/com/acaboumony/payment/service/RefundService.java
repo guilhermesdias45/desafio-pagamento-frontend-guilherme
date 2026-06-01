@@ -52,7 +52,7 @@ public class RefundService {
     }
 
     @Transactional
-    public RefundResponse refund(String transactionId, RefundRequest request) {
+    public RefundResponse refund(String transactionId, RefundRequest request, UUID merchantId) {
         var idempotencyKey = "idempotency:refund:" + request.idempotencyKey();
         Boolean alreadyProcessed = redis.opsForValue().setIfAbsent(idempotencyKey, "PENDING", Duration.ofHours(24));
         if (Boolean.FALSE.equals(alreadyProcessed)) {
@@ -65,6 +65,10 @@ public class RefundService {
 
         var transaction = transactionRepository.findByTransactionId(transactionId)
             .orElseThrow(() -> new IllegalArgumentException("TRANSACTION_NOT_FOUND"));
+
+        if (!transaction.getMerchantId().equals(merchantId)) {
+            throw new IllegalArgumentException("INSUFFICIENT_PERMISSIONS");
+        }
 
         if (!REFUNDABLE_STATUSES.contains(transaction.getStatus())) {
             throw new IllegalArgumentException("TRANSACTION_NOT_REFUNDABLE");
@@ -105,14 +109,16 @@ public class RefundService {
         refund.setEstimatedArrivalDays(isFullRefund ? 10 : 7);
         refundRepository.save(refund);
 
-        if (isFullRefund && mpRefund.success()) {
-            transaction.setStatus(TransactionStatus.FULLY_REFUNDED);
-            transaction.setRefundedAmountInCents(transaction.getAmountInCents());
-        } else if (mpRefund.success()) {
-            transaction.setStatus(TransactionStatus.PARTIALLY_REFUNDED);
-            var currentRefunded = transaction.getRefundedAmountInCents() != null
-                ? transaction.getRefundedAmountInCents() : 0L;
-            transaction.setRefundedAmountInCents(currentRefunded + refundAmount);
+        if (mpRefund.success()) {
+            var newRefundedTotal = transaction.getRefundedAmountInCents() != null
+                ? transaction.getRefundedAmountInCents() + refundAmount : refundAmount;
+            if (newRefundedTotal >= transaction.getAmountInCents()) {
+                transaction.setStatus(TransactionStatus.FULLY_REFUNDED);
+                transaction.setRefundedAmountInCents(transaction.getAmountInCents());
+            } else {
+                transaction.setStatus(TransactionStatus.PARTIALLY_REFUNDED);
+                transaction.setRefundedAmountInCents(newRefundedTotal);
+            }
         }
         transactionRepository.save(transaction);
 

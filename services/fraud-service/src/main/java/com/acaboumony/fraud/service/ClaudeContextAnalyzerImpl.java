@@ -1,6 +1,5 @@
 package com.acaboumony.fraud.service;
 
-import com.anthropic.client.okhttp.AnthropicOkHttpClient;
 import com.anthropic.models.messages.Message;
 import com.anthropic.models.messages.MessageCreateParams;
 import com.anthropic.models.messages.Model;
@@ -10,17 +9,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
 import java.util.Optional;
 
 @Component
 public class ClaudeContextAnalyzerImpl implements ClaudeContextAnalyzer {
 
     private static final Logger log = LoggerFactory.getLogger(ClaudeContextAnalyzerImpl.class);
-    private static final int TIMEOUT_MS = 250;
     private static final String SYSTEM_PROMPT = """
         You are a fraud detection analyst. Analyze the risk of this transaction and respond with a JSON object only.
         {"adjustment": N, "reasoning": "..."}
@@ -30,16 +26,7 @@ public class ClaudeContextAnalyzerImpl implements ClaudeContextAnalyzer {
     private final com.anthropic.client.AnthropicClient client;
     private final ObjectMapper objectMapper;
 
-    public ClaudeContextAnalyzerImpl(@Value("${anthropic.api-key:}") String apiKey) {
-        this(apiKey != null && !apiKey.isBlank()
-            ? AnthropicOkHttpClient.builder()
-                .apiKey(apiKey)
-                .timeout(Duration.ofMillis(TIMEOUT_MS))
-                .build()
-            : null);
-    }
-
-    ClaudeContextAnalyzerImpl(com.anthropic.client.AnthropicClient client) {
+    public ClaudeContextAnalyzerImpl(com.anthropic.client.AnthropicClient client) {
         this.client = client;
         this.objectMapper = new ObjectMapper();
         if (client == null) {

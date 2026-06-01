@@ -24,6 +24,10 @@ public class UnusualHourRule implements FraudRule {
 
     @Override
     public int evaluate(FraudAnalysisRequest request, StringRedisTemplate redis) {
+        return evaluate(request, redis, clock);
+    }
+
+    int evaluate(FraudAnalysisRequest request, StringRedisTemplate redis, Clock clock) {
         LocalTime now = LocalTime.now(clock);
         int hour = now.getHour();
         boolean unusualHour = hour >= UNUSUAL_START && hour < UNUSUAL_END;

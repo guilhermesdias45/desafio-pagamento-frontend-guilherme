@@ -15,18 +15,6 @@ class ClaudeContextAnalyzerImplTest {
     );
 
     @Test
-    void noApiKey_shouldReturnZero() {
-        var analyzer = new ClaudeContextAnalyzerImpl("");
-        assertEquals(0, analyzer.getContextualAdjustment(request, 50));
-    }
-
-    @Test
-    void blankApiKey_shouldReturnZero() {
-        var analyzer = new ClaudeContextAnalyzerImpl("   ");
-        assertEquals(0, analyzer.getContextualAdjustment(request, 50));
-    }
-
-    @Test
     void nullClient_shouldReturnZero() {
         var analyzer = new ClaudeContextAnalyzerImpl((com.anthropic.client.AnthropicClient) null);
         assertEquals(0, analyzer.getContextualAdjustment(request, 50));

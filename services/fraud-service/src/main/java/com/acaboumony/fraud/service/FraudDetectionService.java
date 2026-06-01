@@ -65,7 +65,11 @@ public class FraudDetectionService {
     public FraudScore score(FraudAnalysisRequest request) {
         Instant start = Instant.now();
 
-        recordVelocity(request);
+        try {
+            recordVelocity(request);
+        } catch (Exception e) {
+            log.warn("Redis velocity recording failed for transaction {}: {}", request.transactionId(), e.getMessage());
+        }
 
         RuleEngineService.ScoreResult base = ruleEngine.calculateBaseScore(request);
         int finalScore = base.score();
@@ -84,12 +88,6 @@ public class FraudDetectionService {
             finalScore = Math.max(finalScore, ipBlacklistMinScore);
         }
 
-        FraudDecision decision = finalScore >= blockThreshold
-            ? FraudDecision.BLOCK
-            : finalScore >= reviewThreshold
-                ? FraudDecision.REVIEW
-                : FraudDecision.APPROVE;
-
         Duration analysisTime = Duration.between(start, Instant.now());
 
         if (analysisTime.toMillis() > analysisTimeoutMs) {
@@ -98,11 +96,22 @@ public class FraudDetectionService {
                 List.of("TIMEOUT_FALLBACK"), analysisTime.toMillis());
         }
 
+        FraudDecision decision = finalScore >= blockThreshold
+            ? FraudDecision.BLOCK
+            : finalScore >= reviewThreshold
+                ? FraudDecision.REVIEW
+                : FraudDecision.APPROVE;
+
         if (decision == FraudDecision.BLOCK) {
-            autoBlacklistIp(request);
+            try {
+                autoBlacklistIp(request);
+            } catch (Exception e) {
+                log.warn("Redis IP blacklist failed for transaction {}: {}", request.transactionId(), e.getMessage());
+            }
         }
 
         if (decision == FraudDecision.BLOCK || decision == FraudDecision.REVIEW) {
+            String anonymizedIp = anonymizeIp(request.ipAddress());
             FraudAlert alert = FraudAlert.builder()
                 .transactionId(request.transactionId())
                 .customerId(request.customerId())
@@ -113,6 +122,8 @@ public class FraudDetectionService {
                 .claudeReasoning(claudeReasoning)
                 .build();
             alertRepository.save(alert);
+            log.info("Fraud alert for transaction {} (ip={}): score={}, decision={}",
+                request.transactionId(), anonymizedIp, finalScore, decision);
         }
 
         var scoreResult = new FraudScore(finalScore, decision.name(), reasons, analysisTime.toMillis());

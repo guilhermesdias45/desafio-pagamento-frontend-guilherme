@@ -50,6 +50,7 @@ class RefundServiceTest {
         approvedTransaction.setMpPaymentId(123456L);
         approvedTransaction.setAmountInCents(10000L);
         approvedTransaction.setStatus(TransactionStatus.APPROVED);
+        approvedTransaction.setMerchantId(UUID.randomUUID());
 
         refundRequest = new RefundRequest(null, RefundReason.CUSTOMER_REQUEST,
             UUID.randomUUID(), UUID.randomUUID());
@@ -57,27 +58,30 @@ class RefundServiceTest {
 
     @Test
     void refund_whenTransactionNotFound_throwsException() {
+        var merchantId = approvedTransaction.getMerchantId();
         when(redis.opsForValue()).thenReturn(valueOps);
         when(valueOps.setIfAbsent(anyString(), anyString(), any(Duration.class))).thenReturn(true);
         when(transactionRepository.findByTransactionId("txn_nonexistent")).thenReturn(Optional.empty());
 
         assertThrows(IllegalArgumentException.class,
-            () -> service.refund("txn_nonexistent", refundRequest));
+            () -> service.refund("txn_nonexistent", refundRequest, merchantId));
     }
 
     @Test
     void refund_whenAlreadyFullyRefunded_throwsException() {
+        var merchantId = approvedTransaction.getMerchantId();
         approvedTransaction.setStatus(TransactionStatus.FULLY_REFUNDED);
         when(redis.opsForValue()).thenReturn(valueOps);
         when(valueOps.setIfAbsent(anyString(), anyString(), any(Duration.class))).thenReturn(true);
         when(transactionRepository.findByTransactionId("txn_abc123")).thenReturn(Optional.of(approvedTransaction));
 
         assertThrows(IllegalArgumentException.class,
-            () -> service.refund("txn_abc123", refundRequest));
+            () -> service.refund("txn_abc123", refundRequest, merchantId));
     }
 
     @Test
     void refund_whenAmountExceedsOriginal_throwsException() {
+        var merchantId = approvedTransaction.getMerchantId();
         var partialRequest = new RefundRequest(20000L, RefundReason.CUSTOMER_REQUEST,
             UUID.randomUUID(), UUID.randomUUID());
         when(redis.opsForValue()).thenReturn(valueOps);
@@ -86,11 +90,24 @@ class RefundServiceTest {
         when(refundRepository.findByTransactionIdOrderByCreatedAtDesc("txn_abc123")).thenReturn(List.of());
 
         assertThrows(IllegalArgumentException.class,
-            () -> service.refund("txn_abc123", partialRequest));
+            () -> service.refund("txn_abc123", partialRequest, merchantId));
+    }
+
+    @Test
+    void refund_whenInsufficientPermissions_throwsException() {
+        var wrongMerchantId = UUID.randomUUID();
+        when(redis.opsForValue()).thenReturn(valueOps);
+        when(valueOps.setIfAbsent(anyString(), anyString(), any(Duration.class))).thenReturn(true);
+        when(transactionRepository.findByTransactionId("txn_abc123")).thenReturn(Optional.of(approvedTransaction));
+
+        var ex = assertThrows(IllegalArgumentException.class,
+            () -> service.refund("txn_abc123", refundRequest, wrongMerchantId));
+        assertEquals("INSUFFICIENT_PERMISSIONS", ex.getMessage());
     }
 
     @Test
     void refund_whenFullRefundSucceeds_returnsCompleted() {
+        var merchantId = approvedTransaction.getMerchantId();
         when(redis.opsForValue()).thenReturn(valueOps);
         when(valueOps.setIfAbsent(anyString(), anyString(), any(Duration.class))).thenReturn(true);
         when(transactionRepository.findByTransactionId("txn_abc123")).thenReturn(Optional.of(approvedTransaction));
@@ -98,7 +115,7 @@ class RefundServiceTest {
             new MercadoPagoGateway.RefundResult(true, 789L));
         when(refundRepository.save(any())).thenAnswer(i -> i.getArgument(0));
 
-        RefundResponse response = service.refund("txn_abc123", refundRequest);
+        RefundResponse response = service.refund("txn_abc123", refundRequest, merchantId);
 
         assertNotNull(response);
         assertEquals("COMPLETED", response.status());

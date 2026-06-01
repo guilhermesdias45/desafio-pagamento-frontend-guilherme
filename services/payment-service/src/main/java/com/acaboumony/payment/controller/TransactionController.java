@@ -45,17 +45,26 @@ public class TransactionController {
             case TransactionResult.Approved a -> ResponseEntity.status(a.duplicate() ? HttpStatus.OK : HttpStatus.CREATED)
                 .body(response(a.transactionId(), a.mpPaymentId(), a.orderId(),
                     "APPROVED", a.processingTimeMs(), null));
-            case TransactionResult.Failed f -> ResponseEntity.status(errorHttpStatus(f.errorCode()))
-                .body(error(f.errorCode(), f.message(), f.retryable(), f.processingTimeMs()));
+            case TransactionResult.Failed f -> {
+                var responseEntity = ResponseEntity.status(errorHttpStatus(f.errorCode()))
+                    .body(error(f.errorCode(), f.message(), f.retryable(), f.processingTimeMs()));
+                if ("RATE_LIMIT_EXCEEDED".equals(f.errorCode())) {
+                    yield ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                        .header("Retry-After", "60")
+                        .body(error(f.errorCode(), f.message(), f.retryable(), f.processingTimeMs()));
+                }
+                yield responseEntity;
+            }
         };
     }
 
     @PostMapping("/{transactionId}/refund")
     public ResponseEntity<Map<String, Object>> refundTransaction(
             @PathVariable String transactionId,
-            @Valid @RequestBody RefundRequest request) {
+            @Valid @RequestBody RefundRequest request,
+            @RequestHeader("X-Merchant-Id") UUID merchantId) {
         try {
-            var refund = refundService.refund(transactionId, request);
+            var refund = refundService.refund(transactionId, request, merchantId);
             return ResponseEntity.ok(Map.of(
                 "data", refund,
                 "meta", Map.of("timestamp", Instant.now().toString())
@@ -63,6 +72,7 @@ public class TransactionController {
         } catch (IllegalArgumentException e) {
             var httpStatus = switch (e.getMessage()) {
                 case "TRANSACTION_NOT_FOUND" -> HttpStatus.NOT_FOUND;
+                case "INSUFFICIENT_PERMISSIONS" -> HttpStatus.FORBIDDEN;
                 case "TRANSACTION_NOT_REFUNDABLE" -> HttpStatus.UNPROCESSABLE_ENTITY;
                 case "REFUND_WINDOW_EXPIRED" -> HttpStatus.UNPROCESSABLE_ENTITY;
                 case "ALREADY_FULLY_REFUNDED", "AMOUNT_EXCEEDS_ORIGINAL" -> HttpStatus.UNPROCESSABLE_ENTITY;
@@ -74,14 +84,21 @@ public class TransactionController {
     }
 
     @GetMapping("/{transactionId}")
-    public ResponseEntity<Map<String, Object>> getTransaction(@PathVariable String transactionId) {
-        var tx = transactionService.findById(transactionId);
-        if (tx == null) {
+    public ResponseEntity<Map<String, Object>> getTransaction(
+            @PathVariable String transactionId,
+            @RequestHeader("X-Merchant-Id") UUID merchantId) {
+        var allTx = transactionService.findById(transactionId);
+        if (allTx == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(error("TRANSACTION_NOT_FOUND", "Transaction not found", false, 0));
         }
+        var ownedTx = transactionService.findById(transactionId, merchantId);
+        if (ownedTx.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(error("INSUFFICIENT_PERMISSIONS", "Access denied", false, 0));
+        }
         return ResponseEntity.ok(Map.of(
-            "data", tx,
+            "data", ownedTx.get(),
             "meta", Map.of("timestamp", Instant.now().toString())
         ));
     }
@@ -89,8 +106,9 @@ public class TransactionController {
     @GetMapping
     public ResponseEntity<Map<String, Object>> listTransactions(
             @RequestParam UUID customerId,
+            @RequestHeader("X-Merchant-Id") UUID merchantId,
             Pageable pageable) {
-        var page = transactionService.findByCustomer(customerId, pageable);
+        var page = transactionService.findByCustomer(customerId, merchantId, pageable);
         return ResponseEntity.ok(Map.of(
             "data", page.getContent(),
             "meta", Map.of(

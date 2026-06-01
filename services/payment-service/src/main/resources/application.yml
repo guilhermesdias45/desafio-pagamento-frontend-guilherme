@@ -35,6 +35,7 @@ server:
 
 mercadopago:
   access-token: ${MERCADOPAGO_ACCESS_TOKEN}
+  webhook-secret: ${MERCADOPAGO_WEBHOOK_SECRET:}
 
 fraud:
   service:
