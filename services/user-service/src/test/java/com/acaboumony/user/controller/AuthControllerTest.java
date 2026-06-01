@@ -252,4 +252,34 @@ class AuthControllerTest {
                 .andExpect(status().isNotImplemented())
                 .andExpect(jsonPath("$.errorCode").value("NOT_IMPLEMENTED_SPRINT_2"));
     }
+
+    // ─── GlobalExceptionHandler — branches adicionais ─────────────────────────
+
+    @Test
+    void deve_retornar_423_com_unlockAt_quando_AccountLockedException_lancada_diretamente() throws Exception {
+        var req = new RegisterRequest("ana@loja.com.br", "Senha@1234", "Ana Lima",
+                UserRole.CUSTOMER, null, null);
+        when(authService.register(any())).thenThrow(
+                new AccountLockedException(java.time.Instant.now().plusSeconds(1800)));
+
+        mvc.perform(post("/api/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(req)))
+                .andExpect(status().isLocked())
+                .andExpect(jsonPath("$.unlockAt").exists());
+    }
+
+    @Test
+    void deve_retornar_500_quando_excecao_de_dominio_com_codigo_desconhecido() throws Exception {
+        var req = new RegisterRequest("ana@loja.com.br", "Senha@1234", "Ana Lima",
+                UserRole.CUSTOMER, null, null);
+        // Anonymous subclass with unknown error code → triggers default branch in mapStatus
+        when(authService.register(any())).thenThrow(new com.acaboumony.user.exception.UserServiceException(
+                "UNKNOWN_ERROR", "something unexpected") {});
+
+        mvc.perform(post("/api/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(req)))
+                .andExpect(status().isInternalServerError());
+    }
 }
