@@ -22,7 +22,7 @@ class FraudResultTest {
 
     @Test
     void underReview_hasCorrectDecisionAndScore() {
-        var review = new FraudResult.UnderReview(45, 50, List.of("AMOUNT_ANOMALY"), Duration.ofMillis(80), 5);
+        var review = new FraudResult.UnderReview(50, List.of("AMOUNT_ANOMALY"), Duration.ofMillis(80));
         assertEquals(FraudDecision.REVIEW, review.decision());
         assertEquals("REVIEW", review.toScore().decision());
         assertEquals(50, review.toScore().score());

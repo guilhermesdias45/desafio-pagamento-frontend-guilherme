@@ -22,6 +22,12 @@ GET    /api/v1/transactions/{transactionId}           → consultar por ID
 GET    /api/v1/transactions                           → listar (paginado)
 ```
 
+### Headers obrigatórios (todos os endpoints)
+
+| Header | Tipo | Descrição |
+|--------|------|-----------|
+| X-Merchant-Id | UUID (v4) | ID do merchant autenticado. Usado para autorização e isolamento de dados. |
+
 ---
 
 ## 3. OPERAÇÃO: Processar Transação
@@ -136,7 +142,22 @@ Kafka publish (20ms)
 Response HTTP 201
 ```
 
-### 3.10 Casos Extremos
+### 3.10 Autenticação e Autorização do Merchant
+
+**Padrão de autenticação:** `merchantId` (UUID v4) é extraído do header `X-Merchant-Id` em todos os endpoints. O gateway de API valida o JWT e propaga o merchantId autenticado.
+
+**Isolamento de dados:** Todas as queries filtram por `merchantId`:
+- `TransactionRepository.findByCustomerIdAndMerchantId()`
+- `TransactionRepository.findByMerchantId()`
+- `Transaction.findById()` verifica ownership antes de retornar
+
+**Modelo de autorização:**
+- Merchant só pode visualizar/editar transações do próprio merchant
+- `findById()` retorna vazio se `transaction.merchantId != request.merchantId` → HTTP 403
+- `refund()` lança `INSUFFICIENT_PERMISSIONS` se merchant não é dono da transação
+- Listagem filtra automaticamente por merchantId (não expõe transações de outros merchants)
+
+### 3.11 Casos Extremos
 
 #### CE-001: Transação duplicada (mesma idempotencyKey)
 - **Input:** Segunda requisição com `idempotencyKey` idêntico dentro de 24h
@@ -173,12 +194,16 @@ Response HTTP 201
 - **Comportamento:** Rejeitar sem processar
 - **Output:** `errorCode = RATE_LIMIT_EXCEEDED`, `retryable = true`, header `Retry-After`, HTTP 429
 
-### 3.11 Exemplos Concretos
+### 3.12 Exemplos Concretos
 
 #### Exemplo 1 — Sucesso
 
 **Request:**
-```json
+```http
+POST /api/v1/transactions
+X-Merchant-Id: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+Content-Type: application/json
+
 {
   "amountInCents": 8990,
   "currency": "BRL",
@@ -368,6 +393,8 @@ SLA: **P99 < 1.000ms**
 
 - `cardToken` nunca logado — apenas `paymentMethodId` e `cardLastFour`
 - `customerId` validado via JWT claims antes de qualquer operação
+- `merchantId` extraído do header `X-Merchant-Id`; JWT deve conter merchantId válido
+- Isolamento de dados: todas as queries filtram por `merchantId` (nunca expõe dados de outros merchants)
 - Rate limiting por `customerId` via Redis (100 req/min)
 - Fraud score calculado antes de atingir o gateway
 - Toda transação tem log de auditoria imutável

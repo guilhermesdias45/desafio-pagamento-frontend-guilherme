@@ -4,6 +4,7 @@ import com.acaboumony.fraud.domain.entity.FraudAlert;
 import com.acaboumony.fraud.dto.request.FraudAnalysisRequest;
 import com.acaboumony.fraud.event.FraudEventProducer;
 import com.acaboumony.fraud.repository.FraudAlertRepository;
+import com.acaboumony.fraud.repository.IpBlacklistRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,8 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
+
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -43,6 +46,8 @@ class FraudDetectionServiceTest {
     private FraudAlertRepository alertRepository;
     @Mock
     private FraudEventProducer eventProducer;
+    @Mock
+    private IpBlacklistRepository ipBlacklistRepository;
 
     @Captor
     private ArgumentCaptor<FraudAlert> alertCaptor;
@@ -56,8 +61,8 @@ class FraudDetectionServiceTest {
         lenient().when(redis.opsForZSet()).thenReturn(zSetOps);
         lenient().when(redis.opsForValue()).thenReturn(valueOps);
         lenient().when(redis.opsForSet()).thenReturn(setOps);
-        ruleEngine = new RuleEngineService(redis);
-        fraudDetection = new FraudDetectionService(ruleEngine, claudeAnalyzer, alertRepository, redis, eventProducer,
+        ruleEngine = new RuleEngineService(redis, ipBlacklistRepository);
+        fraudDetection = new FraudDetectionService(ruleEngine, claudeAnalyzer, alertRepository, ipBlacklistRepository, redis, eventProducer, new SimpleMeterRegistry(),
             90, 70, 250L, 24L, 30, 5L);
         request = new FraudAnalysisRequest(
             "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,

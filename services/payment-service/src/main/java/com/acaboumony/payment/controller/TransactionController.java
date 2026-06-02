@@ -3,7 +3,9 @@ package com.acaboumony.payment.controller;
 import com.acaboumony.payment.dto.request.RefundRequest;
 import com.acaboumony.payment.dto.request.TransactionRequest;
 import com.acaboumony.payment.dto.response.RefundResponse;
+import com.acaboumony.payment.domain.enums.TransactionStatus;
 import com.acaboumony.payment.dto.response.TransactionResponse;
+import com.acaboumony.payment.dto.response.TransactionSummary;
 import com.acaboumony.payment.result.TransactionResult;
 import com.acaboumony.payment.service.RefundService;
 import com.acaboumony.payment.service.TransactionService;
@@ -37,21 +39,22 @@ public class TransactionController {
             @Valid @RequestBody TransactionRequest request,
             @RequestHeader("X-Customer-Email") String customerEmail,
             @RequestHeader("X-Merchant-Id") UUID merchantId,
-            @RequestHeader("X-Forwarded-For") String ipAddress) {
+            @RequestHeader("X-Forwarded-For") String ipAddress,
+            @RequestHeader(value = "X-Request-Id", required = false) String requestId) {
 
         var result = transactionService.processTransaction(request, customerEmail, merchantId, ipAddress);
 
         return switch (result) {
             case TransactionResult.Approved a -> ResponseEntity.status(a.duplicate() ? HttpStatus.OK : HttpStatus.CREATED)
                 .body(response(a.transactionId(), a.mpPaymentId(), a.orderId(),
-                    "APPROVED", a.processingTimeMs(), null));
+                    "APPROVED", a.processingTimeMs(), null, requestId));
             case TransactionResult.Failed f -> {
                 var responseEntity = ResponseEntity.status(errorHttpStatus(f.errorCode()))
-                    .body(error(f.errorCode(), f.message(), f.retryable(), f.processingTimeMs()));
+                    .body(error(f.errorCode(), f.message(), f.retryable(), f.processingTimeMs(), requestId));
                 if ("RATE_LIMIT_EXCEEDED".equals(f.errorCode())) {
                     yield ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
                         .header("Retry-After", "60")
-                        .body(error(f.errorCode(), f.message(), f.retryable(), f.processingTimeMs()));
+                        .body(error(f.errorCode(), f.message(), f.retryable(), f.processingTimeMs(), requestId));
                 }
                 yield responseEntity;
             }
@@ -62,12 +65,13 @@ public class TransactionController {
     public ResponseEntity<Map<String, Object>> refundTransaction(
             @PathVariable String transactionId,
             @Valid @RequestBody RefundRequest request,
-            @RequestHeader("X-Merchant-Id") UUID merchantId) {
+            @RequestHeader("X-Merchant-Id") UUID merchantId,
+            @RequestHeader(value = "X-Request-Id", required = false) String requestId) {
         try {
             var refund = refundService.refund(transactionId, request, merchantId);
             return ResponseEntity.ok(Map.of(
                 "data", refund,
-                "meta", Map.of("timestamp", Instant.now().toString())
+                "meta", metaMap(requestId)
             ));
         } catch (IllegalArgumentException e) {
             var httpStatus = switch (e.getMessage()) {
@@ -79,27 +83,23 @@ public class TransactionController {
                 default -> HttpStatus.BAD_REQUEST;
             };
             return ResponseEntity.status(httpStatus)
-                .body(error(e.getMessage(), e.getMessage(), false, 0));
+                .body(error(e.getMessage(), e.getMessage(), false, 0, requestId));
         }
     }
 
     @GetMapping("/{transactionId}")
     public ResponseEntity<Map<String, Object>> getTransaction(
             @PathVariable String transactionId,
-            @RequestHeader("X-Merchant-Id") UUID merchantId) {
-        var allTx = transactionService.findById(transactionId);
-        if (allTx == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(error("TRANSACTION_NOT_FOUND", "Transaction not found", false, 0));
-        }
+            @RequestHeader("X-Merchant-Id") UUID merchantId,
+            @RequestHeader(value = "X-Request-Id", required = false) String requestId) {
         var ownedTx = transactionService.findById(transactionId, merchantId);
         if (ownedTx.isEmpty()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(error("INSUFFICIENT_PERMISSIONS", "Access denied", false, 0));
+                .body(error("INSUFFICIENT_PERMISSIONS", "Access denied", false, 0, requestId));
         }
         return ResponseEntity.ok(Map.of(
             "data", ownedTx.get(),
-            "meta", Map.of("timestamp", Instant.now().toString())
+            "meta", metaMap(requestId)
         ));
     }
 
@@ -107,22 +107,33 @@ public class TransactionController {
     public ResponseEntity<Map<String, Object>> listTransactions(
             @RequestParam UUID customerId,
             @RequestHeader("X-Merchant-Id") UUID merchantId,
+            @RequestParam(required = false) String status,
+            @RequestHeader(value = "X-Request-Id", required = false) String requestId,
             Pageable pageable) {
-        var page = transactionService.findByCustomer(customerId, merchantId, pageable);
+        Page<TransactionSummary> page;
+        if (status != null && !status.isBlank()) {
+            page = transactionService.findByCustomerAndStatus(customerId, merchantId,
+                TransactionStatus.valueOf(status.toUpperCase()), pageable);
+        } else {
+            page = transactionService.findByCustomer(customerId, merchantId, pageable);
+        }
+        var meta = new java.util.LinkedHashMap<String, Object>();
+        meta.put("timestamp", Instant.now().toString());
+        if (requestId != null) meta.put("requestId", requestId);
+        meta.put("page", page.getNumber());
+        meta.put("size", page.getSize());
+        meta.put("pageSize", pageable.getPageSize());
+        meta.put("total", page.getTotalElements());
         return ResponseEntity.ok(Map.of(
             "data", page.getContent(),
-            "meta", Map.of(
-                "timestamp", Instant.now().toString(),
-                "page", page.getNumber(),
-                "size", page.getSize(),
-                "total", page.getTotalElements()
-            )
+            "meta", meta
         ));
     }
 
     private Map<String, Object> response(String transactionId, Long mpPaymentId,
                                           UUID orderId, String status,
-                                          long processingTimeMs, List<?> errors) {
+                                          long processingTimeMs, List<?> errors,
+                                          String requestId) {
         return Map.of(
             "data", Map.of(
                 "transactionId", transactionId,
@@ -131,24 +142,32 @@ public class TransactionController {
                 "status", status,
                 "processingTimeMs", processingTimeMs
             ),
-            "meta", Map.of("timestamp", Instant.now().toString()),
+            "meta", metaMap(requestId),
             "errors", errors != null ? errors : List.of()
         );
     }
 
-    private Map<String, Object> error(String code, String message, boolean retryable, long processingTimeMs) {
+    private Map<String, Object> error(String code, String message, boolean retryable,
+                                       long processingTimeMs, String requestId) {
         return Map.of(
             "data", Map.of(
                 "status", "FAILURE",
                 "processingTimeMs", processingTimeMs
             ),
-            "meta", Map.of("timestamp", Instant.now().toString()),
+            "meta", metaMap(requestId),
             "errors", List.of(Map.of(
                 "code", code,
                 "message", message,
                 "retryable", retryable
             ))
         );
+    }
+
+    private Map<String, Object> metaMap(String requestId) {
+        if (requestId != null) {
+            return Map.of("timestamp", Instant.now().toString(), "requestId", requestId);
+        }
+        return Map.of("timestamp", Instant.now().toString());
     }
 
     private HttpStatus errorHttpStatus(String errorCode) {

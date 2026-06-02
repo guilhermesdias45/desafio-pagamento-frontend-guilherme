@@ -1,5 +1,7 @@
 package com.acaboumony.payment.client;
 
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,29 +21,35 @@ public class FraudServiceClient {
 
     private final RestTemplate restTemplate;
     private final String fraudServiceUrl;
+    private final CircuitBreaker circuitBreaker;
 
-    public FraudServiceClient(@Value("${fraud.service.url}") String fraudServiceUrl) {
+    public FraudServiceClient(
+            @Value("${fraud.service.url}") String fraudServiceUrl,
+            CircuitBreakerRegistry circuitBreakerRegistry) {
         this.fraudServiceUrl = fraudServiceUrl;
         this.restTemplate = new RestTemplateBuilder()
             .setConnectTimeout(Duration.ofMillis(250))
             .setReadTimeout(Duration.ofMillis(250))
             .build();
+        this.circuitBreaker = circuitBreakerRegistry.circuitBreaker("fraudService");
     }
 
     public FraudScoreResult score(FraudAnalysisRequest request) {
         try {
-            var start = Instant.now();
-            var response = restTemplate.postForEntity(
-                fraudServiceUrl + "/internal/fraud/score",
-                request,
-                FraudScoreResult.class
-            );
-            log.debug("Fraud check completed in {}ms",
-                java.time.Duration.between(start, Instant.now()).toMillis());
-            return response.getBody();
+            return circuitBreaker.executeSupplier(() -> {
+                var start = Instant.now();
+                var response = restTemplate.postForEntity(
+                    fraudServiceUrl + "/internal/fraud/score",
+                    request,
+                    FraudScoreResult.class
+                );
+                log.debug("Fraud check completed in {}ms",
+                    Duration.between(start, Instant.now()).toMillis());
+                return response.getBody();
+            });
         } catch (Exception e) {
-            log.warn("Fraud service unavailable or timeout, returning fallback score=50: {}", e.getMessage());
-            return new FraudScoreResult(50, "APPROVE", List.of("FALLBACK_TIMEOUT"), 0L);
+            log.warn("Fraud service unavailable or circuit open, fallback score=50: {}", e.getMessage());
+            return new FraudScoreResult(50, "APPROVE", List.of("FALLBACK_CIRCUIT_BREAKER"), 0L);
         }
     }
 

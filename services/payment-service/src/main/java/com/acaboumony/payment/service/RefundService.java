@@ -1,6 +1,7 @@
 package com.acaboumony.payment.service;
 
 import com.acaboumony.payment.client.MercadoPagoGateway;
+import com.acaboumony.payment.domain.entity.AuditLog;
 import com.acaboumony.payment.domain.entity.Refund;
 import com.acaboumony.payment.domain.entity.Transaction;
 import com.acaboumony.payment.domain.enums.RefundReason;
@@ -9,6 +10,7 @@ import com.acaboumony.payment.dto.request.RefundRequest;
 import com.acaboumony.payment.dto.response.RefundResponse;
 import com.acaboumony.payment.event.TransactionRefundedEvent;
 import com.acaboumony.payment.event.TransactionEventProducer;
+import com.acaboumony.payment.repository.AuditLogRepository;
 import com.acaboumony.payment.repository.RefundRepository;
 import com.acaboumony.payment.repository.TransactionRepository;
 import org.slf4j.Logger;
@@ -35,17 +37,20 @@ public class RefundService {
 
     private final TransactionRepository transactionRepository;
     private final RefundRepository refundRepository;
+    private final AuditLogRepository auditLogRepository;
     private final StringRedisTemplate redis;
     private final MercadoPagoGateway mpGateway;
     private final TransactionEventProducer eventProducer;
 
     public RefundService(TransactionRepository transactionRepository,
                          RefundRepository refundRepository,
+                         AuditLogRepository auditLogRepository,
                          StringRedisTemplate redis,
                          MercadoPagoGateway mpGateway,
                          TransactionEventProducer eventProducer) {
         this.transactionRepository = transactionRepository;
         this.refundRepository = refundRepository;
+        this.auditLogRepository = auditLogRepository;
         this.redis = redis;
         this.mpGateway = mpGateway;
         this.eventProducer = eventProducer;
@@ -132,8 +137,19 @@ public class RefundService {
             eventProducer.publishRefunded(refundedEvent);
         }
 
+        logAudit(transactionId, request.requestedBy(), "REFUND_" + status, refundAmount + "|" + request.reason().name());
+
         log.info("Refund {} for transaction {}: {}", refundId, transactionId, status);
         return toResponse(refund);
+    }
+
+    private void logAudit(String transactionId, UUID actorId, String action, String details) {
+        try {
+            var audit = new AuditLog(transactionId, action, actorId, details, null);
+            auditLogRepository.save(audit);
+        } catch (Exception e) {
+            log.warn("Failed to write audit log: {}", e.getMessage());
+        }
     }
 
     private RefundResponse toResponse(Refund refund) {
