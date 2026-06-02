@@ -8,6 +8,7 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -29,6 +30,10 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
             status = HttpStatus.UNAUTHORIZED;
             errorCode = "INVALID_TOKEN";
             message = "Token inválido ou expirado";
+        } else if (ex instanceof ResponseStatusException rse && rse.getStatusCode().value() == 404) {
+            status = HttpStatus.NOT_FOUND;
+            errorCode = "NOT_FOUND";
+            message = "Recurso não encontrado";
         } else {
             status = HttpStatus.SERVICE_UNAVAILABLE;
             errorCode = "SERVICE_UNAVAILABLE";
