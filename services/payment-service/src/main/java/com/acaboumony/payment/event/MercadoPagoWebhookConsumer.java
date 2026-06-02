@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.HexFormat;
 
 @RestController
@@ -45,13 +46,14 @@ public class MercadoPagoWebhookConsumer {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        if (webhookSecret != null && !webhookSecret.isBlank()) {
-            if (!validateSignature(payload, signature)) {
-                log.warn("Invalid x-signature for webhook — rejecting");
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
-        } else {
-            log.warn("MERCADOPAGO_WEBHOOK_SECRET not configured — signature validation skipped");
+        if (webhookSecret == null || webhookSecret.isBlank()) {
+            log.error("MERCADOPAGO_WEBHOOK_SECRET not configured — rejecting webhook for security");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        if (!validateSignature(payload, signature)) {
+            log.warn("Invalid x-signature for webhook — rejecting");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         if (!"payment".equals(payload.path("type").asText())) {
@@ -82,6 +84,20 @@ public class MercadoPagoWebhookConsumer {
 
             var ts = tsAndV1[0];
             var v1 = tsAndV1[1];
+
+            long tsSeconds;
+            try {
+                tsSeconds = Long.parseLong(ts);
+            } catch (NumberFormatException e) {
+                log.warn("x-signature ts is not a valid number");
+                return false;
+            }
+            long nowSeconds = Instant.now().getEpochSecond();
+            if (Math.abs(nowSeconds - tsSeconds) > MAX_SIGNATURE_AGE_SECONDS) {
+                log.warn("x-signature timestamp expired: ts={}, now={}, maxAge={}s",
+                    tsSeconds, nowSeconds, MAX_SIGNATURE_AGE_SECONDS);
+                return false;
+            }
 
             var dataId = payload.path("data").path("id").asText();
             var createdAt = payload.path("data").path("created_at").asText("");

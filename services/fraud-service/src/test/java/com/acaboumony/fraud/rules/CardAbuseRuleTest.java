@@ -64,10 +64,11 @@ class CardAbuseRuleTest {
     }
 
     @Test
-    void shouldUsePaymentMethodBasedKey() {
+    void shouldUsePaymentMethodHashedKey() {
         when(valueOps.get(anyString())).thenReturn("3");
         rule.evaluate(request, redis);
-        verify(valueOps).get(eq("fraud:card:visa"));
+        String expectedHash = CardAbuseRule.hashPaymentMethod("visa");
+        verify(valueOps).get(eq("fraud:card:" + expectedHash));
     }
 
     @Test

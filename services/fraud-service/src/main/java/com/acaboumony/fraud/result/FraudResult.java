@@ -24,7 +24,7 @@ public sealed interface FraudResult permits FraudResult.Approved, FraudResult.Un
         }
     }
 
-    record UnderReview(int baseScore, int adjustedScore, List<String> reasons, Duration analysisTime, int claudeAdjustment) implements FraudResult {
+    record UnderReview(int score, List<String> reasons, Duration analysisTime) implements FraudResult {
         @Override
         public FraudDecision decision() {
             return FraudDecision.REVIEW;
@@ -32,7 +32,7 @@ public sealed interface FraudResult permits FraudResult.Approved, FraudResult.Un
 
         @Override
         public FraudScore toScore() {
-            return new FraudScore(adjustedScore, "REVIEW", reasons, analysisTime.toMillis());
+            return new FraudScore(score, "REVIEW", reasons, analysisTime.toMillis());
         }
     }
 

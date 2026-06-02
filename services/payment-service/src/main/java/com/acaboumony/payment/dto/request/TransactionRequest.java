@@ -6,10 +6,10 @@ import java.util.UUID;
 
 public record TransactionRequest(
     @NotNull @Min(1) @Max(999999) Long amountInCents,
-    @NotBlank @Size(min = 3, max = 3) String currency,
+    @NotBlank @Pattern(regexp = "^BRL$") String currency,
     @NotNull UUID customerId,
     @NotNull UUID orderId,
-    @NotBlank @Pattern(regexp = "^[a-f0-9]{32}$") String cardToken,
+    @NotBlank @Pattern(regexp = "^[a-fA-F0-9]{32}$") String cardToken,
     @NotBlank String paymentMethodId,
     @Min(1) @Max(12) Integer installments,
     @NotNull UUID idempotencyKey

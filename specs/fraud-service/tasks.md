@@ -36,18 +36,28 @@
 
 | # | Tarefa | Tipo | Status | Notas |
 |---|--------|------|--------|-------|
-| 21 | **[TEST]** `MerchantPatternRuleTest` — testes unitários da regra (6-8 testes) | Test | ⬜ | CE-004: 0, <3, =3, <5, =5, >5 transações, reason/score |
-| 22 | Adicionar `merchantId` ao `FraudDetectedEvent` (Kafka) | Code | ⬜ | CE-004: evento precisa identificar o merchant |
-| 23 | Persistir `reasoning` do Claude em `FraudAlert.claudeReasoning` | Code | ⬜ | FraudAlert tem coluna TEXT, nunca populada |
-| 24 | Incluir `merchantId` no prompt do Claude (análise contextual) | Code | ⬜ | CE-004: "análise inclui padrão do merchant" |
-| 25 | Mover thresholds para `application.yml` (BLOCK, REVIEW, timeout) | Code | ⬜ | plan.md: env vars configuráveis |
-| 26 | Criar `IpBlacklistRepository` JPA | Code | ⬜ | plan.md: lista na estrutura; Flyway V2 cria tabela |
-| 27 | **[TEST]** Teste CE-004 no `FraudDetectionServiceTest` | Test | ⬜ | Merchant velocity → score elevado |
-| 28 | Anonimizar IP em logs (últimos 8 bits zerados) | Code | ⬜ | Spec §13: PCI DSS LGPD |
-| 29 | Criar `RedisConfig.java` (bean RedisTemplate) | Code | ⬜ | plan.md: classe não existe; auto-config hoje |
-| 30 | Criar `AnthropicConfig.java` (bean AnthropicClient) | Code | ⬜ | plan.md: classe não existe; inline hoje |
+| 21 | **[TEST]** `MerchantPatternRuleTest` — testes unitários da regra (6-8 testes) | Test | ✅ | 9 testes: 0, <3, =3, <5, =5, >5 transações, reason, score, Redis key |
+| 22 | Adicionar `merchantId` ao `FraudDetectedEvent` (Kafka) | Code | ✅ | `FraudEventProducer.FraudDetectedEvent` inclui `UUID merchantId` |
+| 23 | Persistir `reasoning` do Claude em `FraudAlert.claudeReasoning` | Code | ✅ | Coluna TEXT populada em `FraudDetectionService` |
+| 24 | Incluir `merchantId` no prompt do Claude (análise contextual) | Code | ✅ | `ClaudeContextAnalyzerImpl.buildUserPrompt()` inclui `Merchant ID` |
+| 25 | Mover thresholds para `application.yml` (BLOCK, REVIEW, timeout) | Code | ✅ | 6 props configuráveis via env vars |
+| 26 | Criar `IpBlacklistRepository` JPA | Code | ✅ | `JpaRepository<IpBlacklist, UUID>` com `findByIpAddress` |
+| 27 | **[TEST]** Teste CE-004 no `FraudDetectionServiceTest` | Test | ✅ | `ce004_merchantHighVelocity_shouldAddMerchantPatternScore` |
+| 28 | Anonimizar IP em logs (últimos 8 bits zerados) | Code | ✅ | `anonymizeIp()` zera último octeto, usado em logs |
+| 29 | Criar `RedisConfig.java` (bean RedisTemplate) | Code | ✅ | `@Configuration` com bean `StringRedisTemplate` |
+| 30 | Criar `AnthropicConfig.java` (bean AnthropicClient) | Code | ✅ | `@Configuration` com bean `AnthropicClient`, timeout 250ms |
 
 ---
+
+## Sprint 3 (Resilience, Observability, Compliance)
+
+| # | Tarefa | Tipo | Status | Notas |
+|---|--------|------|--------|-------|
+| S1 | **Circuit Breaker Resilience4j** — `ClaudeContextAnalyzerImpl.{getContextualAdjustment,adjustWithReasoning}` com fallback | Code | ✅ | Programático `CircuitBreaker.executeSupplier()`; `resilience4j-spring-boot3:2.2.0` |
+| S2 | **Custom Micrometer metrics** — counters `fraud.decision.approve/review/block`, timer `fraud.analysis.time` | Code | ✅ | `MeterRegistry` injetado no `FraudDetectionService` |
+| S3 | **Auto-blacklist IP** — `FraudDetectionService.autoBlacklistIp()` persiste em JPA `ip_blacklist` | Code | ✅ | Compliance — Épico 2 |
+| S4 | **Health indicators** — Redis, PostgreSQL, Kafka | Code | ✅ | `@Component` health indicators |
+| S5 | **[TEST]** Circuit breaker tests — `ClaudeContextAnalyzerImplTest` com `CircuitBreakerRegistry.ofDefaults()` | Test | ✅ | 15 testes passando |
 
 ## Checklist de Conclusão
 
@@ -62,11 +72,11 @@
 - [x] Revisado e merged
 
 ### Sprint 2
-- [ ] CE-004: `MerchantPatternRuleTest` com cobertura completa
-- [ ] CE-004: `merchantId` no evento Kafka `fraud.detected`
-- [ ] Claude reasoning persistido em `FraudAlert`
-- [ ] Claude prompt inclui contexto do merchant
-- [ ] Thresholds configuráveis via `application.yml`
-- [ ] `IpBlacklistRepository` JPA implementado
-- [ ] IP anonimizado em logs (últimos 8 bits)
-- [ ] `RedisConfig` + `AnthropicConfig` criados
+- [x] CE-004: `MerchantPatternRuleTest` com cobertura completa
+- [x] CE-004: `merchantId` no evento Kafka `fraud.detected`
+- [x] Claude reasoning persistido em `FraudAlert`
+- [x] Claude prompt inclui contexto do merchant
+- [x] Thresholds configuráveis via `application.yml`
+- [x] `IpBlacklistRepository` JPA implementado
+- [x] IP anonimizado em logs (últimos 8 bits)
+- [x] `RedisConfig` + `AnthropicConfig` criados

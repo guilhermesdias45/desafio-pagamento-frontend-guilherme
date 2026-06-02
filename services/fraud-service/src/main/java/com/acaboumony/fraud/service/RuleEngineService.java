@@ -1,6 +1,7 @@
 package com.acaboumony.fraud.service;
 
 import com.acaboumony.fraud.dto.request.FraudAnalysisRequest;
+import com.acaboumony.fraud.repository.IpBlacklistRepository;
 import com.acaboumony.fraud.rules.*;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,12 @@ public class RuleEngineService {
     private final List<FraudRule> rules;
     private final StringRedisTemplate redis;
 
-    public RuleEngineService(StringRedisTemplate redis) {
+    public RuleEngineService(StringRedisTemplate redis, IpBlacklistRepository ipBlacklistRepository) {
         this.redis = redis;
         this.rules = List.of(
             new VelocityRule(),
             new AmountAnomalyRule(),
-            new IpBlacklistRule(),
+            new IpBlacklistRule(ipBlacklistRepository),
             new CountryMismatchRule(),
             new DeviceFingerprintRule(),
             new CardAbuseRule(),

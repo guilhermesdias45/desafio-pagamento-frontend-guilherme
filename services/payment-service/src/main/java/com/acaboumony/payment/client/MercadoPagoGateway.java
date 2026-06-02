@@ -6,8 +6,11 @@ import com.mercadopago.client.payment.PaymentPayerRequest;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.payment.Payment;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -20,41 +23,59 @@ import java.util.concurrent.*;
 public class MercadoPagoGateway {
 
     private static final Logger log = LoggerFactory.getLogger(MercadoPagoGateway.class);
-    private static final long TIMEOUT_MS = 800;
 
     private final PaymentClient paymentClient;
     private final ExecutorService executor;
+    private final long timeoutMs;
+    private final CircuitBreaker circuitBreaker;
 
-    public MercadoPagoGateway() {
+    public MercadoPagoGateway(
+            @Value("${mercadopago.timeout-ms:800}") long timeoutMs,
+            CircuitBreakerRegistry circuitBreakerRegistry) {
         this.paymentClient = new PaymentClient();
         this.executor = Executors.newVirtualThreadPerTaskExecutor();
+        this.timeoutMs = timeoutMs;
+        this.circuitBreaker = circuitBreakerRegistry.circuitBreaker("mercadoPago");
     }
 
     public PaymentResult createPayment(String cardToken, Long amountInCents,
                                         String paymentMethodId, Integer installments,
                                         UUID orderId, String customerEmail) {
-        var start = Instant.now();
         try {
-            var future = CompletableFuture.supplyAsync(() -> {
-                try {
-                    var request = PaymentCreateRequest.builder()
-                        .transactionAmount(new BigDecimal(amountInCents).divide(new BigDecimal(100)))
-                        .token(cardToken)
-                        .description("Acabou o Mony - Pedido " + orderId)
-                        .installments(installments)
-                        .paymentMethodId(paymentMethodId)
-                        .payer(PaymentPayerRequest.builder()
-                            .email(customerEmail).build())
-                        .build();
-                    return paymentClient.create(request);
-                } catch (MPApiException e) {
-                    throw new CompletionException(e);
-                } catch (MPException e) {
-                    throw new CompletionException(e);
-                }
-            }, executor);
+            return circuitBreaker.executeSupplier(() ->
+                doCreatePayment(cardToken, amountInCents, paymentMethodId,
+                    installments, orderId, customerEmail));
+        } catch (Exception e) {
+            log.warn("MP gateway circuit breaker fallback: {}", e.getMessage());
+            return PaymentResult.timeout();
+        }
+    }
 
-            Payment payment = future.get(TIMEOUT_MS, TimeUnit.MILLISECONDS);
+    private PaymentResult doCreatePayment(String cardToken, Long amountInCents,
+                                           String paymentMethodId, Integer installments,
+                                           UUID orderId, String customerEmail) {
+        var start = Instant.now();
+        var future = CompletableFuture.supplyAsync(() -> {
+            try {
+                var request = PaymentCreateRequest.builder()
+                    .transactionAmount(new BigDecimal(amountInCents).divide(new BigDecimal(100)))
+                    .token(cardToken)
+                    .description("Acabou o Mony - Pedido " + orderId)
+                    .installments(installments)
+                    .paymentMethodId(paymentMethodId)
+                    .payer(PaymentPayerRequest.builder()
+                        .email(customerEmail).build())
+                    .build();
+                return paymentClient.create(request);
+            } catch (MPApiException e) {
+                throw new CompletionException(e);
+            } catch (MPException e) {
+                throw new CompletionException(e);
+            }
+        }, executor);
+
+        try {
+            Payment payment = future.get(timeoutMs, TimeUnit.MILLISECONDS);
             log.debug("MP payment created in {}ms: id={}, status={}",
                 Duration.between(start, Instant.now()).toMillis(),
                 payment.getId(), payment.getStatus());
@@ -65,11 +86,13 @@ public class MercadoPagoGateway {
                     payment.getStatusDetail() != null ? payment.getStatusDetail() : "CARD_DECLINED");
                 default -> PaymentResult.declined("UNEXPECTED_STATUS");
             };
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new CompletionException(e);
         } catch (TimeoutException e) {
             log.warn("MP gateway timeout after {}ms", Duration.between(start, Instant.now()).toMillis());
-            return PaymentResult.timeout();
-        } catch (Exception e) {
-            log.error("MP gateway error: {}", e.getMessage());
+            throw new CompletionException(e);
+        } catch (ExecutionException e) {
             var cause = e.getCause();
             if (cause instanceof MPApiException mpApi) {
                 var status = mpApi.getStatusCode();
@@ -77,17 +100,25 @@ public class MercadoPagoGateway {
                     return PaymentResult.declined("CARD_DECLINED");
                 }
             }
-            return PaymentResult.timeout();
+            throw new CompletionException("MP gateway error", e.getCause());
         }
     }
 
     public RefundResult refundPayment(Long mpPaymentId, Long amountInCents) {
         try {
-            BigDecimal amount = amountInCents != null
-                ? new BigDecimal(amountInCents).divide(new BigDecimal(100))
-                : null;
-            var refund = paymentClient.refund(mpPaymentId, amount);
-            return new RefundResult(true, refund.getId());
+            return circuitBreaker.executeSupplier(() -> {
+                try {
+                    BigDecimal amount = amountInCents != null
+                        ? new BigDecimal(amountInCents).divide(new BigDecimal(100))
+                        : null;
+                    var refund = paymentClient.refund(mpPaymentId, amount);
+                    return new RefundResult(true, refund.getId());
+                } catch (MPApiException e) {
+                    throw new CompletionException(e);
+                } catch (MPException e) {
+                    throw new CompletionException(e);
+                }
+            });
         } catch (Exception e) {
             log.error("MP refund error for payment {}: {}", mpPaymentId, e.getMessage());
             return new RefundResult(false, null);

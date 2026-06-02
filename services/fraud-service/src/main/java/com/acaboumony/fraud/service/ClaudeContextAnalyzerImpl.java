@@ -7,6 +7,8 @@ import com.acaboumony.fraud.dto.request.FraudAnalysisRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -21,14 +23,19 @@ public class ClaudeContextAnalyzerImpl implements ClaudeContextAnalyzer {
         You are a fraud detection analyst. Analyze the risk of this transaction and respond with a JSON object only.
         {"adjustment": N, "reasoning": "..."}
         N must be an integer between -10 and +10 (negative = reduce risk score, positive = increase).
+        Consider both customer behavior and merchant context when assessing risk.
         """;
 
     private final com.anthropic.client.AnthropicClient client;
     private final ObjectMapper objectMapper;
+    private final CircuitBreaker circuitBreaker;
 
-    public ClaudeContextAnalyzerImpl(com.anthropic.client.AnthropicClient client) {
+    public ClaudeContextAnalyzerImpl(
+            com.anthropic.client.AnthropicClient client,
+            CircuitBreakerRegistry circuitBreakerRegistry) {
         this.client = client;
         this.objectMapper = new ObjectMapper();
+        this.circuitBreaker = circuitBreakerRegistry.circuitBreaker("claudeApi");
         if (client == null) {
             log.warn("ANTHROPIC_API_KEY not configured; ClaudeContextAnalyzer will always return 0");
         }
@@ -40,19 +47,20 @@ public class ClaudeContextAnalyzerImpl implements ClaudeContextAnalyzer {
             return 0;
         }
 
-        String userPrompt = buildUserPrompt(request, baseScore);
-        MessageCreateParams params = MessageCreateParams.builder()
-            .model(Model.CLAUDE_3_5_HAIKU_LATEST)
-            .maxTokens(100)
-            .system(SYSTEM_PROMPT)
-            .addUserMessage(userPrompt)
-            .build();
-
         try {
-            Message response = client.messages().create(params);
-            return parseAdjustment(response);
+            return circuitBreaker.executeSupplier(() -> {
+                String userPrompt = buildUserPrompt(request, baseScore);
+                MessageCreateParams params = MessageCreateParams.builder()
+                    .model(Model.CLAUDE_3_5_HAIKU_LATEST)
+                    .maxTokens(100)
+                    .system(SYSTEM_PROMPT)
+                    .addUserMessage(userPrompt)
+                    .build();
+                Message response = client.messages().create(params);
+                return parseAdjustment(response);
+            });
         } catch (Exception e) {
-            log.warn("Claude API call failed for transaction {}: {}", request.transactionId(), e.getMessage());
+            log.warn("Claude API call failed or circuit open for transaction {}: {}", request.transactionId(), e.getMessage());
             return 0;
         }
     }
@@ -63,19 +71,20 @@ public class ClaudeContextAnalyzerImpl implements ClaudeContextAnalyzer {
             return new AdjustmentResult(0, null);
         }
 
-        String userPrompt = buildUserPrompt(request, baseScore);
-        MessageCreateParams params = MessageCreateParams.builder()
-            .model(Model.CLAUDE_3_5_HAIKU_LATEST)
-            .maxTokens(100)
-            .system(SYSTEM_PROMPT)
-            .addUserMessage(userPrompt)
-            .build();
-
         try {
-            Message response = client.messages().create(params);
-            return parseAdjustmentWithReasoning(response);
+            return circuitBreaker.executeSupplier(() -> {
+                String userPrompt = buildUserPrompt(request, baseScore);
+                MessageCreateParams params = MessageCreateParams.builder()
+                    .model(Model.CLAUDE_3_5_HAIKU_LATEST)
+                    .maxTokens(100)
+                    .system(SYSTEM_PROMPT)
+                    .addUserMessage(userPrompt)
+                    .build();
+                Message response = client.messages().create(params);
+                return parseAdjustmentWithReasoning(response);
+            });
         } catch (Exception e) {
-            log.warn("Claude API call failed for transaction {}: {}", request.transactionId(), e.getMessage());
+            log.warn("Claude API call failed or circuit open for transaction {}: {}", request.transactionId(), e.getMessage());
             return new AdjustmentResult(0, null);
         }
     }
@@ -90,6 +99,10 @@ public class ClaudeContextAnalyzerImpl implements ClaudeContextAnalyzer {
             IP: %s
             Device: %s
             Score base: %d
+            Merchant context: this merchant's transaction velocity in the last 5 minutes is tracked separately.
+            Consider merchant risk patterns: high-velocity merchants or merchants with repeated fraud alerts
+            may indicate compromised payment infrastructure rather than individual customer fraud.
+            If the merchant has unusual transaction patterns, the contextual adjustment should factor this in.
             """,
             request.transactionId(),
             request.customerId(),

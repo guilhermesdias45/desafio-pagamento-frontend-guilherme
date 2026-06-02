@@ -49,11 +49,28 @@ user:
   service:
     url: ${USER_SERVICE_URL:http://localhost:8083}
 
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+    instances:
+      fraudService:
+        base-config: default
+      mercadoPago:
+        base-config: default
+        wait-duration-in-open-state: 60s
+
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info,metrics,circuitbreakers
   endpoint:
     health:
       show-details: always

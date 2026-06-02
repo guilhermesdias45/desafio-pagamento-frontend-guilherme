@@ -1,6 +1,7 @@
 package com.acaboumony.fraud.service;
 
 import com.acaboumony.fraud.dto.request.FraudAnalysisRequest;
+import com.acaboumony.fraud.repository.IpBlacklistRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +32,8 @@ class RuleEngineServiceTest {
     private ValueOperations<String, String> valueOps;
     @Mock
     private SetOperations<String, String> setOps;
+    @Mock
+    private IpBlacklistRepository ipBlacklistRepository;
 
     private RuleEngineService ruleEngine;
     private FraudAnalysisRequest request;
@@ -40,7 +43,7 @@ class RuleEngineServiceTest {
         lenient().when(redis.opsForZSet()).thenReturn(zSetOps);
         lenient().when(redis.opsForValue()).thenReturn(valueOps);
         lenient().when(redis.opsForSet()).thenReturn(setOps);
-        ruleEngine = new RuleEngineService(redis);
+        ruleEngine = new RuleEngineService(redis, ipBlacklistRepository);
         request = new FraudAnalysisRequest(
             "txn_001", UUID.randomUUID(), UUID.randomUUID(), 5000L,
             "visa", "192.168.1.1", null, null, null
