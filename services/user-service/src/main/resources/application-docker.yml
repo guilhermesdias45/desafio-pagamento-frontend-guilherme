@@ -48,3 +48,8 @@ totp:
 
 internal:
   secret: ${INTERNAL_SECRET}
+
+management:
+  health:
+    mail:
+      enabled: false
