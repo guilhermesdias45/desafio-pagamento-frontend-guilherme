@@ -14,9 +14,48 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      password: ${SPRING_DATA_REDIS_PASSWORD:}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 10
+          min-idle: 2
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/payment_db}
+    username: ${SPRING_DATASOURCE_USERNAME:aom}
+    password: ${SPRING_DATASOURCE_PASSWORD:aom}
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9094}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
 
 server:
   port: 8082
+
+internal:
+  secret: ${INTERNAL_SECRET:dev-internal-secret}
+
+mercadopago:
+  access-token: ${MERCADOPAGO_ACCESS_TOKEN:test-access-token}
+  base-url: ${MERCADOPAGO_BASE_URL:https://api.mercadopago.com}
+  timeout-ms: 800
+
+fraud-service:
+  url: ${FRAUD_SERVICE_URL:http://localhost:8085}
+
+order-service:
+  url: ${ORDER_SERVICE_URL:http://localhost:8083}
+
+payment:
+  rate-limit:
+    max-requests-per-minute: 100
 
 management:
   endpoints:

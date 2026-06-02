@@ -1,0 +1,33 @@
+spring:
+  flyway:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  kafka:
+    producer:
+      properties:
+        spring.json.add.type.headers: false
+
+internal:
+  secret: test-internal-secret
+
+mercadopago:
+  access-token: TEST-ACCESS-TOKEN
+  base-url: http://localhost:${wiremock.server.port:8089}
+  timeout-ms: 800
+
+fraud-service:
+  url: http://localhost:${wiremock.server.port:8089}
+
+order-service:
+  url: http://localhost:${wiremock.server.port:8089}
+
+payment:
+  rate-limit:
+    max-requests-per-minute: 100
+
+management:
+  health:
+    redis:
+      enabled: false

@@ -1,0 +1,23 @@
+spring:
+  flyway:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  kafka:
+    producer:
+      properties:
+        spring.json.add.type.headers: false
+    consumer:
+      group-id: order-service-test
+
+internal:
+  secret: test-internal-secret
+
+order:
+  expiration-minutes: 15
+
+management:
+  health:
+    redis:
+      enabled: false

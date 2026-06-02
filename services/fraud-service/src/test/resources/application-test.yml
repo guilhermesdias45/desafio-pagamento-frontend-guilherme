@@ -1,0 +1,18 @@
+spring:
+  flyway:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  kafka:
+    producer:
+      properties:
+        spring.json.add.type.headers: false
+
+internal:
+  secret: test-internal-secret
+
+management:
+  health:
+    redis:
+      enabled: false

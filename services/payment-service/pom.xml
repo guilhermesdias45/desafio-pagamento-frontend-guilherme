@@ -66,12 +66,7 @@
             <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
 
-        <!-- Mercado Pago SDK -->
-        <dependency>
-            <groupId>com.mercadopago</groupId>
-            <artifactId>sdk-java</artifactId>
-            <version>${mercadopago.version}</version>
-        </dependency>
+        <!-- Nota: MP SDK não usado diretamente — integração via RestClient para testabilidade -->
 
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -106,7 +106,8 @@ services:
         kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic fraud.detected        --partitions 3 --replication-factor 1 &&
         kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic order.created         --partitions 3 --replication-factor 1 &&
         kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic order.paid            --partitions 3 --replication-factor 1 &&
-        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic order.cancelled       --partitions 3 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic order.cancelled         --partitions 3 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic transaction.refunded   --partitions 3 --replication-factor 1 &&
         echo 'Topicos criados com sucesso.'
       "
     networks:
@@ -219,6 +220,8 @@ services:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       MERCADOPAGO_ACCESS_TOKEN: ${MERCADOPAGO_ACCESS_TOKEN}
       FRAUD_SERVICE_URL: http://fraud-service:8085
+      ORDER_SERVICE_URL: http://order-service:8083
+      INTERNAL_SECRET: ${INTERNAL_SECRET}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-payment-service
     ports:
@@ -257,6 +260,7 @@ services:
       SPRING_DATA_REDIS_PORT: 6379
       SPRING_DATA_REDIS_PASSWORD: ${REDIS_PASSWORD}
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      INTERNAL_SECRET: ${INTERNAL_SECRET}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-order-service
     ports:
@@ -333,6 +337,7 @@ services:
       SPRING_DATA_REDIS_PASSWORD: ${REDIS_PASSWORD}
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      INTERNAL_SECRET: ${INTERNAL_SECRET}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-fraud-service
     # Sem porta exposta — apenas interno (payment-service acessa via rede Docker)
