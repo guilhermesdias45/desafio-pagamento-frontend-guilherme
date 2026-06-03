@@ -1,5 +1,6 @@
 package com.acaboumony.payment.client;
 
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
@@ -10,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class OrderServiceClientTest {
 
-    private final OrderServiceClient client = new OrderServiceClient("http://localhost:9999");
+    private final OrderServiceClient client = new OrderServiceClient("http://localhost:9999", CircuitBreakerRegistry.ofDefaults());
 
     @Test
     void validateOrder_whenServiceUnavailable_returnsUnavailable() {

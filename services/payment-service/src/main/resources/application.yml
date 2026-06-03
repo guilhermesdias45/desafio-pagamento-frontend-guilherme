@@ -43,11 +43,11 @@ fraud:
 
 order:
   service:
-    url: ${ORDER_SERVICE_URL:http://localhost:8081}
+    url: ${ORDER_SERVICE_URL:http://localhost:8083}
 
 user:
   service:
-    url: ${USER_SERVICE_URL:http://localhost:8083}
+    url: ${USER_SERVICE_URL:http://localhost:8081}
 
 resilience4j:
   circuitbreaker:
@@ -65,6 +65,13 @@ resilience4j:
       mercadoPago:
         base-config: default
         wait-duration-in-open-state: 60s
+      userService:
+        base-config: default
+      orderService:
+        base-config: default
+
+payment:
+  internal-secret: ${INTERNAL_SECRET:dev-secret}
 
 management:
   endpoints:

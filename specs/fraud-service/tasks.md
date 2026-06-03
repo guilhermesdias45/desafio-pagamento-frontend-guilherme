@@ -80,3 +80,19 @@
 - [x] `IpBlacklistRepository` JPA implementado
 - [x] IP anonimizado em logs (últimos 8 bits)
 - [x] `RedisConfig` + `AnthropicConfig` criados
+
+---
+
+## Sprint 4 (Security Audit + Performance)
+
+| # | Tarefa | Tipo | Status | Notas |
+|---|--------|------|--------|-------|
+| S6 | **Security Audit PCI DSS** — logs, scoring, IP anonimização | Audit | ✅ | Relatório em `qa-output/dev1/pci-report.md` |
+| S7 | **Corrigir raw IP em logs** — `IpBlacklistRule.java:43`, `FraudDetectionService.java:209` | Fix | ✅ | PCI DSS 3.4 — IP substituído por anonimizado ou removido |
+| S8 | **Criar scripts k6** — `POST /internal/fraud/score` (APPROVE, BLOCK, REVIEW) | Test | ✅ | Sprint 4 — ver `scripts/k6/` |
+
+### Checklist Sprint 4
+
+- [x] PCI report gerado sem críticos
+- [x] Raw IP corrigido em logs
+- [x] Scripts k6 criados

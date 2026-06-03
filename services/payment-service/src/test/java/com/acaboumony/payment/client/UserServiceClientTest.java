@@ -1,5 +1,6 @@
 package com.acaboumony.payment.client;
 
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -8,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceClientTest {
 
-    private final UserServiceClient client = new UserServiceClient("http://localhost:9999");
+    private final UserServiceClient client = new UserServiceClient("http://localhost:9999", "test-secret", CircuitBreakerRegistry.ofDefaults());
 
     @Test
     void validateCustomer_whenServiceUnavailable_returnsValid() {

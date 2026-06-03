@@ -1,6 +1,7 @@
 package com.acaboumony.fraud.support;
 
 import com.acaboumony.fraud.FraudServiceApplication;
+import org.junit.jupiter.api.Tag;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -16,6 +17,7 @@ import org.testcontainers.utility.DockerImageName;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @Testcontainers
+@Tag("integration")
 public abstract class BaseIntegrationTest {
 
     @Container

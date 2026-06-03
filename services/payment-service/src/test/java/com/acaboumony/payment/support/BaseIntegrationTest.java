@@ -2,6 +2,7 @@ package com.acaboumony.payment.support;
 
 import com.acaboumony.payment.PaymentServiceApplication;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -20,6 +21,7 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @Testcontainers
+@Tag("integration")
 public abstract class BaseIntegrationTest {
 
     protected static final int WIREMOCK_PORT = 10800;

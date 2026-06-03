@@ -192,6 +192,7 @@ public class FraudDetectionService {
     }
 
     private void autoBlacklistIp(FraudAnalysisRequest request) {
+        String anonymizedIp = anonymizeIp(request.ipAddress());
         String key = "fraud:ip_blacklist:" + request.ipAddress();
         redis.opsForSet().add(key, request.ipAddress());
         redis.expire(key, ipBlacklistTtlHours, TimeUnit.HOURS);
@@ -199,14 +200,14 @@ public class FraudDetectionService {
             if (ipBlacklistRepository.findByIpAddress(request.ipAddress()).isEmpty()) {
                 var entry = com.acaboumony.fraud.domain.entity.IpBlacklist.builder()
                     .ipAddress(request.ipAddress())
-                    .reason("AUTO_BLACKLIST - fraud score " + request)
+                    .reason("AUTO_BLACKLIST - score=" + request)
                     .source(com.acaboumony.fraud.domain.enums.BlacklistSource.AUTOMATIC)
                     .expiresAt(java.time.OffsetDateTime.now().plusHours(ipBlacklistTtlHours))
                     .build();
                 ipBlacklistRepository.save(entry);
             }
         } catch (Exception e) {
-            log.warn("Failed to persist IP blacklist entry for {}: {}", request.ipAddress(), e.getMessage());
+            log.warn("Failed to persist IP blacklist entry for {}: {}", anonymizedIp, e.getMessage());
         }
     }
 

@@ -40,7 +40,7 @@ public class IpBlacklistRule implements FraudRule {
                 }
             }
         } catch (Exception e) {
-            log.warn("Database IP blacklist lookup failed for {}: {}", request.ipAddress(), e.getMessage());
+            log.warn("Database IP blacklist lookup failed: {}", e.getMessage());
         }
 
         return 0;

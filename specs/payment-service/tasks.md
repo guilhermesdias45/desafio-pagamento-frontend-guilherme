@@ -33,7 +33,7 @@
 | 22 | Configurar Dockerfile | Infra | ✅ | |
 | 23 | Configurar entrada no docker-compose.yml | Infra | ✅ | |
 | 24 | Validar cobertura ≥ 90% | Validate | ✅ | JaCoCo 0.8.14 (upgrade de 0.8.12 p/ Java 26), 90% LINE threshold atingido |
-| 25 | PR + code review contra spec | Review | 🔄 | Em andamento — Sprint 2 finalizada |
+| 25 | PR + code review contra spec | Review | ✅ | Merge concluído |
 
 ---
 
@@ -65,16 +65,29 @@
 | S9 | **[TEST]** Circuit breaker tests — `FraudServiceClientTest`, `MercadoPagoGateway{Test,MockedTest}`, `ClaudeContextAnalyzerImplTest` | Test | ✅ | Todos com `CircuitBreakerRegistry.ofDefaults()` |
 | S10 | **Health indicators** — Redis, PostgreSQL, Kafka, MP Gateway | Code | ✅ | `@Component` health indicators em ambos os serviços |
 
-## Checklist de Conclusão
+---
 
-- [x] Todos os CE-001 a CE-007 da spec cobertos por testes
-- [x] Estorno: CE-001 a CE-004 cobertos
-- [x] Cobertura ≥ 90% (JaCoCo)
-- [x] cardToken nunca aparece em nenhum log (verificado)
-- [x] Idempotência testada (mesma key → mesmo resultado)
-- [x] Circuit breaker com fallback nos 3 pontos de falha
-- [x] Metrics Micrometer ativos nos dois serviços
-- [x] Audit logs em refunds
-- [x] Webhook secret ausente = 401
-- [x] WireMock simula: MP aprovado, MP recusado, MP timeout
-- [x] PR em andamento
+## Sprint 4 (Security Audit, Correções, Performance)
+
+| # | Tarefa | Tipo | Status | Notas |
+|---|--------|------|--------|-------|
+| S11 | **Security Audit PCI DSS** — logs, circuit breaker, idempotência, rate limiting | Audit | ✅ | Relatório em `qa-output/dev1/pci-report.md` |
+| S12 | **Corrigir URL defaults invertidos** `order.service.url` → 8083, `user.service.url` → 8081 | Fix | ✅ | D-002 |
+| S13 | **Externalizar `X-Internal-Secret`** do payment-service para `application.yml` | Fix | ✅ | D-003: config `payment.internal-secret` lê `INTERNAL_SECRET` env var |
+| S14 | **Alinhar header de role** `X-User-Roles` → `X-User-Role` (singular) no `OrderServiceClient` | Fix | ✅ | D-004 |
+| S15 | **Adicionar circuit breaker** em `UserServiceClient` e `OrderServiceClient` | Fix | ✅ | Instâncias `userService` e `orderService` no resilience4j |
+| S16 | **Corrigir raw IP em logs** — `IpBlacklistRule.java` e `FraudDetectionService.java` | Fix | ✅ | PCI DSS 3.4 |
+| S17 | **Criar scripts k6** — fraud score, transações, consulta, refund, e2e | Test | ✅ | Sprint 4 — ver `scripts/k6/` |
+| S18 | **Testcontainers** — verificar `@Disabled` e configurar `@Tag("integration")` | Config | ✅ | Sprint 4 |
+
+## Checklist de Conclusão (Sprint 4)
+
+- [x] Defaults de URL corrigidos no `application.yml`
+- [x] Internal secret externalizado para config (D-003)
+- [x] Circuit breaker nos 5 clients (fraudService, mercadoPago, claudeApi, userService, orderService)
+- [x] PCI report gerado em `qa-output/dev1/pci-report.md` sem críticos
+- [x] Scripts k6 criados em `scripts/k6/` para payment e fraud
+- [x] Testcontainers rodando sem `@Disabled`
+- [x] `mvn verify` com cobertura JaCoCo ≥ 90%
+- [x] `AuditLog` populado em todos os pontos do fluxo
+- [x] `tasks.md` atualizado
