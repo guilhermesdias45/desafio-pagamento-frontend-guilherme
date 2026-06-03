@@ -53,7 +53,7 @@ public class OrderController {
     public ResponseEntity<ApiResponse<OrderDetailResponse>> getOrder(
             @PathVariable UUID orderId,
             @RequestHeader("X-User-Id") UUID userId,
-            @RequestHeader(value = "X-User-Roles", defaultValue = "CUSTOMER") String role,
+            @RequestHeader(value = "X-User-Role", defaultValue = "CUSTOMER") String role,
             @RequestHeader(value = "X-Merchant-Id", required = false) UUID merchantId) {
 
         var order = orderService.getOrder(orderId, userId, role, merchantId);
@@ -63,7 +63,7 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<ApiResponse<PagedResponse<OrderResponse>>> listOrders(
             @RequestHeader("X-User-Id") UUID userId,
-            @RequestHeader(value = "X-User-Roles", defaultValue = "CUSTOMER") String role,
+            @RequestHeader(value = "X-User-Role", defaultValue = "CUSTOMER") String role,
             @RequestHeader(value = "X-Merchant-Id", required = false) UUID merchantId,
             @RequestParam(required = false) String status,
             @RequestParam(defaultValue = "0") int page,
@@ -77,7 +77,7 @@ public class OrderController {
     public ResponseEntity<Void> cancelOrder(
             @PathVariable UUID orderId,
             @RequestHeader("X-User-Id") UUID userId,
-            @RequestHeader(value = "X-User-Roles", defaultValue = "CUSTOMER") String role,
+            @RequestHeader(value = "X-User-Role", defaultValue = "CUSTOMER") String role,
             @RequestHeader(value = "X-Merchant-Id", required = false) UUID merchantId) {
 
         orderService.cancelOrder(orderId, userId, role, merchantId);

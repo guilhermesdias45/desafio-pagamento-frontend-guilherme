@@ -78,7 +78,7 @@ spring:
 services:
   user-service:
     url: ${USER_SERVICE_URL:http://localhost:8081}
-    internal-secret: ${INTERNAL_SERVICE_SECRET:dev-secret}
+    internal-secret: ${INTERNAL_SECRET:dev-secret}
 
 server:
   port: 8080

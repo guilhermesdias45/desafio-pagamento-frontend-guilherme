@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -37,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(OrderController.class)
 @Import(GlobalExceptionHandler.class)
+@TestPropertySource(properties = "internal.secret=test-secret")
 class OrderControllerTest {
 
     @Autowired
@@ -121,7 +123,7 @@ class OrderControllerTest {
 
         mockMvc.perform(get("/api/v1/orders/{orderId}", orderId)
                         .header("X-User-Id", customerId)
-                        .header("X-User-Roles", "CUSTOMER"))
+                        .header("X-User-Role", "CUSTOMER"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.orderId").value(orderId.toString()))
                 .andExpect(jsonPath("$.data.status").value("PAID"))
@@ -138,7 +140,7 @@ class OrderControllerTest {
 
         mockMvc.perform(get("/api/v1/orders/{orderId}", orderId)
                         .header("X-User-Id", customerId)
-                        .header("X-User-Roles", "CUSTOMER"))
+                        .header("X-User-Role", "CUSTOMER"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errors[0].code").value("ORDER_NOT_FOUND"));
     }
@@ -153,7 +155,7 @@ class OrderControllerTest {
 
         mockMvc.perform(get("/api/v1/orders/{orderId}", orderId)
                         .header("X-User-Id", customerId)
-                        .header("X-User-Roles", "CUSTOMER"))
+                        .header("X-User-Role", "CUSTOMER"))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.errors[0].code").value("INSUFFICIENT_PERMISSIONS"));
     }
@@ -168,7 +170,7 @@ class OrderControllerTest {
 
         mockMvc.perform(get("/api/v1/orders")
                         .header("X-User-Id", customerId)
-                        .header("X-User-Roles", "CUSTOMER"))
+                        .header("X-User-Role", "CUSTOMER"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.content").isArray())
                 .andExpect(jsonPath("$.errors").isEmpty());
@@ -181,7 +183,7 @@ class OrderControllerTest {
 
         mockMvc.perform(delete("/api/v1/orders/{orderId}", orderId)
                         .header("X-User-Id", customerId)
-                        .header("X-User-Roles", "CUSTOMER"))
+                        .header("X-User-Role", "CUSTOMER"))
                 .andExpect(status().isNoContent());
     }
 
@@ -195,7 +197,7 @@ class OrderControllerTest {
 
         mockMvc.perform(delete("/api/v1/orders/{orderId}", orderId)
                         .header("X-User-Id", customerId)
-                        .header("X-User-Roles", "CUSTOMER"))
+                        .header("X-User-Role", "CUSTOMER"))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.errors[0].code").value("ORDER_CANNOT_BE_CANCELLED"));
     }
@@ -249,7 +251,7 @@ class OrderControllerTest {
 
         mockMvc.perform(get("/api/v1/orders")
                         .header("X-User-Id", customerId)
-                        .header("X-User-Roles", "CUSTOMER")
+                        .header("X-User-Role", "CUSTOMER")
                         .param("status", "PENDING"))
                 .andExpect(status().isOk());
     }

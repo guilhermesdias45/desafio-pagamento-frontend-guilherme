@@ -1,7 +1,7 @@
 package com.acaboumony.order.integration;
 
 import com.acaboumony.order.dto.request.CreateOrderRequest;
-import com.acaboumony.order.dto.request.OrderItemRequest;
+import com.acaboumony.order.dto.request.ItemRequest;
 import com.acaboumony.order.dto.response.OrderResponse;
 import com.acaboumony.order.repository.OrderRepository;
 import com.acaboumony.order.service.OrderService;
@@ -76,22 +76,21 @@ class OrderServiceIntegrationTest {
         CreateOrderRequest request = new CreateOrderRequest(
                 merchantId,
                 List.of(
-                        new OrderItemRequest("SHIRT-001", "Blue shirt size M", 2, 4999L),
-                        new OrderItemRequest("PANTS-002", "Black jeans", 1, 8999L)
-                ),
-                idempotencyKey
+                        new ItemRequest("SHIRT-001", "Blue shirt size M", 2, 4999L),
+                        new ItemRequest("PANTS-002", "Black jeans", 1, 8999L)
+                )
         );
 
-        OrderResponse response = orderService.createOrder(request, customerId);
+        var result = orderService.createOrder(customerId, "ana@loja.com", idempotencyKey, request);
+        assertThat(result).isInstanceOf(OrderService.CreateOrderResult.Success.class);
+        OrderResponse response = ((OrderService.CreateOrderResult.Success) result).order();
 
-        // 1. Verify response
         assertThat(response.status()).isEqualTo("PENDING");
-        assertThat(response.totalInCents()).isEqualTo(2 * 4999L + 8999L); // 18997
+        assertThat(response.totalInCents()).isEqualTo(2 * 4999L + 8999L);
         assertThat(response.orderId()).isNotNull();
         assertThat(response.expiresAt()).isNotNull();
         assertThat(response.items()).hasSize(2);
 
-        // 2. Verify persisted to DB
         assertThat(orderRepository.findById(response.orderId())).isPresent();
         var saved = orderRepository.findById(response.orderId()).get();
         assertThat(saved.getCustomerId()).isEqualTo(customerId);
@@ -99,7 +98,6 @@ class OrderServiceIntegrationTest {
         assertThat(saved.getTotalInCents()).isEqualTo(18997L);
         assertThat(saved.getItems()).hasSize(2);
 
-        // 3. Verify idempotency key in Redis
         String redisKey = "order:idem:" + idempotencyKey;
         assertThat(redisTemplate.hasKey(redisKey)).isTrue();
     }
@@ -112,14 +110,22 @@ class OrderServiceIntegrationTest {
 
         CreateOrderRequest request = new CreateOrderRequest(
                 merchantId,
-                List.of(new OrderItemRequest("P1", "Product", 1, 1000L)),
-                idempotencyKey
+                List.of(new ItemRequest("P1", "Product", 1, 1000L))
         );
 
-        OrderResponse first = orderService.createOrder(request, customerId);
-        OrderResponse second = orderService.createOrder(request, customerId);
+        var first = orderService.createOrder(customerId, "ana@loja.com", idempotencyKey, request);
+        var second = orderService.createOrder(customerId, "ana@loja.com", idempotencyKey, request);
 
-        assertThat(first.orderId()).isEqualTo(second.orderId());
+        UUID firstId = switch (first) {
+            case OrderService.CreateOrderResult.Success s -> s.order().orderId();
+            case OrderService.CreateOrderResult.Duplicate d -> d.existingOrder().orderId();
+        };
+        UUID secondId = switch (second) {
+            case OrderService.CreateOrderResult.Success s -> s.order().orderId();
+            case OrderService.CreateOrderResult.Duplicate d -> d.existingOrder().orderId();
+        };
+
+        assertThat(firstId).isEqualTo(secondId);
         assertThat(orderRepository.count()).isGreaterThanOrEqualTo(1);
     }
 }

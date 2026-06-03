@@ -37,7 +37,7 @@ totp:
   aes-key: ${TOTP_AES_KEY:0000000000000000000000000000000000000000000000000000000000000000}
 
 internal:
-  secret: ${INTERNAL_SECRET:dev-internal-secret}
+  secret: ${INTERNAL_SECRET:dev-secret}
 
 security:
   login:

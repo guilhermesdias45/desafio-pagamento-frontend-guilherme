@@ -5,6 +5,7 @@ import com.acaboumony.order.domain.entity.OrderItem;
 import com.acaboumony.order.domain.enums.OrderStatus;
 import com.acaboumony.order.dto.request.CreateOrderRequest;
 import com.acaboumony.order.dto.request.ItemRequest;
+import com.acaboumony.order.dto.response.InternalOrderResponse;
 import com.acaboumony.order.dto.response.OrderDetailResponse;
 import com.acaboumony.order.dto.response.OrderResponse;
 import com.acaboumony.order.dto.response.PagedResponse;
@@ -196,6 +197,18 @@ public class OrderService {
         item.setUnitPriceInCents(request.unitPriceInCents());
         item.setSubtotalInCents(request.unitPriceInCents() * request.quantity());
         return item;
+    }
+
+    public InternalOrderResponse getOrderInternal(UUID orderId) {
+        var order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
+        return new InternalOrderResponse(
+                order.getId(),
+                order.getStatus().name(),
+                order.getTotalInCents(),
+                order.getMerchantId(),
+                order.getCustomerId()
+        );
     }
 
     void authorizeAccess(Order order, UUID userId, String role, UUID merchantId) {

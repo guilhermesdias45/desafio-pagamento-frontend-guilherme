@@ -99,6 +99,7 @@ public class GlobalExceptionHandler {
                  "MALFORMED_TOKEN", "INVALID_TOKEN", "MISSING_CLAIMS", "INVALID_CLAIMS" -> HttpStatus.UNAUTHORIZED;
             case "ACCOUNT_LOCKED" -> HttpStatus.LOCKED;
             case "ACCOUNT_NOT_CONFIRMED", "ACCOUNT_DISABLED" -> HttpStatus.FORBIDDEN;
+            case "USER_NOT_FOUND" -> HttpStatus.NOT_FOUND;
             case "TWO_FACTOR_NOT_ENABLED", "RECOVERY_CODE_EXHAUSTED" -> HttpStatus.UNPROCESSABLE_ENTITY;
             case "TOO_MANY_REQUESTS" -> HttpStatus.TOO_MANY_REQUESTS;
             default -> HttpStatus.INTERNAL_SERVER_ERROR;
