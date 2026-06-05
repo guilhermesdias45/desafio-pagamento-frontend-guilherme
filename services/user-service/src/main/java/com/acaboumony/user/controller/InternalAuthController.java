@@ -6,6 +6,7 @@ import com.acaboumony.user.security.JwtTokenValidator;
 import com.acaboumony.user.security.JwtValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -30,9 +31,12 @@ public class InternalAuthController {
     private static final Logger log = LoggerFactory.getLogger(InternalAuthController.class);
 
     private final JwtTokenValidator jwtTokenValidator;
+    private final StringRedisTemplate stringRedisTemplate;
 
-    public InternalAuthController(JwtTokenValidator jwtTokenValidator) {
+    public InternalAuthController(JwtTokenValidator jwtTokenValidator,
+                                   StringRedisTemplate stringRedisTemplate) {
         this.jwtTokenValidator = jwtTokenValidator;
+        this.stringRedisTemplate = stringRedisTemplate;
     }
 
     /**
@@ -47,7 +51,10 @@ public class InternalAuthController {
             @RequestHeader("Authorization") String authHeader) {
 
         String token = authHeader.replaceFirst("(?i)^Bearer\\s+", "");
-        JwtClaims claims = jwtTokenValidator.validate(token); // throws JwtValidationException on failure
+        if (Boolean.TRUE.equals(stringRedisTemplate.hasKey("blacklist:" + token))) {
+            throw new JwtValidationException("TOKEN_REVOKED", "Token has been revoked", null);
+        }
+        JwtClaims claims = jwtTokenValidator.validate(token);
         log.debug("Token validated: userId={}", claims.sub());
         return ResponseEntity.ok(new ValidateTokenResponse(
                 claims.sub(),

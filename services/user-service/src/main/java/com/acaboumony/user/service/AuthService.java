@@ -226,10 +226,32 @@ public class AuthService {
      * Logs out a specific session by revoking its refresh token.
      * Idempotent — calling with an already-revoked token is a no-op.
      */
-    public void logout(UUID userId, String refreshToken) {
+    public void logout(UUID userId, String refreshToken, String accessToken, Instant tokenExp) {
         refreshTokenService.revoke(refreshToken);
+        if (accessToken != null && tokenExp != null) {
+            Duration ttl = Duration.between(Instant.now(), tokenExp);
+            if (!ttl.isNegative()) {
+                stringRedisTemplate.opsForValue().set("blacklist:" + accessToken, "1", ttl);
+                // Invalidate the gateway's token validation cache so blacklist takes effect immediately
+                String tokenHash = sha256(accessToken);
+                if (tokenHash != null) {
+                    stringRedisTemplate.delete("token_validation:" + tokenHash);
+                }
+            }
+        }
         userAuditLogger.log(userId, "LOGOUT", null, null);
         log.info("Logout: userId={}", userId);
+    }
+
+    private static String sha256(String input) {
+        try {
+            java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(input.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            return java.util.HexFormat.of().formatHex(hash);
+        } catch (java.security.NoSuchAlgorithmException e) {
+            log.warn("SHA-256 not available, gateway cache not invalidated for logout");
+            return null;
+        }
     }
 
     // ─── resendConfirmation ───────────────────────────────────────────────────

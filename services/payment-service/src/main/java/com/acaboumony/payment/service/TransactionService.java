@@ -146,7 +146,7 @@ public class TransactionService {
             request.paymentMethodId(), ipAddress, null, null, null
         );
         var fraudResult = fraudClient.score(fraudRequest);
-        logAudit(transactionId, merchantId, "FRAUD_CHECK", "risk=" + fraudResult.decision(), ipAddress);
+        logAudit(transactionId, merchantId, "FRAUD_CHECK", "{\"risk\":\"" + fraudResult.decision() + "\"}", ipAddress);
 
         if ("BLOCK".equals(fraudResult.decision())) {
             saveFailedTransaction(transactionId, request, merchantId, "SUSPECTED_FRAUD", start);
@@ -169,7 +169,7 @@ public class TransactionService {
             }
             saveFailedTransaction(transactionId, request, merchantId, "CARD_DECLINED", start);
             publishFailed(transactionId, request, customerEmail, "CARD_DECLINED", start);
-            logAudit(transactionId, merchantId, "PAYMENT_FAILED", "CARD_DECLINED", ipAddress);
+            logAudit(transactionId, merchantId, "PAYMENT_FAILED", "{\"detail\":\"CARD_DECLINED\"}", ipAddress);
             safeRedisDelete(idempotencyKey);
             return fail("CARD_DECLINED", "Payment gateway error", true, start);
         }

@@ -18,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -83,9 +84,12 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(
             @AuthenticationPrincipal JwtClaims claims,
-            @CookieValue(name = "refreshToken", required = false) String token) {
+            @CookieValue(name = "refreshToken", required = false) String token,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
         if (token != null && claims != null) {
-            authService.logout(claims.sub(), token);
+            String accessToken = (authHeader != null && authHeader.startsWith("Bearer "))
+                    ? authHeader.substring(7) : null;
+            authService.logout(claims.sub(), token, accessToken, claims.expiresAt());
         }
         return ResponseEntity.noContent().build();
     }

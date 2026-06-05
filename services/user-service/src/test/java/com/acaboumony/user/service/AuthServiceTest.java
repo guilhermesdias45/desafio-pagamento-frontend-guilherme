@@ -296,7 +296,7 @@ class AuthServiceTest {
     @Test
     void deve_revogar_refresh_token_no_logout() {
         UUID userId = UUID.randomUUID();
-        authService.logout(userId, "some-token");
+        authService.logout(userId, "some-token", null, null);
 
         verify(refreshTokenService).revoke("some-token");
         verify(userAuditLogger).log(eq(userId), eq("LOGOUT"), any(), any());
