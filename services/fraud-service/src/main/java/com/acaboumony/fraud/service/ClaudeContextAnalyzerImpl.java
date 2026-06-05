@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import org.springframework.lang.Nullable;
 
 @Component
 public class ClaudeContextAnalyzerImpl implements ClaudeContextAnalyzer {
@@ -31,7 +32,7 @@ public class ClaudeContextAnalyzerImpl implements ClaudeContextAnalyzer {
     private final CircuitBreaker circuitBreaker;
 
     public ClaudeContextAnalyzerImpl(
-            com.anthropic.client.AnthropicClient client,
+            @Nullable com.anthropic.client.AnthropicClient client,
             CircuitBreakerRegistry circuitBreakerRegistry) {
         this.client = client;
         this.objectMapper = new ObjectMapper();
