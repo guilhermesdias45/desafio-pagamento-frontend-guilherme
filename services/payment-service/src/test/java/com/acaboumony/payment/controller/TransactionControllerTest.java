@@ -55,7 +55,7 @@ class TransactionControllerTest {
 
         mockMvc.perform(post("/api/v1/transactions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Customer-Email", "test@test.com")
+                .header("X-User-Email", "test@test.com")
                 .header("X-Merchant-Id", UUID.randomUUID().toString())
                 .header("X-Forwarded-For", "127.0.0.1")
                 .content(objectMapper.writeValueAsString(request)))
@@ -73,7 +73,7 @@ class TransactionControllerTest {
 
         mockMvc.perform(post("/api/v1/transactions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Customer-Email", "test@test.com")
+                .header("X-User-Email", "test@test.com")
                 .header("X-Merchant-Id", UUID.randomUUID().toString())
                 .header("X-Forwarded-For", "127.0.0.1")
                 .content(objectMapper.writeValueAsString(request)))
@@ -255,7 +255,7 @@ class TransactionControllerTest {
 
         mockMvc.perform(post("/api/v1/transactions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Customer-Email", "test@test.com")
+                .header("X-User-Email", "test@test.com")
                 .header("X-Merchant-Id", UUID.randomUUID().toString())
                 .header("X-Forwarded-For", "127.0.0.1")
                 .header("X-Request-Id", requestId)
@@ -276,7 +276,7 @@ class TransactionControllerTest {
 
         mockMvc.perform(post("/api/v1/transactions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Customer-Email", "test@test.com")
+                .header("X-User-Email", "test@test.com")
                 .header("X-Merchant-Id", UUID.randomUUID().toString())
                 .header("X-Forwarded-For", "127.0.0.1")
                 .content(objectMapper.writeValueAsString(request)))
@@ -296,7 +296,7 @@ class TransactionControllerTest {
 
         mockMvc.perform(post("/api/v1/transactions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Customer-Email", "test@test.com")
+                .header("X-User-Email", "test@test.com")
                 .header("X-Merchant-Id", UUID.randomUUID().toString())
                 .header("X-Forwarded-For", "127.0.0.1")
                 .content(objectMapper.writeValueAsString(request)))
@@ -316,7 +316,7 @@ class TransactionControllerTest {
 
         mockMvc.perform(post("/api/v1/transactions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Customer-Email", "test@test.com")
+                .header("X-User-Email", "test@test.com")
                 .header("X-Merchant-Id", UUID.randomUUID().toString())
                 .header("X-Forwarded-For", "127.0.0.1")
                 .content(objectMapper.writeValueAsString(request)))
@@ -373,7 +373,7 @@ class TransactionControllerTest {
 
         mockMvc.perform(post("/api/v1/transactions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Customer-Email", "test@test.com")
+                .header("X-User-Email", "test@test.com")
                 .header("X-Merchant-Id", UUID.randomUUID().toString())
                 .header("X-Forwarded-For", "127.0.0.1")
                 .content(objectMapper.writeValueAsString(request)))
@@ -393,7 +393,7 @@ class TransactionControllerTest {
 
         mockMvc.perform(post("/api/v1/transactions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Customer-Email", "test@test.com")
+                .header("X-User-Email", "test@test.com")
                 .header("X-Merchant-Id", UUID.randomUUID().toString())
                 .header("X-Forwarded-For", "127.0.0.1")
                 .content(objectMapper.writeValueAsString(request)))
@@ -413,7 +413,7 @@ class TransactionControllerTest {
 
         mockMvc.perform(post("/api/v1/transactions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Customer-Email", "test@test.com")
+                .header("X-User-Email", "test@test.com")
                 .header("X-Merchant-Id", UUID.randomUUID().toString())
                 .header("X-Forwarded-For", "127.0.0.1")
                 .content(objectMapper.writeValueAsString(request)))
@@ -433,7 +433,7 @@ class TransactionControllerTest {
 
         mockMvc.perform(post("/api/v1/transactions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Customer-Email", "test@test.com")
+                .header("X-User-Email", "test@test.com")
                 .header("X-Merchant-Id", UUID.randomUUID().toString())
                 .header("X-Forwarded-For", "127.0.0.1")
                 .content(objectMapper.writeValueAsString(request)))
@@ -453,7 +453,7 @@ class TransactionControllerTest {
 
         mockMvc.perform(post("/api/v1/transactions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Customer-Email", "test@test.com")
+                .header("X-User-Email", "test@test.com")
                 .header("X-Merchant-Id", UUID.randomUUID().toString())
                 .header("X-Forwarded-For", "127.0.0.1")
                 .content(objectMapper.writeValueAsString(request)))
@@ -473,7 +473,7 @@ class TransactionControllerTest {
 
         mockMvc.perform(post("/api/v1/transactions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Customer-Email", "test@test.com")
+                .header("X-User-Email", "test@test.com")
                 .header("X-Merchant-Id", UUID.randomUUID().toString())
                 .header("X-Forwarded-For", "127.0.0.1")
                 .content(objectMapper.writeValueAsString(request)))

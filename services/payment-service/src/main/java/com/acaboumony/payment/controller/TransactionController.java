@@ -37,7 +37,7 @@ public class TransactionController {
     @PostMapping
     public ResponseEntity<Map<String, Object>> processTransaction(
             @Valid @RequestBody TransactionRequest request,
-            @RequestHeader("X-Customer-Email") String customerEmail,
+            @RequestHeader("X-User-Email") String customerEmail,
             @RequestHeader("X-Merchant-Id") UUID merchantId,
             @RequestHeader("X-Forwarded-For") String ipAddress,
             @RequestHeader(value = "X-Request-Id", required = false) String requestId) {

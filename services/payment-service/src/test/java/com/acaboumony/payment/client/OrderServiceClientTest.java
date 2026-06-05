@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class OrderServiceClientTest {
 
-    private final OrderServiceClient client = new OrderServiceClient("http://localhost:9999", CircuitBreakerRegistry.ofDefaults());
+    private final OrderServiceClient client = new OrderServiceClient("http://localhost:9999", "test-secret", CircuitBreakerRegistry.ofDefaults());
 
     @Test
     void validateOrder_whenServiceUnavailable_returnsUnavailable() {
