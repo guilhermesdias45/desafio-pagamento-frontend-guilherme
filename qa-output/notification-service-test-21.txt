@@ -1,0 +1,227 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------< com.acaboumony:notification-service >-----------------
+[INFO] Building notification-service 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ notification-service ---
+[INFO] Deleting C:\Users\guilherme.dias\Downloads\desafio-pagamento\desafio-pagamento\services\notification-service\target
+[INFO] 
+[INFO] --- jacoco:0.8.12:prepare-agent (default) @ notification-service ---
+[INFO] Skipping JaCoCo execution because property jacoco.skip is set.
+[INFO] argLine set to empty
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ notification-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 11 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ notification-service ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 22 source files with javac [debug parameters release 21] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ notification-service ---
+[INFO] skip non existing resourceDirectory C:\Users\guilherme.dias\Downloads\desafio-pagamento\desafio-pagamento\services\notification-service\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ notification-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 10 source files with javac [debug parameters release 21] to target\test-classes
+[INFO] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/notification-service/src/test/java/com/acaboumony/notification/support/BaseIntegrationTest.java: C:\Users\guilherme.dias\Downloads\desafio-pagamento\desafio-pagamento\services\notification-service\src\test\java\com\acaboumony\notification\support\BaseIntegrationTest.java uses or overrides a deprecated API.
+[INFO] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/notification-service/src/test/java/com/acaboumony/notification/support/BaseIntegrationTest.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- surefire:3.5.3:test (default-test) @ notification-service ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+mvn : jun. 05, 2026 9:34:06 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+No linha:19 caractere:5
++     mvn clean test "-Djacoco.skip=true" *>&1 | Out-File -FilePath $lo ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (jun. 05, 2026 9...asspathResource:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:06 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:06 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:06 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:06 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:07 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:07 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:07 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:07 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:07 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:07 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+[INFO] Running com.acaboumony.notification.config.KafkaConsumerConfigTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.203 s -- in com.acaboumony.notification.config.KafkaConsumerConfigTest
+[INFO] Running com.acaboumony.notification.service.EmailRateLimiterTest
+09:34:07.786 [main] WARN com.acaboumony.notification.service.EmailRateLimiter -- Rate limit reached for test@test.com: 2 emails in the last hour
+09:34:07.803 [main] WARN com.acaboumony.notification.service.EmailRateLimiter -- Rate limit reached for test@test.com: 2 emails in the last hour
+09:34:07.803 [main] WARN com.acaboumony.notification.service.EmailRateLimiter -- Rate limit reached for a@test.com: 1 emails in the last hour
+09:34:07.803 [main] WARN com.acaboumony.notification.service.EmailRateLimiter -- Rate limit reached for b@test.com: 1 emails in the last hour
+09:34:07.815 [main] WARN com.acaboumony.notification.service.EmailRateLimiter -- Rate limit reached for alice@test.com: 1 emails in the last hour
+09:34:07.818 [main] WARN com.acaboumony.notification.service.EmailRateLimiter -- Rate limit reached for alice@test.com: 2 emails in the last hour
+09:34:07.818 [main] WARN com.acaboumony.notification.service.EmailRateLimiter -- Rate limit reached for bob@test.com: 2 emails in the last hour
+09:34:07.819 [main] WARN com.acaboumony.notification.service.EmailRateLimiter -- Rate limit reached for a@test.com: 1 emails in the last hour
+09:34:07.819 [main] WARN com.acaboumony.notification.service.EmailRateLimiter -- Rate limit reached for b@test.com: 1 emails in the last hour
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.084 s -- in com.acaboumony.notification.service.EmailRateLimiterTest
+[INFO] Running com.acaboumony.notification.service.EmailServiceNullRecipientTest
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of 
+the JDK. Please add Mockito as an agent to your build what is described in Mockito's documentation: 
+https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically 
+(C:\Users\guilherme.dias\.m2\repository\net\bytebuddy\byte-buddy-agent\1.15.11\byte-buddy-agent-1.15.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has 
+been appended
+09:34:08.858 [main] WARN com.acaboumony.notification.service.EmailService -- Skipping email to null/blank recipient: subject=Subject, template=template
+09:34:08.900 [main] WARN com.acaboumony.notification.service.EmailService -- Skipping email to null/blank recipient: subject=Subject, template=template
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.065 s -- in com.acaboumony.notification.service.EmailServiceNullRecipientTest
+[INFO] Running com.acaboumony.notification.service.EmailServiceTest
+[INFO] Running com.acaboumony.notification.service.EmailServiceTest$TemplateFallback
+09:34:08.988 [main] WARN com.acaboumony.notification.service.EmailService -- Template broken-template failed, falling back to plain text: Template error
+09:34:09.017 [main] INFO com.acaboumony.notification.service.EmailService -- Email sent successfully: to=test@test.com, eventType=broken-template
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.105 s -- in com.acaboumony.notification.service.EmailServiceTest$TemplateFallback
+[INFO] Running com.acaboumony.notification.service.EmailServiceTest$RateLimit
+09:34:09.032 [main] WARN com.acaboumony.notification.service.EmailService -- Rate limited: skipping email to test@test.com, subject=Subject
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s -- in com.acaboumony.notification.service.EmailServiceTest$RateLimit
+[INFO] Running com.acaboumony.notification.service.EmailServiceTest$Idempotency
+09:34:09.038 [main] INFO com.acaboumony.notification.service.EmailService -- Duplicate notification skipped: correlationId=dup-key, eventType=welcome
+09:34:09.042 [main] INFO com.acaboumony.notification.service.EmailService -- Email sent successfully: to=test@test.com, eventType=welcome
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.020 s -- in com.acaboumony.notification.service.EmailServiceTest$Idempotency
+[INFO] Running com.acaboumony.notification.service.EmailServiceTest$SendEmail
+09:34:09.059 [main] WARN com.acaboumony.notification.service.EmailService -- Failed to send email (attempt 1/3): to=test@test.com, error=SMTP unavailable
+09:34:10.079 [main] WARN com.acaboumony.notification.service.EmailService -- Failed to send email (attempt 2/3): to=test@test.com, error=SMTP unavailable
+09:34:15.105 [main] WARN com.acaboumony.notification.service.EmailService -- Failed to send email (attempt 3/3): to=test@test.com, error=SMTP unavailable
+09:34:15.105 [main] ERROR com.acaboumony.notification.service.EmailService -- Email failed permanently: to=test@test.com, eventType=welcome, error=SMTP unavailable
+09:34:15.120 [main] WARN com.acaboumony.notification.service.EmailService -- Failed to send email (attempt 1/3): to=test@test.com, error=SMTP unavailable
+09:34:16.127 [main] WARN com.acaboumony.notification.service.EmailService -- Failed to send email (attempt 2/3): to=test@test.com, error=SMTP unavailable
+09:34:21.164 [main] INFO com.acaboumony.notification.service.EmailService -- Email sent successfully: to=test@test.com, eventType=welcome
+09:34:21.168 [main] INFO com.acaboumony.notification.service.EmailService -- Duplicate notification skipped: correlationId=corr-1, eventType=welcome
+09:34:21.180 [main] INFO com.acaboumony.notification.service.EmailService -- Email sent successfully: to=test@test.com, eventType=welcome
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.13 s -- in com.acaboumony.notification.service.EmailServiceTest$SendEmail
+[INFO] Tests run: 0, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.27 s -- in com.acaboumony.notification.service.EmailServiceTest
+[INFO] Running com.acaboumony.notification.service.FraudEventConsumerTest
+09:34:21.204 [main] INFO com.acaboumony.notification.consumer.FraudEventConsumer -- Received fraud.detected event for transactionId=txn_456, score=50
+09:34:21.204 [main] WARN com.acaboumony.notification.consumer.FraudEventConsumer -- SECURITY_ALERT_EMAIL not configured, skipping fraud alert
+09:34:21.204 [main] INFO com.acaboumony.notification.consumer.FraudEventConsumer -- Received fraud.detected event for transactionId=txn_123, score=85
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s -- in com.acaboumony.notification.service.FraudEventConsumerTest
+[INFO] Running com.acaboumony.notification.service.OrderEventConsumerTest
+09:34:21.234 [main] INFO com.acaboumony.notification.consumer.OrderEventConsumer -- Received order.cancelled event for orderId=fbe3e4e2-1e3e-48a8-b81e-487257ad5a65
+09:34:21.236 [main] INFO com.acaboumony.notification.consumer.OrderEventConsumer -- Received order.created event for orderId=6383cc7d-3ac7-4a8e-95ca-b3804a6a3774
+09:34:21.236 [main] INFO com.acaboumony.notification.consumer.OrderEventConsumer -- Received order.created event for orderId=810c8a3b-f3f1-48c2-9130-f65360ce618e
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.032 s -- in com.acaboumony.notification.service.OrderEventConsumerTest
+[INFO] Running com.acaboumony.notification.service.TransactionEventConsumerTest
+09:34:21.261 [main] INFO com.acaboumony.notification.consumer.TransactionEventConsumer -- Received transaction.refunded event for transactionId=txn_123
+09:34:21.261 [main] INFO com.acaboumony.notification.consumer.TransactionEventConsumer -- Received transaction.failed event for transactionId=txn_123
+09:34:21.271 [main] INFO com.acaboumony.notification.consumer.TransactionEventConsumer -- Received transaction.completed event for transactionId=txn_123
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.019 s -- in com.acaboumony.notification.service.TransactionEventConsumerTest
+[INFO] Running com.acaboumony.notification.service.UserEventConsumerTest
+09:34:21.271 [main] INFO com.acaboumony.notification.consumer.UserEventConsumer -- Received user.registered event for email=test@test.com
+09:34:21.282 [main] INFO com.acaboumony.notification.consumer.UserEventConsumer -- Received user.2fa.enabled event for email=test@test.com
+09:34:21.287 [main] INFO com.acaboumony.notification.consumer.UserEventConsumer -- Received user.login.blocked event for email=test@test.com
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 s -- in com.acaboumony.notification.service.UserEventConsumerTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 36, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jacoco:0.8.12:report (report) @ notification-service ---
+[INFO] Skipping JaCoCo execution because property jacoco.skip is set.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  45.697 s
+[INFO] Finished at: 2026-06-05T09:34:21-03:00
+[INFO] ------------------------------------------------------------------------

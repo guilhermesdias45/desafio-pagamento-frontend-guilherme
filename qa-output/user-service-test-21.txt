@@ -1,0 +1,575 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.acaboumony:user-service >---------------------
+[INFO] Building user-service 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ user-service ---
+[INFO] Deleting C:\Users\guilherme.dias\Downloads\desafio-pagamento\desafio-pagamento\services\user-service\target
+[INFO] 
+[INFO] --- jacoco:0.8.12:prepare-agent (default) @ user-service ---
+[INFO] Skipping JaCoCo execution because property jacoco.skip is set.
+[INFO] argLine set to empty
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ user-service ---
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] Copying 4 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ user-service ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 86 source files with javac [debug parameters release 21] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ user-service ---
+[INFO] Copying 3 resources from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ user-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 37 source files with javac [debug parameters release 21] to target\test-classes
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[56,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[56,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[56,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[56,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[56,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/AuthControllerTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalAuthControllerTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalAuthControllerTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalAuthControllerTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalAuthControllerTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalAuthControllerTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalAuthControllerTest.java:[43,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalAuthControllerTest.java:[43,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalAuthControllerTest.java:[43,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalAuthControllerTest.java:[43,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalAuthControllerTest.java:[43,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[47,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[47,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[47,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[47,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[47,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[48,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[48,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[48,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[48,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[48,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[49,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[49,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[49,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[49,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/InternalUserControllerTest.java:[49,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[56,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[56,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[56,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[56,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[56,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[57,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/TwoFactorControllerTest.java:[58,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[46,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[46,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[46,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[46,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[46,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[47,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[47,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[47,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[47,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[47,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[48,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[48,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[48,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[48,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/controller/UserControllerTest.java:[48,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[INFO] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/support/BaseIntegrationTest.java: C:\Users\guilherme.dias\Downloads\desafio-pagamento\desafio-pagamento\services\user-service\src\test\java\com\acaboumony\user\support\BaseIntegrationTest.java uses or overrides a deprecated API.
+[INFO] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/user-service/src/test/java/com/acaboumony/user/support/BaseIntegrationTest.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- surefire:3.5.3:test (default-test) @ user-service ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+mvn : jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+No linha:19 caractere:5
++     mvn clean test "-Djacoco.skip=true" *>&1 | Out-File -FilePath $lo ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (jun. 05, 2026 9...asspathResource:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:53 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:54 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:54 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:54 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:54 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:54 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:54 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:54 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:54 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:54 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:34:54 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+[INFO] Running com.acaboumony.user.config.ConfigurationPropertiesTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.5)
+
+2026-06-05T09:34:55.361-03:00  INFO 20152 --- [user-service] [           main] c.a.u.c.ConfigurationPropertiesTest      : Starting ConfigurationPropertiesTest using Java 21.0.10 with PID 20152 (started by guilherme.dias in C:\Users\guilherme.dias\Downloads\desafio-pagamento\desafio-pagamento\services\user-service)
+2026-06-05T09:34:55.364-03:00  INFO 20152 --- [user-service] [           main] c.a.u.c.ConfigurationPropertiesTest      : No active profile set, falling back to 1 default profile: "default"
+2026-06-05T09:34:56.259-03:00  INFO 20152 --- [user-service] [           main] c.a.u.c.ConfigurationPropertiesTest      : Started ConfigurationPropertiesTest in 1.331 seconds (process running for 3.657)
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of 
+the JDK. Please add Mockito as an agent to your build what is described in Mockito's documentation: 
+https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically 
+(C:\Users\guilherme.dias\.m2\repository\net\bytebuddy\byte-buddy-agent\1.15.11\byte-buddy-agent-1.15.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has 
+been appended
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.972 s -- in com.acaboumony.user.config.ConfigurationPropertiesTest
+[INFO] Running com.acaboumony.user.controller.AuthControllerTest
+2026-06-05T09:34:58.613-03:00  INFO 20152 --- [user-service] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.acaboumony.user.controller.AuthControllerTest]: AuthControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-05T09:34:59.372-03:00  INFO 20152 --- [user-service] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.acaboumony.user.UserServiceApplication for test class com.acaboumony.user.controller.AuthControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.5)
+
+2026-06-05T09:34:59.674-03:00  INFO 20152 --- [user-service] [           main] c.a.user.controller.AuthControllerTest   : Starting AuthControllerTest using Java 21.0.10 with PID 20152 (started by guilherme.dias in C:\Users\guilherme.dias\Downloads\desafio-pagamento\desafio-pagamento\services\user-service)
+2026-06-05T09:34:59.674-03:00  INFO 20152 --- [user-service] [           main] c.a.user.controller.AuthControllerTest   : No active profile set, falling back to 1 default profile: "default"
+2026-06-05T09:35:04.707-03:00  WARN 20152 --- [user-service] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 94838185-7fff-476e-bb5a-9409a14eebd7
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-06-05T09:35:04.871-03:00  INFO 20152 --- [user-service] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-06-05T09:35:08.223-03:00  INFO 20152 --- [user-service] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:35:08.223-03:00  INFO 20152 --- [user-service] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:35:08.239-03:00  INFO 20152 --- [user-service] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 16 ms
+2026-06-05T09:35:08.312-03:00  INFO 20152 --- [user-service] [           main] c.a.user.controller.AuthControllerTest   : Started AuthControllerTest in 8.887 seconds (process running for 15.716)
+[INFO] Tests run: 17, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.45 s -- in com.acaboumony.user.controller.AuthControllerTest
+[INFO] Running com.acaboumony.user.controller.InternalAuthControllerTest
+2026-06-05T09:35:11.077-03:00  INFO 20152 --- [user-service] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.acaboumony.user.controller.InternalAuthControllerTest]: InternalAuthControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-05T09:35:11.223-03:00  INFO 20152 --- [user-service] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.acaboumony.user.UserServiceApplication for test class com.acaboumony.user.controller.InternalAuthControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.5)
+
+2026-06-05T09:35:11.674-03:00  INFO 20152 --- [user-service] [           main] c.a.u.c.InternalAuthControllerTest       : Starting InternalAuthControllerTest using Java 21.0.10 with PID 20152 (started by guilherme.dias in C:\Users\guilherme.dias\Downloads\desafio-pagamento\desafio-pagamento\services\user-service)
+2026-06-05T09:35:11.676-03:00  INFO 20152 --- [user-service] [           main] c.a.u.c.InternalAuthControllerTest       : No active profile set, falling back to 1 default profile: "default"
+2026-06-05T09:35:13.109-03:00  WARN 20152 --- [user-service] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 18982a92-093c-4f0a-9add-b0366d9616e1
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-06-05T09:35:13.114-03:00  INFO 20152 --- [user-service] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-06-05T09:35:13.658-03:00  INFO 20152 --- [user-service] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:35:13.658-03:00  INFO 20152 --- [user-service] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:35:13.672-03:00  INFO 20152 --- [user-service] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 14 ms
+2026-06-05T09:35:13.706-03:00  INFO 20152 --- [user-service] [           main] c.a.u.c.InternalAuthControllerTest       : Started InternalAuthControllerTest in 2.476 seconds (process running for 21.109)
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.942 s -- in com.acaboumony.user.controller.InternalAuthControllerTest
+[INFO] Running com.acaboumony.user.controller.InternalUserControllerTest
+2026-06-05T09:35:14.041-03:00  INFO 20152 --- [user-service] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.acaboumony.user.controller.InternalUserControllerTest]: InternalUserControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-05T09:35:14.106-03:00  INFO 20152 --- [user-service] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.acaboumony.user.UserServiceApplication for test class com.acaboumony.user.controller.InternalUserControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.5)
+
+2026-06-05T09:35:14.259-03:00  INFO 20152 --- [user-service] [           main] c.a.u.c.InternalUserControllerTest       : Starting InternalUserControllerTest using Java 21.0.10 with PID 20152 (started by guilherme.dias in C:\Users\guilherme.dias\Downloads\desafio-pagamento\desafio-pagamento\services\user-service)
+2026-06-05T09:35:14.266-03:00  INFO 20152 --- [user-service] [           main] c.a.u.c.InternalUserControllerTest       : No active profile set, falling back to 1 default profile: "default"
+2026-06-05T09:35:16.152-03:00  WARN 20152 --- [user-service] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: e0340fa9-2a67-4934-bcef-a9a3ae56c8aa
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-06-05T09:35:16.155-03:00  INFO 20152 --- [user-service] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-06-05T09:35:16.561-03:00  INFO 20152 --- [user-service] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:35:16.561-03:00  INFO 20152 --- [user-service] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:35:16.561-03:00  INFO 20152 --- [user-service] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:35:16.611-03:00  INFO 20152 --- [user-service] [           main] c.a.u.c.InternalUserControllerTest       : Started InternalUserControllerTest in 2.497 seconds (process running for 24.009)
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.715 s -- in com.acaboumony.user.controller.InternalUserControllerTest
+[INFO] Running com.acaboumony.user.controller.TwoFactorControllerTest
+2026-06-05T09:35:16.781-03:00  INFO 20152 --- [user-service] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.acaboumony.user.controller.TwoFactorControllerTest]: TwoFactorControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-05T09:35:16.893-03:00  INFO 20152 --- [user-service] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.acaboumony.user.UserServiceApplication for test class com.acaboumony.user.controller.TwoFactorControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.5)
+
+2026-06-05T09:35:16.983-03:00  INFO 20152 --- [user-service] [           main] c.a.u.c.TwoFactorControllerTest          : Starting TwoFactorControllerTest using Java 21.0.10 with PID 20152 (started by guilherme.dias in C:\Users\guilherme.dias\Downloads\desafio-pagamento\desafio-pagamento\services\user-service)
+2026-06-05T09:35:16.984-03:00  INFO 20152 --- [user-service] [           main] c.a.u.c.TwoFactorControllerTest          : No active profile set, falling back to 1 default profile: "default"
+2026-06-05T09:35:18.063-03:00  WARN 20152 --- [user-service] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 6f743cb5-ee1e-4580-96df-dc5fa09ad7e6
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-06-05T09:35:18.072-03:00  INFO 20152 --- [user-service] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-06-05T09:35:18.414-03:00  INFO 20152 --- [user-service] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:35:18.415-03:00  INFO 20152 --- [user-service] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:35:18.419-03:00  INFO 20152 --- [user-service] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:35:18.444-03:00  INFO 20152 --- [user-service] [           main] c.a.u.c.TwoFactorControllerTest          : Started TwoFactorControllerTest in 1.55 seconds (process running for 25.842)
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.050 s -- in com.acaboumony.user.controller.TwoFactorControllerTest
+[INFO] Running com.acaboumony.user.controller.UserControllerTest
+2026-06-05T09:35:18.864-03:00  INFO 20152 --- [user-service] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.acaboumony.user.controller.UserControllerTest]: UserControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-05T09:35:18.894-03:00  INFO 20152 --- [user-service] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.acaboumony.user.UserServiceApplication for test class com.acaboumony.user.controller.UserControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.5)
+
+2026-06-05T09:35:18.960-03:00  INFO 20152 --- [user-service] [           main] c.a.user.controller.UserControllerTest   : Starting UserControllerTest using Java 21.0.10 with PID 20152 (started by guilherme.dias in C:\Users\guilherme.dias\Downloads\desafio-pagamento\desafio-pagamento\services\user-service)
+2026-06-05T09:35:18.960-03:00  INFO 20152 --- [user-service] [           main] c.a.user.controller.UserControllerTest   : No active profile set, falling back to 1 default profile: "default"
+2026-06-05T09:35:19.909-03:00  WARN 20152 --- [user-service] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: e1733f51-e8a8-4a19-862e-4366d5479843
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-06-05T09:35:19.911-03:00  INFO 20152 --- [user-service] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-06-05T09:35:20.316-03:00  INFO 20152 --- [user-service] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:35:20.316-03:00  INFO 20152 --- [user-service] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:35:20.320-03:00  INFO 20152 --- [user-service] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 4 ms
+2026-06-05T09:35:20.335-03:00  INFO 20152 --- [user-service] [           main] c.a.user.controller.UserControllerTest   : Started UserControllerTest in 1.436 seconds (process running for 27.734)
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.637 s -- in com.acaboumony.user.controller.UserControllerTest
+[INFO] Running com.acaboumony.user.domain.enums.EnumValuesTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.039 s -- in com.acaboumony.user.domain.enums.EnumValuesTest
+[INFO] Running com.acaboumony.user.event.UserEventProducerTest
+2026-06-05T09:35:21.022-03:00 ERROR 20152 --- [user-service] [           main] c.a.user.event.UserEventProducer         : Failed to publish user.login.success for userId=0558247e-2f5e-4f1d-bd63-bf5ed39dc45c: Kafka down
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.556 s -- in com.acaboumony.user.event.UserEventProducerTest
+[INFO] Running com.acaboumony.user.security.InternalSecretFilterTest
+2026-06-05T09:35:21.111-03:00  WARN 20152 --- [user-service] [           main] c.a.user.security.InternalSecretFilter   : Rejected /internal request: invalid or missing X-Internal-Secret
+2026-06-05T09:35:21.122-03:00  WARN 20152 --- [user-service] [           main] c.a.user.security.InternalSecretFilter   : Rejected /internal request: invalid or missing X-Internal-Secret
+2026-06-05T09:35:21.131-03:00  WARN 20152 --- [user-service] [           main] c.a.user.security.InternalSecretFilter   : Rejected /internal request: invalid or missing X-Internal-Secret
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.020 s -- in com.acaboumony.user.security.InternalSecretFilterTest
+[INFO] Running com.acaboumony.user.security.JwtAuthenticationFilterTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.528 s -- in com.acaboumony.user.security.JwtAuthenticationFilterTest
+[INFO] Running com.acaboumony.user.security.JwtTokenProviderTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.628 s -- in com.acaboumony.user.security.JwtTokenProviderTest
+[INFO] Running com.acaboumony.user.security.JwtTokenValidatorTest
+2026-06-05T09:35:22.313-03:00  WARN 20152 --- [user-service] [           main] c.a.user.security.JwtTokenValidator      : JWT malformed
+2026-06-05T09:35:23.227-03:00  WARN 20152 --- [user-service] [           main] c.a.user.security.JwtTokenValidator      : JWT invalid signature
+2026-06-05T09:35:23.289-03:00  WARN 20152 --- [user-service] [           main] c.a.user.security.JwtTokenValidator      : JWT expired: JWT expired 1279 milliseconds ago at 2026-06-05T12:35:22.000Z. Current time: 2026-06-05T12:35:23.279Z. Allowed clock skew: 0 milliseconds.
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.989 s -- in com.acaboumony.user.security.JwtTokenValidatorTest
+[INFO] Running com.acaboumony.user.security.RsaKeyLoaderTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.944 s -- in com.acaboumony.user.security.RsaKeyLoaderTest
+[INFO] Running com.acaboumony.user.service.AesGcmCryptoServiceTest
+[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.413 s -- in com.acaboumony.user.service.AesGcmCryptoServiceTest
+[INFO] Running com.acaboumony.user.service.AuthServiceTest
+2026-06-05T09:35:28.168-03:00  INFO 20152 --- [user-service] [           main] c.acaboumony.user.service.AuthService    : Refresh token rotated: userId=b833ebb7-e1ca-4b24-a3b8-29219d627f0c
+2026-06-05T09:35:30.338-03:00  INFO 20152 --- [user-service] [           main] c.acaboumony.user.service.AuthService    : Login successful: userId=4dc2ace3-0d52-44c9-9daf-bb05f09df7da
+2026-06-05T09:35:30.343-03:00  INFO 20152 --- [user-service] [           main] c.acaboumony.user.service.AuthService    : Logout: userId=a47abc22-30d3-4bad-bdd7-ec818e17702e
+2026-06-05T09:35:32.867-03:00  INFO 20152 --- [user-service] [           main] c.acaboumony.user.service.AuthService    : User registered: userId=7621bbcd-9003-4596-85a2-f9ef5b976709, role=MERCHANT_OWNER
+2026-06-05T09:35:35.969-03:00  INFO 20152 --- [user-service] [           main] c.acaboumony.user.service.AuthService    : User registered: userId=5495502c-bbb8-4b0b-9120-00e54ca001d9, role=CUSTOMER
+2026-06-05T09:35:36.994-03:00  WARN 20152 --- [user-service] [           main] o.s.s.c.bcrypt.BCryptPasswordEncoder     : Encoded password does not look like BCrypt
+2026-06-05T09:35:38.010-03:00  INFO 20152 --- [user-service] [           main] c.acaboumony.user.service.AuthService    : Login successful: userId=db3d43b6-4fd9-4d89-894c-a902aa5b7f2a
+2026-06-05T09:35:39.713-03:00  INFO 20152 --- [user-service] [           main] c.acaboumony.user.service.AuthService    : Email confirmed: userId=bae4b421-1d51-4865-86f7-1f6cb04abb1f
+[INFO] Tests run: 20, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 14.06 s -- in com.acaboumony.user.service.AuthServiceTest
+[INFO] Running com.acaboumony.user.service.LoginAttemptServiceTest
+2026-06-05T09:35:39.922-03:00  INFO 20152 --- [user-service] [           main] c.a.user.service.LoginAttemptService     : Account locked: emailHash=hbEKIpRMCBxs..., attempts=5
+2026-06-05T09:35:39.943-03:00  INFO 20152 --- [user-service] [           main] c.a.user.service.LoginAttemptService     : Account locked: emailHash=hbEKIpRMCBxs..., attempts=10
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.210 s -- in com.acaboumony.user.service.LoginAttemptServiceTest
+[INFO] Running com.acaboumony.user.service.MerchantServiceTest
+2026-06-05T09:35:40.145-03:00  INFO 20152 --- [user-service] [           main] c.a.user.service.MerchantService         : Merchant created: merchantId=7cd59895-f0ea-4711-bbfe-6e58d0bf430a, ownerId=26d7a508-d5ee-45fc-a696-b97f12b39346
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.196 s -- in com.acaboumony.user.service.MerchantServiceTest
+[INFO] Running com.acaboumony.user.service.RefreshTokenServiceTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.061 s -- in com.acaboumony.user.service.RefreshTokenServiceTest
+[INFO] Running com.acaboumony.user.service.TwoFactorServiceTest
+2026-06-05T09:35:43.137-03:00  INFO 20152 --- [user-service] [           main] c.a.user.service.TwoFactorService        : 2FA setup initiated: userId=111fb0c3-f9e0-4bd4-822f-2dd05f22cac8
+2026-06-05T09:35:52.757-03:00  INFO 20152 --- [user-service] [           main] c.a.user.service.TwoFactorService        : 2FA disabled: userId=0171f4b0-d5b6-4053-98b8-10290225de92
+2026-06-05T09:35:57.039-03:00  INFO 20152 --- [user-service] [           main] c.a.user.service.TwoFactorService        : 2FA confirmed: userId=998e9c2b-4b75-43e5-b864-83480df7d6d8
+[INFO] Tests run: 22, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 17.33 s -- in com.acaboumony.user.service.TwoFactorServiceTest
+[INFO] Running com.acaboumony.user.service.UserAuditLoggerTest
+2026-06-05T09:35:57.692-03:00 ERROR 20152 --- [user-service] [           main] c.a.user.service.UserAuditLogger         : Failed to write audit log: userId=ec31d648-d46b-4320-a185-3d5e89d07faf, eventType=LOGOUT: DB down
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.148 s -- in com.acaboumony.user.service.UserAuditLoggerTest
+[INFO] Running com.acaboumony.user.service.UserServiceTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.043 s -- in com.acaboumony.user.service.UserServiceTest
+[INFO] Running com.acaboumony.user.validation.CnpjValidatorTest
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.233 s -- in com.acaboumony.user.validation.CnpjValidatorTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 171, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jacoco:0.8.12:report (report) @ user-service ---
+[INFO] Skipping JaCoCo execution because property jacoco.skip is set.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:35 min
+[INFO] Finished at: 2026-06-05T09:35:58-03:00
+[INFO] ------------------------------------------------------------------------

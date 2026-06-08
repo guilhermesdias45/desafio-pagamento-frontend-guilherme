@@ -1,0 +1,42 @@
+# =============================================================================
+# Acabou o Mony — Dev Local
+# NUNCA commite este arquivo
+# =============================================================================
+
+# ─── PostgreSQL ───────────────────────────────────────────────────────────────
+POSTGRES_USER=aom
+POSTGRES_PASSWORD=aom_dev_pass
+POSTGRES_PORT=5432
+
+# ─── Redis ────────────────────────────────────────────────────────────────────
+REDIS_PASSWORD=redis_dev_pass
+REDIS_PORT=6379
+
+# ─── Kafka ────────────────────────────────────────────────────────────────────
+KAFKA_PORT=9094
+
+# ─── JWT RS256 ────────────────────────────────────────────────────────────────
+JWT_PRIVATE_KEY=-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA4TTJJnRyX+Kt6ElDNgA3l/unO5V9WWgJVcUgAaUOZ5/l+5NO\nLI/kIX0paYgGu252Hj2TcQnbnjjgVMTzPBeC7U1j+r9ZFOaNbB74EjVPTO98cGzT\nS+ZwQo762ulH1xtSSyyk6wmYJmv/1ZhyF5xQyIx+2g/sjE6+WaPy4GCv3g8LEm63\nVpUGhfDHLUZUvqSUPijY6VcoBKAb9GAAHhXa8U5qwYmxiCUXZD4/bFiAwud4PP1n\nYY7Xyi0OaXxv+MseU0RHoML8XGI6wWEMQtDwLsdTS8nyEAicRNRHL0aANofmYqc7\nv9aLeIdPKp/BfgD3r8opj0Wu5A7wsJaYPrbT1QIDAQABAoIBAA44MQM2kwou2+Aw\n0AeW1+vGvfZrJ/D/OqepvK2d6FzuoazSzjrOEw9yQa0iI5quDNM3/BlFEBLbcH6p\nuNnwehnVqxxn/I3vSLqs8ejkaM9ox6iplmXSdQAe2wP7esfAN9/7P6Z/gpXad9ra\nt0l6Wzdud4v5OWxahHZQfcNhF3mjxzIhWhvrO2uiwZlsIVUORDVDA6CVrW/egm2D\nsX4rmazDeHO3jdICI/dzu6zp2spjr5u27muRES8NTyuW5Ig70qluXsOJwsmNS1ce\nEITVNf6U0IBRn8j1mTOGoSLIhJkd12avjvH/MhS7nYv050tD0o5HGSK3SPr65TKP\n7SzaU3kCgYEA83vwVgLBLjI9N6uBKywX/m1ELVdzpMVz1cuzgIXQXyj7CFqyrMRj\n7/uNpmzLsNPAjHrskA8qdH4zQCjWpm2IZ2hWM96ynjI2NQgI4XhxHiYMrPWVUCNK\nEOdTPM69aJBQ/ktrBsmHqqpgZMT6GPghIWpkMFlHByfkj13gLye04VcCgYEA7MhS\nz91VbrsBjwA9gZiDWdXj/x0BdE2nHu9BSOn9e0Pcxk2ZLn066DUcyvIXqDOLwxZq\nyQ/bP0iaxCy5FPNL8GAKJvEsT5thivUFCs/1e+4Tq1bwspenxJVRPURYoMQhWGf4\n635HsmkVFL1YP7ZO1cUcRBRwAwhEmaeFzOSOXLMCgYEAw3FTA9eGNYzCMvOJ5Zup\nTuNqfHLcMwED8DNozNuc3SXKC3SyQ5gJGFN16oceIbx3rMvnI+PokkXS4cdmNYVq\nnobT2yMBgZaQiJUAe+vv8OFd/1/KEN+izlrBJ+hThaGCQf1L1dDjA41rfrfWgUB7\nZ5U9AspHB2lwP9x83Z0jxlUCgYAuFyxvg+D+Ze5+vIg8csiWsxjnbuj6j6cJUX8+\nxzVtSh9uhmpb70qJKtWI96j9N9NrzTBKJQkDf4mIyD/awSU2DCvNusJqWI+bMeii\nWyqozgYMIydFTFn+3SXsLCKoYKUxBUQh6vnf066j09uaw00DNZQz+Fp5bKGV21Mj\nOBYyGwKBgQDlsbaGAFqjLSCMURMkNqGsKoLBdzQdJzpf7iym+eGVKJ3PN5S/K+ne\njkPVLkMPQZCn2IQbuxPX7c+JcXc8YGWvOVf9KfGDNfjrIl27XUb/3YxRj4gOpdEt\nKQewHebiN4RohDmny6pFv0+qeEXJkdrpEeGsZrMLd6chROFPCHPfHg==\n-----END RSA PRIVATE KEY-----
+JWT_PUBLIC_KEY=-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4TTJJnRyX+Kt6ElDNgA3\nl/unO5V9WWgJVcUgAaUOZ5/l+5NOLI/kIX0paYgGu252Hj2TcQnbnjjgVMTzPBeC\n7U1j+r9ZFOaNbB74EjVPTO98cGzTS+ZwQo762ulH1xtSSyyk6wmYJmv/1ZhyF5xQ\nyIx+2g/sjE6+WaPy4GCv3g8LEm63VpUGhfDHLUZUvqSUPijY6VcoBKAb9GAAHhXa\n8U5qwYmxiCUXZD4/bFiAwud4PP1nYY7Xyi0OaXxv+MseU0RHoML8XGI6wWEMQtDw\nLsdTS8nyEAicRNRHL0aANofmYqc7v9aLeIdPKp/BfgD3r8opj0Wu5A7wsJaYPrbT\n1QIDAQAB\n-----END PUBLIC KEY-----
+
+# ─── Criptografia AES-256 ─────────────────────────────────────────────────────
+TOTP_AES_KEY=10bacdc29679940cacc39623a580013259f575e80ffce7ded07a79638fdff622
+
+# ─── Endpoint interno ─────────────────────────────────────────────────────────
+INTERNAL_SECRET=afwh45HmU0wPZEFx01xxzYcqZWKAQVW6BuvDnP50
+
+# ─── TOTP / 2FA ──────────────────────────────────────────────────────────────
+TOTP_ISSUER=AcabouoMony
+
+# ─── Mercado Pago (sandbox) ───────────────────────────────────────────────────
+MERCADOPAGO_ACCESS_TOKEN=TEST-CHANGE_ME
+
+# ─── Email (não usado no Sprint 1) ───────────────────────────────────────────
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=seu-email@gmail.com
+MAIL_PASSWORD=sua-app-password-gmail
+
+# ─── Observabilidade (opcional) ───────────────────────────────────────────────
+NEW_RELIC_LICENSE_KEY=
+ANTHROPIC_API_KEY=

@@ -1,0 +1,789 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------< com.acaboumony:payment-service >-------------------
+[INFO] Building payment-service 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ payment-service ---
+[INFO] Deleting C:\Users\guilherme.dias\Downloads\desafio-pagamento\desafio-pagamento\services\payment-service\target
+[INFO] 
+[INFO] --- jacoco:0.8.14:prepare-agent (default) @ payment-service ---
+[INFO] Skipping JaCoCo execution because property jacoco.skip is set.
+[INFO] argLine set to empty
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ payment-service ---
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] Copying 5 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ payment-service ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 57 source files with javac [debug parameters release 21] to target\classes
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/payment-service/src/main/java/com/acaboumony/payment/client/FraudServiceClient.java:[31,13] setConnectTimeout(java.time.Duration) in org.springframework.boot.web.client.RestTemplateBuilder has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/payment-service/src/main/java/com/acaboumony/payment/client/FraudServiceClient.java:[32,13] setReadTimeout(java.time.Duration) in org.springframework.boot.web.client.RestTemplateBuilder has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/payment-service/src/main/java/com/acaboumony/payment/client/OrderServiceClient.java:[35,13] setConnectTimeout(java.time.Duration) in org.springframework.boot.web.client.RestTemplateBuilder has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/payment-service/src/main/java/com/acaboumony/payment/client/OrderServiceClient.java:[36,13] setReadTimeout(java.time.Duration) in org.springframework.boot.web.client.RestTemplateBuilder has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/payment-service/src/main/java/com/acaboumony/payment/client/UserServiceClient.java:[36,13] setConnectTimeout(java.time.Duration) in org.springframework.boot.web.client.RestTemplateBuilder has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/payment-service/src/main/java/com/acaboumony/payment/client/UserServiceClient.java:[37,13] setReadTimeout(java.time.Duration) in org.springframework.boot.web.client.RestTemplateBuilder has been deprecated and marked for removal
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ payment-service ---
+[INFO] Copying 2 resources from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ payment-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 23 source files with javac [debug parameters release 21] to target\test-classes
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/payment-service/src/test/java/com/acaboumony/payment/service/TransactionServiceIntegrationTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/payment-service/src/test/java/com/acaboumony/payment/service/TransactionServiceIntegrationTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/payment-service/src/test/java/com/acaboumony/payment/service/TransactionServiceIntegrationTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/payment-service/src/test/java/com/acaboumony/payment/service/TransactionServiceIntegrationTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/payment-service/src/test/java/com/acaboumony/payment/service/TransactionServiceIntegrationTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[INFO] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/payment-service/src/test/java/com/acaboumony/payment/support/BaseIntegrationTest.java: C:\Users\guilherme.dias\Downloads\desafio-pagamento\desafio-pagamento\services\payment-service\src\test\java\com\acaboumony\payment\support\BaseIntegrationTest.java uses or overrides a deprecated API.
+[INFO] /C:/Users/guilherme.dias/Downloads/desafio-pagamento/desafio-pagamento/services/payment-service/src/test/java/com/acaboumony/payment/support/BaseIntegrationTest.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- surefire:3.5.3:test (default-test) @ payment-service ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+mvn : jun. 05, 2026 9:37:12 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+No linha:19 caractere:5
++     mvn clean test "-Djacoco.skip=true" *>&1 | Out-File -FilePath $lo ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (jun. 05, 2026 9...asspathResource:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:12 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:12 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:12 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:12 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+jun. 05, 2026 9:37:13 AM org.junit.platform.launcher.core.LauncherConfigurationParameters loadClasspathResource
+ADVERT╩NCIA: Discovered 3 'junit-platform.properties' configuration files on the classpath (see below); only the first 
+(*) will be used.
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1-test.jar!/j
+unit-platform.properties (*)
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka-server-common/3.8.1/kafka-server-common-3.8.1
+-test.jar!/junit-platform.properties
+- jar:file:/C:/Users/guilherme.dias/.m2/repository/org/apache/kafka/kafka_2.13/3.8.1/kafka_2.13-3.8.1-test.jar!/junit-p
+latform.properties
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+[INFO] Running com.acaboumony.payment.client.FraudServiceClientTest
+09:37:14.727 [main] WARN com.acaboumony.payment.client.FraudServiceClient -- Fraud service unavailable or circuit open, fallback score=50: I/O error on POST request for "http://localhost:9999/internal/fraud/score": Connect to http://localhost:9999 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+09:37:14.750 [main] WARN com.acaboumony.payment.client.FraudServiceClient -- Fraud service unavailable or circuit open, fallback score=50: I/O error on POST request for "http://localhost:9999/internal/fraud/score": Connect to http://localhost:9999 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.707 s -- in com.acaboumony.payment.client.FraudServiceClientTest
+[INFO] Running com.acaboumony.payment.client.MercadoPagoGatewayMockedTest
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of 
+the JDK. Please add Mockito as an agent to your build what is described in Mockito's documentation: 
+https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically 
+(C:\Users\guilherme.dias\.m2\repository\net\bytebuddy\byte-buddy-agent\1.17.5\byte-buddy-agent-1.17.5.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has 
+been appended
+09:37:15.712 [main] ERROR com.acaboumony.payment.client.MercadoPagoGateway -- MP refund error for payment 123456: Network error
+09:37:15.746 [main] WARN com.acaboumony.payment.client.MercadoPagoGateway -- MP gateway circuit breaker fallback: MP gateway error
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.971 s -- in com.acaboumony.payment.client.MercadoPagoGatewayMockedTest
+[INFO] Running com.acaboumony.payment.client.MercadoPagoGatewayTest
+09:37:16.567 [main] WARN com.acaboumony.payment.client.MercadoPagoGateway -- MP gateway timeout after 802ms
+09:37:16.567 [main] WARN com.acaboumony.payment.client.MercadoPagoGateway -- MP gateway circuit breaker fallback: java.util.concurrent.TimeoutException
+09:37:17.037 [main] ERROR com.acaboumony.payment.client.MercadoPagoGateway -- MP refund error for payment 123456: com.mercadopago.exceptions.MPApiException: Api error. Check response for details
+09:37:17.255 [main] ERROR com.acaboumony.payment.client.MercadoPagoGateway -- MP refund error for payment 123456: com.mercadopago.exceptions.MPApiException: Api error. Check response for details
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.500 s -- in com.acaboumony.payment.client.MercadoPagoGatewayTest
+[INFO] Running com.acaboumony.payment.client.OrderServiceClientTest
+09:37:17.328 [main] WARN com.acaboumony.payment.client.OrderServiceClient -- Order service unavailable or error: I/O error on GET request for "http://localhost:9999/api/v1/orders/f2ac4c38-d807-4fbe-8056-8d1c4e899504": Connect to http://localhost:9999 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.067 s -- in com.acaboumony.payment.client.OrderServiceClientTest
+[INFO] Running com.acaboumony.payment.client.UserServiceClientTest
+09:37:17.384 [main] WARN com.acaboumony.payment.client.UserServiceClient -- User service unavailable or error: I/O error on GET request for "http://localhost:9999/internal/users/268e7bb2-de6a-4ae0-bde9-2d4007256418": Connect to http://localhost:9999 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.058 s -- in com.acaboumony.payment.client.UserServiceClientTest
+[INFO] Running com.acaboumony.payment.controller.GlobalExceptionHandlerTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.218 s -- in com.acaboumony.payment.controller.GlobalExceptionHandlerTest
+[INFO] Running com.acaboumony.payment.controller.TransactionControllerTest
+09:37:17.760 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.acaboumony.payment.controller.TransactionControllerTest]: TransactionControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+09:37:18.057 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.acaboumony.payment.PaymentServiceApplication for test class com.acaboumony.payment.controller.TransactionControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.5)
+
+2026-06-05T09:37:18.830-03:00  INFO 4468 --- [           main] c.a.p.c.TransactionControllerTest        : Starting TransactionControllerTest using Java 21.0.10 with PID 4468 (started by guilherme.dias in C:\Users\guilherme.dias\Downloads\desafio-pagamento\desafio-pagamento\services\payment-service)
+2026-06-05T09:37:18.830-03:00  INFO 4468 --- [           main] c.a.p.c.TransactionControllerTest        : No active profile set, falling back to 1 default profile: "default"
+2026-06-05T09:37:22.908-03:00  INFO 4468 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:37:22.908-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:37:22.914-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 4 ms
+2026-06-05T09:37:22.988-03:00  INFO 4468 --- [           main] c.a.p.c.TransactionControllerTest        : Started TransactionControllerTest in 4.808 seconds (process running for 10.752)
+[INFO] Tests run: 26, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.203 s -- in com.acaboumony.payment.controller.TransactionControllerTest
+[INFO] Running com.acaboumony.payment.domain.entity.AuditLogTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.003 s -- in com.acaboumony.payment.domain.entity.AuditLogTest
+[INFO] Running com.acaboumony.payment.domain.entity.RefundTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 s -- in com.acaboumony.payment.domain.entity.RefundTest
+[INFO] Running com.acaboumony.payment.domain.entity.TransactionTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 s -- in com.acaboumony.payment.domain.entity.TransactionTest
+[INFO] Running com.acaboumony.payment.dto.DtoRecordsTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.010 s -- in com.acaboumony.payment.dto.DtoRecordsTest
+[INFO] Running com.acaboumony.payment.event.EventRecordsTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 s -- in com.acaboumony.payment.event.EventRecordsTest
+[INFO] Running com.acaboumony.payment.event.MercadoPagoWebhookConsumerExtendedTest
+2026-06-05T09:37:23.909-03:00  INFO 4468 --- [           main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:37:23.909-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:37:23.909-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:37:23.919-03:00  INFO 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Received MP webhook: type=payment
+2026-06-05T09:37:23.919-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : x-signature header does not match expected format ts=...,v1=...
+2026-06-05T09:37:23.919-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Invalid x-signature for webhook ù rejecting
+2026-06-05T09:37:23.939-03:00  INFO 4468 --- [           main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:37:23.939-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:37:23.939-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:37:23.941-03:00  INFO 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Received MP webhook: type=payment
+2026-06-05T09:37:23.941-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : x-signature header does not match expected format ts=...,v1=...
+2026-06-05T09:37:23.941-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Invalid x-signature for webhook ù rejecting
+2026-06-05T09:37:23.955-03:00  INFO 4468 --- [           main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:37:23.955-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:37:23.955-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:37:23.957-03:00  INFO 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Received MP webhook: type=payment
+2026-06-05T09:37:23.957-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : x-signature header does not match expected format ts=...,v1=...
+2026-06-05T09:37:23.957-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Invalid x-signature for webhook ù rejecting
+2026-06-05T09:37:23.975-03:00  INFO 4468 --- [           main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:37:23.975-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:37:23.975-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:37:23.975-03:00  INFO 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Received MP webhook: type=payment
+2026-06-05T09:37:23.978-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Webhook sem assinatura x-signature ù ignorando
+2026-06-05T09:37:24.049-03:00  INFO 4468 --- [           main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:37:24.049-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:37:24.049-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:37:24.064-03:00  INFO 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Received MP webhook: type=payment
+2026-06-05T09:37:24.069-03:00 ERROR 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Error processing webhook for payment 123456: DB error
+2026-06-05T09:37:24.081-03:00  INFO 4468 --- [           main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:37:24.081-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:37:24.081-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:37:24.085-03:00  INFO 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Received MP webhook: type=charge
+2026-06-05T09:37:24.104-03:00  INFO 4468 --- [           main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:37:24.104-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:37:24.104-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:37:24.104-03:00  INFO 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Received MP webhook: type=payment
+2026-06-05T09:37:24.104-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : x-signature header does not match expected format ts=...,v1=...
+2026-06-05T09:37:24.104-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Invalid x-signature for webhook ù rejecting
+2026-06-05T09:37:24.117-03:00  INFO 4468 --- [           main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:37:24.117-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:37:24.117-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:37:24.117-03:00  INFO 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Received MP webhook: type=payment
+2026-06-05T09:37:24.117-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : x-signature ts is not a valid number
+2026-06-05T09:37:24.117-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Invalid x-signature for webhook ù rejecting
+2026-06-05T09:37:24.137-03:00  INFO 4468 --- [           main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:37:24.137-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:37:24.137-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:37:24.142-03:00  INFO 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Received MP webhook: type=payment
+2026-06-05T09:37:24.142-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : x-signature header does not match expected format ts=...,v1=...
+2026-06-05T09:37:24.142-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Invalid x-signature for webhook ù rejecting
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.261 s -- in com.acaboumony.payment.event.MercadoPagoWebhookConsumerExtendedTest
+[INFO] Running com.acaboumony.payment.event.MercadoPagoWebhookConsumerTest
+2026-06-05T09:37:24.162-03:00  INFO 4468 --- [           main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:37:24.162-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:37:24.162-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:37:24.166-03:00  INFO 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Received MP webhook: type=payment
+2026-06-05T09:37:24.180-03:00  INFO 4468 --- [           main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:37:24.180-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:37:24.180-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:37:24.180-03:00  INFO 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Received MP webhook: type=payment
+2026-06-05T09:37:24.180-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : x-signature HMAC mismatch
+2026-06-05T09:37:24.180-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Invalid x-signature for webhook ù rejecting
+2026-06-05T09:37:24.194-03:00  INFO 4468 --- [           main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:37:24.194-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:37:24.194-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:37:24.196-03:00  INFO 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Received MP webhook: type=payment
+2026-06-05T09:37:24.196-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : x-signature timestamp expired: ts=1780662644, now=1780663044, maxAge=300s
+2026-06-05T09:37:24.196-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Invalid x-signature for webhook ù rejecting
+2026-06-05T09:37:24.212-03:00  INFO 4468 --- [           main] o.s.mock.web.MockServletContext          : Initializing Spring TestDispatcherServlet ''
+2026-06-05T09:37:24.212-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-05T09:37:24.212-03:00  INFO 4468 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-06-05T09:37:24.212-03:00  INFO 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Received MP webhook: type=payment
+2026-06-05T09:37:24.212-03:00  WARN 4468 --- [           main] c.a.p.event.MercadoPagoWebhookConsumer   : Webhook sem assinatura x-signature ù ignorando
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.064 s -- in com.acaboumony.payment.event.MercadoPagoWebhookConsumerTest
+[INFO] Running com.acaboumony.payment.event.TransactionEventProducerExtendedTest
+2026-06-05T09:37:24.412-03:00 ERROR 4468 --- [           main] c.a.p.event.TransactionEventProducer     : Failed to publish transaction.refunded for refund ref_001
+
+java.lang.RuntimeException: Kafka down
+	at com.acaboumony.payment.event.TransactionEventProducerExtendedTest.publishRefunded_whenKafkaFails_logsError(TransactionEventProducerExtendedTest.java:71) ~[test-classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:767) ~[junit-platform-commons-1.11.4.jar:1.11.4]
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$8(TestMethodTestDescriptor.java:217) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:213) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:138) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:68) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:156) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596) ~[na:na]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596) ~[na:na]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:194) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:150) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:124) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385) ~[surefire-booter-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162) ~[surefire-booter-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507) ~[surefire-booter-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495) ~[surefire-booter-3.5.3.jar:3.5.3]
+
+2026-06-05T09:37:24.432-03:00 ERROR 4468 --- [           main] c.a.p.event.TransactionEventProducer     : Failed to publish transaction.completed for transaction txn_001
+
+java.lang.RuntimeException: Kafka down
+	at com.acaboumony.payment.event.TransactionEventProducerExtendedTest.publishCompleted_whenKafkaFails_logsError(TransactionEventProducerExtendedTest.java:42) ~[test-classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:767) ~[junit-platform-commons-1.11.4.jar:1.11.4]
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$8(TestMethodTestDescriptor.java:217) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:213) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:138) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:68) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:156) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596) ~[na:na]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596) ~[na:na]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:194) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:150) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:124) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385) ~[surefire-booter-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162) ~[surefire-booter-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507) ~[surefire-booter-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495) ~[surefire-booter-3.5.3.jar:3.5.3]
+
+2026-06-05T09:37:24.442-03:00 ERROR 4468 --- [           main] c.a.p.event.TransactionEventProducer     : Failed to publish transaction.failed for transaction txn_001
+
+java.lang.RuntimeException: Kafka down
+	at com.acaboumony.payment.event.TransactionEventProducerExtendedTest.publishFailed_whenKafkaFails_logsError(TransactionEventProducerExtendedTest.java:57) ~[test-classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:767) ~[junit-platform-commons-1.11.4.jar:1.11.4]
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$8(TestMethodTestDescriptor.java:217) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:213) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:138) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:68) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:156) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596) ~[na:na]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596) ~[na:na]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:194) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:150) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:124) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385) ~[surefire-booter-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162) ~[surefire-booter-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507) ~[surefire-booter-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495) ~[surefire-booter-3.5.3.jar:3.5.3]
+
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.224 s -- in com.acaboumony.payment.event.TransactionEventProducerExtendedTest
+[INFO] Running com.acaboumony.payment.event.TransactionEventProducerTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.014 s -- in com.acaboumony.payment.event.TransactionEventProducerTest
+[INFO] Running com.acaboumony.payment.result.TransactionResultTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.013 s -- in com.acaboumony.payment.result.TransactionResultTest
+[INFO] Running com.acaboumony.payment.service.IdempotencyServiceTest
+2026-06-05T09:37:24.721-03:00 ERROR 4468 --- [           main] c.a.payment.service.IdempotencyService   : Failed to deserialize cached TransactionResponse for idempotencyKey=b88134e6-fcdd-48f1-8817-6c6bb827aac9
+
+com.fasterxml.jackson.core.JsonParseException: Unrecognized token 'invalid': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 8]
+	at com.fasterxml.jackson.core.JsonParser._constructError(JsonParser.java:2584) ~[jackson-core-2.18.3.jar:2.18.3]
+	at com.fasterxml.jackson.core.JsonParser._constructReadException(JsonParser.java:2610) ~[jackson-core-2.18.3.jar:2.18.3]
+	at com.fasterxml.jackson.core.JsonParser._constructReadException(JsonParser.java:2618) ~[jackson-core-2.18.3.jar:2.18.3]
+	at com.fasterxml.jackson.core.base.ParserMinimalBase._reportError(ParserMinimalBase.java:825) ~[jackson-core-2.18.3.jar:2.18.3]
+	at com.fasterxml.jackson.core.json.ReaderBasedJsonParser._reportInvalidToken(ReaderBasedJsonParser.java:3017) ~[jackson-core-2.18.3.jar:2.18.3]
+	at com.fasterxml.jackson.core.json.ReaderBasedJsonParser._handleOddValue(ReaderBasedJsonParser.java:2051) ~[jackson-core-2.18.3.jar:2.18.3]
+	at com.fasterxml.jackson.core.json.ReaderBasedJsonParser.nextToken(ReaderBasedJsonParser.java:780) ~[jackson-core-2.18.3.jar:2.18.3]
+	at com.fasterxml.jackson.databind.ObjectMapper._initForReading(ObjectMapper.java:5018) ~[jackson-databind-2.18.3.jar:2.18.3]
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4921) ~[jackson-databind-2.18.3.jar:2.18.3]
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3868) ~[jackson-databind-2.18.3.jar:2.18.3]
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3836) ~[jackson-databind-2.18.3.jar:2.18.3]
+	at com.acaboumony.payment.service.IdempotencyService.getExisting(IdempotencyService.java:56) ~[classes/:na]
+	at com.acaboumony.payment.service.IdempotencyServiceTest.getExisting_returns_empty_when_invalid_json(IdempotencyServiceTest.java:83) ~[test-classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:767) ~[junit-platform-commons-1.11.4.jar:1.11.4]
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$8(TestMethodTestDescriptor.java:217) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:213) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:138) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:68) ~[junit-jupiter-engine-5.11.4.jar:5.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:156) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596) ~[na:na]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596) ~[na:na]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54) ~[junit-platform-engine-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) ~[junit-platform-launcher-1.11.4.jar:1.11.4]
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:194) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:150) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:124) ~[surefire-junit-platform-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385) ~[surefire-booter-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162) ~[surefire-booter-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507) ~[surefire-booter-3.5.3.jar:3.5.3]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495) ~[surefire-booter-3.5.3.jar:3.5.3]
+
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.356 s -- in com.acaboumony.payment.service.IdempotencyServiceTest
+[INFO] Running com.acaboumony.payment.service.RateLimitServiceTest
+2026-06-05T09:37:24.842-03:00  WARN 4468 --- [           main] c.a.payment.service.RateLimitService     : Null count from Redis rate limit for customerId=d416c0e8-9f94-4e62-8def-44bd944d77b5, allowing request
+2026-06-05T09:37:24.844-03:00  WARN 4468 --- [           main] c.a.payment.service.RateLimitService     : Rate limit exceeded for customerId=d416c0e8-9f94-4e62-8def-44bd944d77b5: count=101
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 s -- in com.acaboumony.payment.service.RateLimitServiceTest
+[INFO] Running com.acaboumony.payment.service.RefundServiceTest
+2026-06-05T09:37:25.168-03:00  INFO 4468 --- [           main] c.a.payment.service.RefundService        : Refund ref_d157a3fb for transaction txn_abc123: FAILED
+2026-06-05T09:37:25.171-03:00  INFO 4468 --- [           main] c.a.payment.service.RefundService        : Refund ref_f1f55b5e for transaction txn_abc123: FAILED
+2026-06-05T09:37:25.180-03:00  INFO 4468 --- [           main] c.a.payment.service.RefundService        : Refund ref_7ec6862d for transaction txn_abc123: COMPLETED
+2026-06-05T09:37:25.180-03:00  INFO 4468 --- [           main] c.a.payment.service.RefundService        : Refund ref_b7a419e3 for transaction txn_abc123: COMPLETED
+2026-06-05T09:37:25.190-03:00  INFO 4468 --- [           main] c.a.payment.service.RefundService        : Refund ref_11b7abf5 for transaction txn_abc123: COMPLETED
+2026-06-05T09:37:25.194-03:00  INFO 4468 --- [           main] c.a.payment.service.RefundService        : Refund ref_b6ad0a63 for transaction txn_abc123: COMPLETED
+2026-06-05T09:37:25.198-03:00  INFO 4468 --- [           main] c.a.payment.service.RefundService        : Refund ref_082096ca for transaction txn_abc123: COMPLETED
+2026-06-05T09:37:25.203-03:00  INFO 4468 --- [           main] c.a.payment.service.RefundService        : Refund ref_61595ab6 for transaction txn_abc123: COMPLETED
+2026-06-05T09:37:25.232-03:00  INFO 4468 --- [           main] c.a.payment.service.RefundService        : Refund ref_bf52921a for transaction txn_abc123: COMPLETED
+[INFO] Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.381 s -- in com.acaboumony.payment.service.RefundServiceTest
+[INFO] Running com.acaboumony.payment.service.TransactionServiceTest
+2026-06-05T09:37:25.472-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Handling MP webhook: paymentId=123456, action=payment.updated
+2026-06-05T09:37:25.477-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Payment 123456 updated ù refreshing status
+2026-06-05T09:37:25.477-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Transaction txn_001 updated to PROCESSING via webhook
+2026-06-05T09:37:25.502-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Transaction txn_6ea3077e approved in 4ms
+2026-06-05T09:37:25.511-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Transaction txn_f4320f0c approved in 3ms
+2026-06-05T09:37:25.519-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Handling MP webhook: paymentId=123456, action=payment.unknown
+2026-06-05T09:37:25.536-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Handling MP webhook: paymentId=123456, action=payment.updated
+2026-06-05T09:37:25.536-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Payment 123456 updated ù refreshing status
+2026-06-05T09:37:25.541-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Transaction txn_6bdfb277 approved in 0ms
+2026-06-05T09:37:25.543-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Handling MP webhook: paymentId=123456, action=payment.updated
+2026-06-05T09:37:25.543-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Payment 123456 updated ù refreshing status
+2026-06-05T09:37:25.543-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Transaction txn_b1b14b94 approved in 0ms
+2026-06-05T09:37:25.557-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Transaction txn_6d73ec04 approved in 0ms
+2026-06-05T09:37:25.557-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Handling MP webhook: paymentId=123456, action=payment.updated
+2026-06-05T09:37:25.557-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Payment 123456 updated ù refreshing status
+2026-06-05T09:37:25.557-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Transaction txn_001 updated to APPROVED via webhook
+2026-06-05T09:37:25.571-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Handling MP webhook: paymentId=123456, action=payment.cancelled
+2026-06-05T09:37:25.571-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Handling MP webhook: paymentId=123456, action=payment.cancelled
+2026-06-05T09:37:25.571-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Transaction txn_001 cancelled via webhook
+2026-06-05T09:37:25.589-03:00  WARN 4468 --- [           main] c.a.payment.service.TransactionService   : Rate limit exceeded for customer 653a3c53-2803-46ca-8fa5-30ea3f07bd59: 101 requests in window
+2026-06-05T09:37:25.598-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Handling MP webhook: paymentId=999, action=payment.updated
+2026-06-05T09:37:25.598-03:00  WARN 4468 --- [           main] c.a.payment.service.TransactionService   : No transaction found for mpPaymentId=999
+2026-06-05T09:37:25.602-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Handling MP webhook: paymentId=123456, action=payment.updated
+2026-06-05T09:37:25.602-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Payment 123456 updated ù refreshing status
+2026-06-05T09:37:25.602-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Transaction txn_001 updated to DECLINED via webhook
+2026-06-05T09:37:25.602-03:00  WARN 4468 --- [           main] c.a.payment.service.TransactionService   : Failed to write audit log: DB error
+2026-06-05T09:37:25.602-03:00  WARN 4468 --- [           main] c.a.payment.service.TransactionService   : Failed to write audit log: DB error
+2026-06-05T09:37:25.602-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Transaction txn_869bd62a approved in 0ms
+2026-06-05T09:37:25.602-03:00  WARN 4468 --- [           main] c.a.payment.service.TransactionService   : Failed to write audit log: DB error
+2026-06-05T09:37:25.615-03:00  WARN 4468 --- [           main] c.a.payment.service.TransactionService   : Redis unavailable for rate limiting, skipping: Connection refused
+2026-06-05T09:37:25.615-03:00  WARN 4468 --- [           main] c.a.payment.service.TransactionService   : Redis unavailable for idempotency, processing without lock: Connection refused
+2026-06-05T09:37:25.615-03:00  WARN 4468 --- [           main] c.a.payment.service.TransactionService   : Redis unavailable to set idempotency result: Connection refused
+2026-06-05T09:37:25.615-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Transaction txn_84036e7d approved in 0ms
+2026-06-05T09:37:25.626-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Transaction txn_a439c2aa approved in 0ms
+2026-06-05T09:37:25.636-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Handling MP webhook: paymentId=123456, action=payment.cancelled
+2026-06-05T09:37:25.636-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Transaction txn_001 cancelled via webhook
+2026-06-05T09:37:25.645-03:00  WARN 4468 --- [           main] c.a.payment.service.TransactionService   : Redis unavailable for delete idempotency:payment:97f2f749-6126-485e-bbe8-b7758bcb66cc: Redis down
+2026-06-05T09:37:25.645-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Handling MP webhook: paymentId=123456, action=payment.created
+2026-06-05T09:37:25.645-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Payment 123456 created, status=APPROVED
+2026-06-05T09:37:25.645-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Handling MP webhook: paymentId=123456, action=payment.updated
+2026-06-05T09:37:25.645-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Payment 123456 updated ù refreshing status
+2026-06-05T09:37:25.645-03:00  INFO 4468 --- [           main] c.a.payment.service.TransactionService   : Transaction txn_001 updated to CANCELLED via webhook
+[INFO] Tests run: 41, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.410 s -- in com.acaboumony.payment.service.TransactionServiceTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 177, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report) @ payment-service ---
+[INFO] Skipping JaCoCo execution because property jacoco.skip is set.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  51.172 s
+[INFO] Finished at: 2026-06-05T09:37:28-03:00
+[INFO] ------------------------------------------------------------------------
