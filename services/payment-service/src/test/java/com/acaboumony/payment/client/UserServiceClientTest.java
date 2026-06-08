@@ -16,8 +16,8 @@ class UserServiceClientTest {
         var result = client.validateCustomer(UUID.randomUUID());
 
         assertNotNull(result);
-        assertTrue(result.valid());
-        assertNull(result.errorCode());
+        assertFalse(result.valid());
+        assertEquals("SERVICE_UNAVAILABLE", result.errorCode());
     }
 
     @Test

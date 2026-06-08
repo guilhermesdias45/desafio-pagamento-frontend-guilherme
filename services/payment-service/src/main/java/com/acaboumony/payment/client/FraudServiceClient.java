@@ -34,8 +34,8 @@ public class FraudServiceClient {
         this.fraudServiceUrl = fraudServiceUrl;
         this.internalSecret = internalSecret;
         this.restTemplate = new RestTemplateBuilder()
-            .setConnectTimeout(Duration.ofMillis(250))
-            .setReadTimeout(Duration.ofMillis(250))
+            .setConnectTimeout(Duration.ofMillis(2000))
+            .setReadTimeout(Duration.ofMillis(2000))
             .build();
         this.circuitBreaker = circuitBreakerRegistry.circuitBreaker("fraudService");
     }

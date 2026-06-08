@@ -127,7 +127,7 @@ public class TransactionService {
         }
 
         var transactionId = generateTransactionId();
-        logAudit(transactionId, merchantId, "CREATED", null, ipAddress);
+        logAudit(transactionId, merchantId, "CREATED", "{}", ipAddress);
 
         var orderValidation = orderClient.validateOrder(request.orderId(), merchantId);
         if (!orderValidation.valid()) {
@@ -164,7 +164,7 @@ public class TransactionService {
         if (!gatewayResult.success()) {
             if (gatewayResult.isTimeout()) {
                 safeRedisDelete(idempotencyKey);
-                logAudit(transactionId, merchantId, "GATEWAY_TIMEOUT", null, ipAddress);
+                logAudit(transactionId, merchantId, "GATEWAY_TIMEOUT", "{}", ipAddress);
                 return fail("MP_GATEWAY_TIMEOUT", "Payment gateway timeout", true, start);
             }
             saveFailedTransaction(transactionId, request, merchantId, "CARD_DECLINED", start);
@@ -203,7 +203,7 @@ public class TransactionService {
         approvedCounter.increment();
         processingTimer.record(Duration.between(start, Instant.now()));
         log.info("Transaction {} approved in {}ms", transactionId, transaction.getProcessingTimeMs());
-        logAudit(transactionId, merchantId, "PAYMENT_APPROVED", null, ipAddress);
+        logAudit(transactionId, merchantId, "PAYMENT_APPROVED", "{}", ipAddress);
         return new TransactionResult.Approved(
             transactionId, gatewayResult.mpPaymentId(),
             request.orderId(), transaction.getProcessingTimeMs(), false);

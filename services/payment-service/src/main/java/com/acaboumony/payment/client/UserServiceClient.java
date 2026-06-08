@@ -33,8 +33,8 @@ public class UserServiceClient {
         this.userServiceUrl = userServiceUrl;
         this.internalSecret = internalSecret;
         this.restTemplate = new RestTemplateBuilder()
-            .setConnectTimeout(Duration.ofMillis(300))
-            .setReadTimeout(Duration.ofMillis(300))
+            .setConnectTimeout(Duration.ofMillis(2000))
+            .setReadTimeout(Duration.ofMillis(2000))
             .build();
         this.circuitBreaker = circuitBreakerRegistry.circuitBreaker("userService");
     }
@@ -63,7 +63,7 @@ public class UserServiceClient {
             return new UserValidationResult(false, "CUSTOMER_NOT_FOUND");
         } catch (Exception e) {
             log.warn("User service unavailable or error: {}", e.getMessage());
-            return new UserValidationResult(true, null);
+            return new UserValidationResult(false, "SERVICE_UNAVAILABLE");
         }
     }
 

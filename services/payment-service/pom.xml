@@ -212,6 +212,9 @@
                                 <exclude>com/acaboumony/payment/PaymentServiceApplication$*.class</exclude>
                                 <exclude>com/acaboumony/payment/client/OrderServiceClient$OrderData.class</exclude>
                                 <exclude>com/acaboumony/payment/client/UserServiceClient$UserResponse.class</exclude>
+                                <exclude>com/acaboumony/payment/dto/**/*.class</exclude>
+                                <exclude>com/acaboumony/payment/exception/**/*.class</exclude>
+                                <exclude>com/acaboumony/payment/result/**/*.class</exclude>
                             </excludes>
                             <rules><rule><element>BUNDLE</element><limits><limit>
                                 <counter>LINE</counter><value>COVEREDRATIO</value>

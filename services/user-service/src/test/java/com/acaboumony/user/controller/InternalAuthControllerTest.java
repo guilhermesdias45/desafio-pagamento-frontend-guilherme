@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
@@ -41,6 +42,7 @@ class InternalAuthControllerTest {
     @Autowired MockMvc mvc;
     @MockBean JwtTokenValidator jwtTokenValidator;
     @MockBean InternalSecretProperties internalSecretProperties;
+    @MockBean StringRedisTemplate stringRedisTemplate;
 
     @BeforeEach
     void setUp() {

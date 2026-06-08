@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.util.Map;
@@ -51,6 +52,7 @@ class EmailServiceTest {
     @BeforeEach
     void setUp() {
         emailService = new EmailService(mailSender, templateEngine, notificationLogRepository, emailRateLimiter, meterRegistry);
+        ReflectionTestUtils.setField(emailService, "fromAddress", "test@acaboumony.com");
     }
 
     private void allowRateLimit() {
