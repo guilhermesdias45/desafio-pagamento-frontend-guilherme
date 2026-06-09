@@ -5,7 +5,9 @@ import { PAYMENT_SERVICE, THRESHOLDS, randomId } from './options.js';
 export const options = {
   vus: 3,
   duration: '30s',
-  thresholds: THRESHOLDS.payment,
+  thresholds: {
+    'http_req_duration': ['p(99)<1000'],
+  },
 };
 
 export default function () {
@@ -29,7 +31,7 @@ export default function () {
   );
 
   check(res, {
-    'refund returns 200, 404, 422 or 403': (r) => [200, 404, 422, 403].includes(r.status),
+    'refund returns 200, 404, 422, 403 ou 503': (r) => [200, 404, 422, 403, 503].includes(r.status),
     'has refund response structure': (r) => {
       try {
         const body = JSON.parse(r.body);

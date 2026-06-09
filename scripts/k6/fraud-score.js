@@ -1,6 +1,6 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
-import { FRAUD_SERVICE, THRESHOLDS, randomId } from './options.js';
+import { FRAUD_SERVICE, INTERNAL_SECRET, THRESHOLDS, randomId } from './options.js';
 
 export const options = {
   vus: 10,
@@ -31,7 +31,10 @@ export default function () {
     });
 
     const res = http.post(`${FRAUD_SERVICE}/internal/fraud/score`, payload, {
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Internal-Secret': INTERNAL_SECRET,
+      },
     });
 
     check(res, {

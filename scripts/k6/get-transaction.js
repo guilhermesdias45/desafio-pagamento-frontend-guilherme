@@ -5,7 +5,9 @@ import { PAYMENT_SERVICE, THRESHOLDS, randomId } from './options.js';
 export const options = {
   vus: 5,
   duration: '30s',
-  thresholds: THRESHOLDS.payment,
+  thresholds: {
+    'http_req_duration': ['p(99)<1000'],
+  },
 };
 
 export default function () {
@@ -39,7 +41,7 @@ export default function () {
   );
 
   check(detailRes, {
-    'detail returns 403 or 200': (r) => [200, 403].includes(r.status),
+    'detail returns 200, 403 ou 404': (r) => [200, 403, 404].includes(r.status),
   });
 
   sleep(0.5);

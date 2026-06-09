@@ -350,7 +350,9 @@ services:
       INTERNAL_SECRET: ${INTERNAL_SECRET}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-fraud-service
-    # Sem porta exposta — apenas interno (payment-service acessa via rede Docker)
+    # Porta exposta para testes de carga k6 (apenas interno em produção)
+    ports:
+      - "8085:8085"
     depends_on:
       postgres:
         condition: service_healthy

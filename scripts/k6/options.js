@@ -1,5 +1,6 @@
 export const PAYMENT_SERVICE = 'http://localhost:8082';
 export const FRAUD_SERVICE = 'http://localhost:8085';
+export const INTERNAL_SECRET = 'afwh45HmU0wPZEFx01xxzYcqZWKAQVW6BuvDnP50';
 
 export const THRESHOLDS = {
   fraud: {
