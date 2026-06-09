@@ -401,3 +401,84 @@ SLA: **P99 < 1.000ms**
 - Comunicação com Mercado Pago somente via HTTPS/TLS 1.3
 - `idempotencyKey` previne double-charge em falhas de rede
 - Webhook do Mercado Pago validado via `x-signature` antes de processar
+
+---
+
+## 9. Contas de Teste MercadoPago
+
+### 9.1 Visão Geral
+
+O payment-service armazena credenciais de duas contas de teste do MercadoPago (seller e buyer)
+em uma tabela dedicada `mp_test_accounts`. Essas contas são registradas exclusivamente via script
+SQL manual executado pelo operador do sistema — não há endpoint para criá-las via API.
+
+### 9.2 Tabela: `mp_test_accounts`
+
+| Campo | Tipo | Descrição |
+|-------|------|-----------|
+| id | UUID (PK) | Gerado automaticamente |
+| type | VARCHAR(16) | `SELLER` ou `BUYER` |
+| mp_user_id | BIGINT | ID numérico da conta no MercadoPago |
+| email | VARCHAR(255) | Usuário/nickname da conta de teste |
+| password_enc | TEXT | Senha criptografada |
+| verification_code | VARCHAR(16) | Código de verificação 2FA |
+| access_token_enc | TEXT | Access token criptografado (nullable — Fase 1) |
+| refresh_token_enc | TEXT | Refresh token criptografado (nullable) |
+| public_key | VARCHAR(255) | Chave pública (nullable) |
+| token_expires_at | TIMESTAMPTZ | Expiração do access_token (nullable) |
+| created_at | TIMESTAMPTZ | Data de criação |
+| updated_at | TIMESTAMPTZ | Última atualização |
+
+**Restrições:**
+- `UNIQUE(email)` — email é único
+- `UNIQUE INDEX` parcial em `type WHERE type = 'SELLER'` — apenas uma conta seller
+
+### 9.3 Fluxo de Pagamento com Contas de Teste
+
+```
+┌──────────────┐     ┌──────────────────┐     ┌───────────────────┐
+│  Comprador   │────▶│  Payment Service  │────▶│  MercadoPago API  │
+│ (test@test…) │     │  (token da Fase 1)│     │  (sandbox)        │
+└──────────────┘     └──────────────────┘     └───────────────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │  mp_test_accounts│
+                    │  (seller creds)  │
+                    └──────────────────┘
+```
+
+- **Fase 1 (atual):** Usa `MERCADOPAGO_ACCESS_TOKEN` global como seller token.
+  `access_token_enc` fica NULL. Pagamentos usam `test@testuser.com` como payer.email.
+- **Fase 2 (futura):** Obtém seller access token via OAuth authorization_code,
+  armazena criptografado na tabela, e usa `RequestOptions` nas chamadas ao gateway.
+
+### 9.4 Casos Extremos
+
+#### CE-008: Credenciais MP ausentes ou token expirado
+
+| Condição | Comportamento | Output |
+|----------|--------------|--------|
+| `access_token_enc = NULL` | Usa token global (`MERCADOPAGO_ACCESS_TOKEN`) como fallback | Transação processa normalmente |
+| Token expirado e sem refresh | Usa token global como fallback, log warn | Transação processa, alerta em log |
+| Nenhuma conta seller no banco | Log warn, usa token global | Transação processa com token global |
+
+#### CE-009: Múltiplas contas buyer
+
+O schema atual usa `UNIQUE(email)`. Se no futuro múltiplos buyers forem necessários,
+a unique constraint deve ser removida e a query ajustada para aceitar o mais recente.
+
+### 9.5 Inserção Manual
+
+A única forma de registrar contas é via script SQL:
+```sql
+INSERT INTO mp_test_accounts (type, mp_user_id, email, password_enc, verification_code)
+VALUES ('SELLER', ..., ..., ..., ...),
+       ('BUYER',  ..., ..., ..., ...);
+```
+
+### 9.6 Segurança
+
+- `password_enc` e `access_token_enc` são criptografados em repouso (PGP ou AES-256)
+- Credenciais nunca são expostas em logs, responses de API, ou métricas
+- Apenas o payment-service acessa a tabela `mp_test_accounts`

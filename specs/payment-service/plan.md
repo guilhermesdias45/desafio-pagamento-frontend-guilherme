@@ -39,6 +39,7 @@
 | `transactions` | Registro de todas as transações (aprovadas e rejeitadas) |
 | `refunds` | Registro de estornos por transação |
 | `audit_logs` | Trilha imutável de todas as operações (PCI DSS) |
+| `mp_test_accounts` | Credenciais das contas de teste MP (seller + buyer) |
 
 ### Chaves Redis
 
@@ -85,7 +86,11 @@ src/main/java/com/acaboumony/payment/
 │   └── GatewayTimeoutException.java
 ├── config/
 │   ├── MercadoPagoConfig.java
-│   └── RedisConfig.java
+│   ├── RedisConfig.java
+│   └── MpEncryptionConfig.java
+├── domain/
+│   └── enums/
+│       └── MpAccountType.java           (SELLER, BUYER)
 ├── client/
 │   ├── FraudServiceClient.java          (REST client para fraud-service)
 │   └── MercadoPagoGateway.java          (adapter do SDK MP)
@@ -105,6 +110,7 @@ src/main/java/com/acaboumony/payment/
 | V1 | `V1__create_transactions.sql` | Tabela transactions, índices |
 | V2 | `V2__create_refunds.sql` | Tabela refunds, FK para transactions |
 | V3 | `V3__create_audit_logs.sql` | Tabela audit_logs |
+| V6 | `V6__create_mp_test_accounts.sql` | Tabela mp_test_accounts para credenciais MP |
 
 ---
 
@@ -191,3 +197,5 @@ payment-service:
 | Redis indisponível | Baixa | Médio | Fallback para DB para idempotência (mais lento) |
 | fraud-service lento | Média | Alto | Timeout 250ms + score fallback = 50 |
 | Double charge em retry | Baixa | Crítico | Idempotência via Redis + MP idempotency key header |
+| Credenciais MP ausentes | Alta | Baixo | Fallback para token global (Fase 1) |
+| OAuth password grant não suportado | Média | Médio | Fallback para authorization_code flow semi-automatizado |

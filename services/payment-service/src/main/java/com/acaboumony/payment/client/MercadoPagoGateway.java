@@ -3,6 +3,7 @@ package com.acaboumony.payment.client;
 import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.client.payment.PaymentCreateRequest;
 import com.mercadopago.client.payment.PaymentPayerRequest;
+import com.mercadopago.core.MPRequestOptions;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.payment.Payment;
@@ -11,6 +12,7 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -41,10 +43,18 @@ public class MercadoPagoGateway {
     public PaymentResult createPayment(String cardToken, Long amountInCents,
                                         String paymentMethodId, Integer installments,
                                         UUID orderId, String customerEmail) {
+        return createPayment(cardToken, amountInCents, paymentMethodId,
+            installments, orderId, customerEmail, null);
+    }
+
+    public PaymentResult createPayment(String cardToken, Long amountInCents,
+                                        String paymentMethodId, Integer installments,
+                                        UUID orderId, String customerEmail,
+                                        @Nullable String sellerAccessToken) {
         try {
             return circuitBreaker.executeSupplier(() ->
                 doCreatePayment(cardToken, amountInCents, paymentMethodId,
-                    installments, orderId, customerEmail));
+                    installments, orderId, customerEmail, sellerAccessToken));
         } catch (Exception e) {
             log.warn("MP gateway circuit breaker fallback: {}", e.getMessage());
             return PaymentResult.timeout();
@@ -53,7 +63,8 @@ public class MercadoPagoGateway {
 
     private PaymentResult doCreatePayment(String cardToken, Long amountInCents,
                                            String paymentMethodId, Integer installments,
-                                           UUID orderId, String customerEmail) {
+                                           UUID orderId, String customerEmail,
+                                           @Nullable String sellerAccessToken) {
         var start = Instant.now();
         var future = CompletableFuture.supplyAsync(() -> {
             try {
@@ -66,6 +77,13 @@ public class MercadoPagoGateway {
                     .payer(PaymentPayerRequest.builder()
                         .email(customerEmail).build())
                     .build();
+
+                if (sellerAccessToken != null) {
+                    var requestOptions = MPRequestOptions.builder()
+                        .accessToken(sellerAccessToken)
+                        .build();
+                    return paymentClient.create(request, requestOptions);
+                }
                 return paymentClient.create(request);
             } catch (MPApiException e) {
                 throw new CompletionException(e);

@@ -24,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.beans.factory.ObjectProvider;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -54,7 +55,8 @@ class TransactionServiceTest {
     @BeforeEach
     void setUp() {
         service = new TransactionService(transactionRepository, auditLogRepository, redis, fraudClient,
-            orderClient, userClient, mpGateway, eventProducer, mapper, objectMapper, new SimpleMeterRegistry());
+            orderClient, userClient, mpGateway, eventProducer, mapper, objectMapper, new SimpleMeterRegistry(),
+            "test@testuser.com", mock(ObjectProvider.class));
         validRequest = new com.acaboumony.payment.dto.request.TransactionRequest(
             8990L, "BRL", UUID.randomUUID(), UUID.randomUUID(),
             "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6", "visa", 1, UUID.randomUUID()
@@ -97,6 +99,22 @@ class TransactionServiceTest {
     }
 
     @Test
+    void processTransaction_usesPayerEmailFromConfig() {
+        mockRedisForNewRequest();
+        when(valueOps.setIfAbsent(anyString(), anyString(), any(Duration.class)))
+            .thenReturn(true);
+        when(fraudClient.score(any())).thenReturn(
+            new FraudServiceClient.FraudScoreResult(10, "APPROVE", java.util.List.of(), 15L));
+        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), eq("test@testuser.com"), any()))
+            .thenReturn(MercadoPagoGateway.PaymentResult.approved(123456L));
+
+        var result = service.processTransaction(validRequest, "customer@email.com", UUID.randomUUID(), "127.0.0.1");
+
+        assertInstanceOf(TransactionResult.Approved.class, result);
+        verify(mpGateway).createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), eq("test@testuser.com"), any());
+    }
+
+    @Test
     void processTransaction_whenDuplicateIdempotencyKey_returnsConflict() {
         mockRedisForNewRequest();
         when(valueOps.setIfAbsent(anyString(), anyString(), any(Duration.class)))
@@ -133,7 +151,7 @@ class TransactionServiceTest {
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
             new FraudServiceClient.FraudScoreResult(20, "APPROVE", java.util.List.of(), 20L));
-        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString()))
+        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString(), any()))
             .thenReturn(MercadoPagoGateway.PaymentResult.declined("CARD_DECLINED"));
 
         TransactionResult result = service.processTransaction(validRequest, "test@test.com", UUID.randomUUID(), "127.0.0.1");
@@ -150,7 +168,7 @@ class TransactionServiceTest {
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
             new FraudServiceClient.FraudScoreResult(20, "APPROVE", java.util.List.of(), 20L));
-        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString()))
+        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString(), any()))
             .thenReturn(MercadoPagoGateway.PaymentResult.timeout());
 
         TransactionResult result = service.processTransaction(validRequest, "test@test.com", UUID.randomUUID(), "127.0.0.1");
@@ -167,7 +185,7 @@ class TransactionServiceTest {
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
             new FraudServiceClient.FraudScoreResult(20, "APPROVE", java.util.List.of(), 20L));
-        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString()))
+        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString(), any()))
             .thenReturn(MercadoPagoGateway.PaymentResult.timeout());
 
         service.processTransaction(validRequest, "test@test.com", UUID.randomUUID(), "127.0.0.1");
@@ -183,7 +201,7 @@ class TransactionServiceTest {
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
             new FraudServiceClient.FraudScoreResult(50, "APPROVE", java.util.List.of("FALLBACK_TIMEOUT"), 0L));
-        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString()))
+        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString(), any()))
             .thenReturn(MercadoPagoGateway.PaymentResult.approved(123456L));
 
         TransactionResult result = service.processTransaction(validRequest, "test@test.com", UUID.randomUUID(), "127.0.0.1");
@@ -199,7 +217,7 @@ class TransactionServiceTest {
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
             new FraudServiceClient.FraudScoreResult(10, "APPROVE", java.util.List.of(), 15L));
-        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString()))
+        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString(), any()))
             .thenReturn(MercadoPagoGateway.PaymentResult.approved(123456L));
 
         TransactionResult result = service.processTransaction(validRequest, "test@test.com", UUID.randomUUID(), "127.0.0.1");
@@ -218,7 +236,7 @@ class TransactionServiceTest {
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
             new FraudServiceClient.FraudScoreResult(10, "APPROVE", java.util.List.of(), 15L));
-        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString()))
+        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString(), any()))
             .thenReturn(MercadoPagoGateway.PaymentResult.approved(123456L));
         when(transactionRepository.save(any())).thenAnswer(i -> i.getArgument(0));
 
@@ -236,7 +254,7 @@ class TransactionServiceTest {
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
             new FraudServiceClient.FraudScoreResult(10, "APPROVE", java.util.List.of(), 15L));
-        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString()))
+        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString(), any()))
             .thenReturn(MercadoPagoGateway.PaymentResult.approved(123456L));
         when(transactionRepository.save(any())).thenAnswer(i -> i.getArgument(0));
 
@@ -254,7 +272,7 @@ class TransactionServiceTest {
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
             new FraudServiceClient.FraudScoreResult(20, "APPROVE", java.util.List.of(), 20L));
-        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString()))
+        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString(), any()))
             .thenReturn(MercadoPagoGateway.PaymentResult.declined("CARD_DECLINED"));
         when(transactionRepository.save(any())).thenAnswer(i -> i.getArgument(0));
 
@@ -270,7 +288,7 @@ class TransactionServiceTest {
         when(redis.opsForValue()).thenThrow(new org.springframework.data.redis.RedisConnectionFailureException("Connection refused"));
         when(fraudClient.score(any())).thenReturn(
             new FraudServiceClient.FraudScoreResult(10, "APPROVE", java.util.List.of(), 15L));
-        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString()))
+        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString(), any()))
             .thenReturn(MercadoPagoGateway.PaymentResult.approved(123456L));
 
         TransactionResult result = service.processTransaction(validRequest, "test@test.com", UUID.randomUUID(), "127.0.0.1");
@@ -635,7 +653,7 @@ class TransactionServiceTest {
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
             new FraudServiceClient.FraudScoreResult(10, "APPROVE", java.util.List.of(), 15L));
-        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString()))
+        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString(), any()))
             .thenReturn(MercadoPagoGateway.PaymentResult.approved(123456L));
 
         service.processTransaction(validRequest, "test@test.com", UUID.randomUUID(), "127.0.0.1");
@@ -655,13 +673,13 @@ class TransactionServiceTest {
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
             new FraudServiceClient.FraudScoreResult(10, "APPROVE", java.util.List.of(), 15L));
-        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString()))
+        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString(), any()))
             .thenReturn(MercadoPagoGateway.PaymentResult.approved(123456L));
         when(transactionRepository.save(any())).thenAnswer(i -> i.getArgument(0));
 
         service.processTransaction(request, "test@test.com", UUID.randomUUID(), "127.0.0.1");
 
-        verify(mpGateway).createPayment(anyString(), anyLong(), anyString(), eq(1), any(), anyString());
+        verify(mpGateway).createPayment(anyString(), anyLong(), anyString(), eq(1), any(), anyString(), any());
     }
 
     @Test
@@ -727,7 +745,7 @@ class TransactionServiceTest {
         when(auditLogRepository.save(any())).thenThrow(new RuntimeException("DB error"));
         when(fraudClient.score(any())).thenReturn(
             new FraudServiceClient.FraudScoreResult(10, "APPROVE", java.util.List.of(), 15L));
-        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString()))
+        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString(), any()))
             .thenReturn(MercadoPagoGateway.PaymentResult.approved(123456L));
         when(transactionRepository.save(any())).thenAnswer(i -> i.getArgument(0));
 
@@ -743,7 +761,7 @@ class TransactionServiceTest {
             .thenReturn(true);
         when(fraudClient.score(any())).thenReturn(
             new FraudServiceClient.FraudScoreResult(20, "APPROVE", java.util.List.of(), 20L));
-        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString()))
+        when(mpGateway.createPayment(anyString(), anyLong(), anyString(), anyInt(), any(), anyString(), any()))
             .thenReturn(MercadoPagoGateway.PaymentResult.declined("CARD_DECLINED"));
         when(transactionRepository.save(any())).thenAnswer(i -> i.getArgument(0));
         doThrow(new RuntimeException("Redis down")).when(redis).delete(anyString());

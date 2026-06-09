@@ -36,6 +36,13 @@ server:
 mercadopago:
   access-token: ${MERCADOPAGO_ACCESS_TOKEN}
   webhook-secret: ${MERCADOPAGO_WEBHOOK_SECRET:}
+  payer-email: test@testuser.com
+  encryption:
+    key: ${MERCADOPAGO_ENCRYPTION_KEY:}
+  oauth:
+    client-id: ${MP_CLIENT_ID:}
+    client-secret: ${MP_CLIENT_SECRET:}
+    redirect-uri: "http://localhost:8082/api/v1/admin/mp-oauth/callback"
 
 fraud:
   service:

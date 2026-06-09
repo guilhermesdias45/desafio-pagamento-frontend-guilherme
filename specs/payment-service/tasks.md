@@ -91,3 +91,26 @@
 - [x] `mvn verify` com cobertura JaCoCo ≥ 90%
 - [x] `AuditLog` populado em todos os pontos do fluxo
 - [x] `tasks.md` atualizado
+
+---
+
+## Sprint 5 (Contas de Teste MercadoPago)
+
+**Referência:** Spec §9, [`sprint-5-mp-test-accounts.md`](sprint-5-mp-test-accounts.md)
+
+| # | Tarefa | Tipo | Status | Notas |
+|---|--------|------|--------|-------|
+| T1 | Atualizar spec §9 — Contas de Teste MP (spec.md) | Spec | ✅ | Seção 9 adicionada |
+| T2 | Atualizar plan — tabela, configs, riscos (plan.md) | Plan | ✅ | Tabela, migrations, riscos |
+| T3 | V6 Migration — `mp_test_accounts` | Infra | ✅ | `V6__create_mp_test_accounts.sql` |
+| T4 | Entidade `MpTestAccount` + enum `MpAccountType` | Code | ✅ | `domain/entity/MpTestAccount.java`, `domain/enums/MpAccountType.java` |
+| T5 | Repository `MpTestAccountRepository` | Code | ✅ | `repository/MpTestAccountRepository.java` |
+| T6 | DTO `MpTestAccountResponse` | Code | ✅ | `dto/response/MpTestAccountResponse.java` |
+| T7 | **[TEST]** `MpTestAccountRepositoryIT` | Test | ✅ | Extends `BaseIntegrationTest` (Docker required) |
+| T8 | **[TEST]** `MpTestAccountTest` | Test | ✅ | 6 tests, entity unit tests |
+| T9 | `MercadoPagoGateway` overload com seller token | Code | ✅ | `createPayment()` com `@Nullable sellerAccessToken` + `MPRequestOptions` |
+| T10 | **[TEST]** `MercadoPagoGatewayMockedTest` — overload | Test | ✅ | 3 new tests for overload behavior |
+| T11 | `TransactionService` — usar `test@testuser.com` | Code | ✅ | `@Value("${mercadopago.payer-email}")` injetado |
+| T12 | **[TEST]** `TransactionServiceTest` — atualizar | Test | ✅ | Novo teste `processTransaction_usesPayerEmailFromConfig` |
+| T13 | Script SQL manual `insert-mp-test-accounts.sql` | Infra | ✅ | `scripts/insert-mp-test-accounts.sql` |
+| T14 | Validar cobertura JaCoCo ≥ 90% | Validate | ⬜ | Requer Docker para `mvn verify` (83% unit-only) |

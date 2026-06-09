@@ -16,6 +16,12 @@ mercadopago:
   access-token: TEST-ACCESS-TOKEN
   base-url: http://localhost:${wiremock.server.port:8089}
   timeout-ms: 800
+  encryption:
+    key: 0000000000000000000000000000000000000000000000000000000000000000
+  oauth:
+    client-id: test-client-id
+    client-secret: test-client-secret
+    redirect-uri: "http://localhost:8082/api/v1/admin/mp-oauth/callback"
 
 fraud-service:
   url: http://localhost:${wiremock.server.port:8089}

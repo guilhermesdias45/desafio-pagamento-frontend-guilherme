@@ -73,5 +73,6 @@ public abstract class BaseIntegrationTest {
         registry.add("mercadopago.access-token", () -> "test-token");
         registry.add("mercadopago.webhook-secret", () -> "test-secret");
         registry.add("mercadopago.timeout-ms", () -> "2000");
+        registry.add("mercadopago.payer-email", () -> "test@testuser.com");
     }
 }
