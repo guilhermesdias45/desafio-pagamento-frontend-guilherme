@@ -29,7 +29,7 @@ class MercadoPagoGatewayMockedTest {
     @BeforeEach
     void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        gateway = new MercadoPagoGateway(800L, CircuitBreakerRegistry.ofDefaults());
+        gateway = new MercadoPagoGateway(800L, "567831283", CircuitBreakerRegistry.ofDefaults());
         var clientField = MercadoPagoGateway.class.getDeclaredField("paymentClient");
         clientField.setAccessible(true);
         clientField.set(gateway, paymentClient);

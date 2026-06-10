@@ -176,11 +176,12 @@ public class TransactionService {
                 logAudit(transactionId, merchantId, "GATEWAY_TIMEOUT", "{}", ipAddress);
                 return fail("MP_GATEWAY_TIMEOUT", "Payment gateway timeout", true, start);
             }
-            saveFailedTransaction(transactionId, request, merchantId, "CARD_DECLINED", start);
-            publishFailed(transactionId, request, customerEmail, "CARD_DECLINED", start);
-            logAudit(transactionId, merchantId, "PAYMENT_FAILED", "{\"detail\":\"CARD_DECLINED\"}", ipAddress);
+            var errorCode = gatewayResult.errorCode() != null ? gatewayResult.errorCode() : "CARD_DECLINED";
+            saveFailedTransaction(transactionId, request, merchantId, errorCode, start);
+            publishFailed(transactionId, request, customerEmail, errorCode, start);
+            logAudit(transactionId, merchantId, "PAYMENT_FAILED", String.format("{\"detail\":\"%s\"}", errorCode), ipAddress);
             safeRedisDelete(idempotencyKey);
-            return fail("CARD_DECLINED", "Payment gateway error", true, start);
+            return fail(errorCode, "Payment gateway error", !"CARD_DECLINED".equals(errorCode), start);
         }
 
         var transaction = new Transaction(

@@ -158,7 +158,7 @@ class TransactionServiceTest {
 
         assertInstanceOf(TransactionResult.Failed.class, result);
         assertEquals("CARD_DECLINED", ((TransactionResult.Failed) result).errorCode());
-        assertTrue(((TransactionResult.Failed) result).retryable());
+        assertFalse(((TransactionResult.Failed) result).retryable());
     }
 
     @Test

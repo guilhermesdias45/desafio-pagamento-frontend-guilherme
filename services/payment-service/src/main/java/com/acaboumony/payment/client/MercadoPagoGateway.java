@@ -30,13 +30,18 @@ public class MercadoPagoGateway {
     private final ExecutorService executor;
     private final long timeoutMs;
     private final CircuitBreaker circuitBreaker;
+    @Nullable
+    private final Long sponsorId;
 
     public MercadoPagoGateway(
             @Value("${mercadopago.timeout-ms:800}") long timeoutMs,
+            @Value("${mercadopago.sponsor-id:}") String sponsorIdStr,
             CircuitBreakerRegistry circuitBreakerRegistry) {
         this.paymentClient = new PaymentClient();
         this.executor = Executors.newVirtualThreadPerTaskExecutor();
         this.timeoutMs = timeoutMs;
+        this.sponsorId = sponsorIdStr != null && !sponsorIdStr.isBlank()
+            ? Long.valueOf(sponsorIdStr) : null;
         this.circuitBreaker = circuitBreakerRegistry.circuitBreaker("mercadoPago");
     }
 
@@ -56,7 +61,7 @@ public class MercadoPagoGateway {
                 doCreatePayment(cardToken, amountInCents, paymentMethodId,
                     installments, orderId, customerEmail, sellerAccessToken));
         } catch (Exception e) {
-            log.warn("MP gateway circuit breaker fallback: {}", e.getMessage());
+            log.warn("MP gateway circuit breaker fallback: {}", e.getMessage(), e);
             return PaymentResult.timeout();
         }
     }
@@ -79,10 +84,21 @@ public class MercadoPagoGateway {
                     .build();
 
                 if (sellerAccessToken != null) {
+                    var builder = PaymentCreateRequest.builder()
+                        .transactionAmount(new BigDecimal(amountInCents).divide(new BigDecimal(100)))
+                        .token(cardToken)
+                        .description("Acabou o Mony - Pedido " + orderId)
+                        .installments(installments)
+                        .paymentMethodId(paymentMethodId)
+                        .payer(PaymentPayerRequest.builder()
+                            .email(customerEmail).build());
+                    if (sponsorId != null) {
+                        builder.sponsorId(sponsorId);
+                    }
                     var requestOptions = MPRequestOptions.builder()
                         .accessToken(sellerAccessToken)
                         .build();
-                    return paymentClient.create(request, requestOptions);
+                    return paymentClient.create(builder.build(), requestOptions);
                 }
                 return paymentClient.create(request);
             } catch (MPApiException e) {
@@ -114,9 +130,16 @@ public class MercadoPagoGateway {
             var cause = e.getCause();
             if (cause instanceof MPApiException mpApi) {
                 var status = mpApi.getStatusCode();
+                var apiResponse = mpApi.getApiResponse();
+                var responseBody = apiResponse != null ? apiResponse.getContent() : "null";
+                log.warn("MP API error: status={} body={}", status, responseBody);
                 if (status == 400 || status == 422) {
                     return PaymentResult.declined("CARD_DECLINED");
                 }
+                if (status >= 500) {
+                    return PaymentResult.declined("MP_SERVER_ERROR");
+                }
+                return PaymentResult.declined("MP_API_ERROR");
             }
             throw new CompletionException("MP gateway error", e.getCause());
         }

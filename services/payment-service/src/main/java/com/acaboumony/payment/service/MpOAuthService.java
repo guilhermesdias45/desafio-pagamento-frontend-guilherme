@@ -38,6 +38,7 @@ public class MpOAuthService {
             + "?client_id=" + config.getClientId()
             + "&redirect_uri=" + config.getRedirectUri()
             + "&response_type=code"
+            + "&test_token=true"
             + "&state=" + state;
     }
 
@@ -47,7 +48,8 @@ public class MpOAuthService {
             "client_id", config.getClientId(),
             "client_secret", config.getClientSecret(),
             "code", code,
-            "redirect_uri", config.getRedirectUri()
+            "redirect_uri", config.getRedirectUri(),
+            "test_token", "true"
         );
         try {
             var response = restTemplate.postForEntity(config.getTokenUrl(), body, Map.class);
