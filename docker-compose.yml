@@ -3,6 +3,8 @@
 # Uso:
 #   Infra apenas:    docker compose up
 #   Tudo (Sprint 1): docker compose --profile app up --build
+#   Escalar para 2 de cada servico:
+#   docker compose --profile app up -d --scale payment-service=2 --scale order-service=2 --scale user-service=2 --scale fraud-service=2 --scale notification-service=2
 #
 # Pré-requisito: copie .env.example → .env e preencha os valores
 
@@ -162,7 +164,7 @@ services:
       context: ./services/user-service
       dockerfile: Dockerfile
     image: aom/user-service:latest
-    container_name: aom-user-service
+    #container_name: aom-user-service
     restart: unless-stopped
     profiles: ["app"]
     environment:
@@ -186,8 +188,8 @@ services:
       MAIL_PASSWORD: ${MAIL_PASSWORD}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-user-service
-    ports:
-      - "8081:8081"
+    #ports:
+    #  - "8081:8081"
     depends_on:
       postgres:
         condition: service_healthy
@@ -209,7 +211,7 @@ services:
       context: ./services/payment-service
       dockerfile: Dockerfile
     image: aom/payment-service:latest
-    container_name: aom-payment-service
+    #container_name: aom-payment-service
     restart: unless-stopped
     profiles: ["app"]
     environment:
@@ -229,8 +231,8 @@ services:
       INTERNAL_SECRET: ${INTERNAL_SECRET}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-payment-service
-    ports:
-      - "8082:8082"
+    #ports:
+    #  - "8082:8082"
     depends_on:
       postgres:
         condition: service_healthy
@@ -256,7 +258,7 @@ services:
       context: ./services/order-service
       dockerfile: Dockerfile
     image: aom/order-service:latest
-    container_name: aom-order-service
+    #container_name: aom-order-service
     restart: unless-stopped
     profiles: ["app"]
     environment:
@@ -272,8 +274,8 @@ services:
       INTERNAL_SECRET: ${INTERNAL_SECRET}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-order-service
-    ports:
-      - "8083:8083"
+    #ports:
+    #  - "8083:8083"
     depends_on:
       postgres:
         condition: service_healthy
@@ -295,7 +297,7 @@ services:
       context: ./services/notification-service
       dockerfile: Dockerfile
     image: aom/notification-service:latest
-    container_name: aom-notification-service
+    #container_name: aom-notification-service
     restart: unless-stopped
     profiles: ["app"]
     environment:
@@ -312,8 +314,8 @@ services:
       MAIL_FROM: ${MAIL_FROM:-noreply@acaboumony.com}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-notification-service
-    ports:
-      - "8084:8084"
+    #ports:
+    #  - "8084:8084"
     depends_on:
       postgres:
         condition: service_healthy
@@ -333,7 +335,7 @@ services:
       context: ./services/fraud-service
       dockerfile: Dockerfile
     image: aom/fraud-service:latest
-    container_name: aom-fraud-service
+    #container_name: aom-fraud-service
     restart: unless-stopped
     profiles: ["app"]
     environment:
@@ -351,8 +353,8 @@ services:
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-fraud-service
     # Porta exposta para testes de carga k6 (apenas interno em produção)
-    ports:
-      - "8085:8085"
+    #ports:
+    #  - "8085:8085"
     depends_on:
       postgres:
         condition: service_healthy
