@@ -1,42 +1,93 @@
-﻿name: acabou-o-mony
-
 # Uso:
-#   Infra apenas:    docker compose up
-#   Tudo (Sprint 1): docker compose --profile app up --build
-#   Escalar para 2 de cada servico:
-#   docker compose --profile app up -d --scale payment-service=2 --scale order-service=2 --scale user-service=2 --scale fraud-service=2 --scale notification-service=2
+#   export $(grep -v '^\s*#' .env | xargs) && docker stack deploy -c docker-stack.yml aom
 #
-# Pré-requisito: copie .env.example → .env e preencha os valores
-
+# Pré-requisitos:
+#   docker swarm init
+#   docker compose --profile app build  (build das imagens)
+#   .env configurado (copie .env.example → .env e preencha)
+#
 services:
 
-  # ─── Infraestrutura ────────────────────────────────────────────────────────
+  # ─── Load Balancer ──────────────────────────────────────
+
+  traefik:
+    image: traefik:v3.1
+
+    networks:
+      - aom-net
+      - traefik-net
+
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: ingress
+
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: host
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    command:
+      - "--entrypoints.web.address=:80"
+
+      - "--providers.swarm.endpoint=unix:///var/run/docker.sock"
+      - "--providers.swarm.watch=true"
+      - "--providers.swarm.exposedbydefault=false"
+      - "--providers.swarm.network=aom-net"
+
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+
+      - "--log.level=DEBUG"
+      - "--accesslog=true"
+
+      - "--entrypoints.traefik.address=:8080"
+
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.acaboumony.local`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.entrypoints=web"
+
+
+  # ─── Infraestrutura ─────────────────────────────────────
 
   postgres:
     image: postgres:16-alpine
-    container_name: aom-postgres
-    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-aom}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: postgres
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=200"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./scripts/init-databases.sql:/docker-entrypoint-initdb.d/01-init-databases.sql:ro
-    ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      #- ./scripts/init-databases.sql:/docker-entrypoint-initdb.d/01-init-databases.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-aom}"]
       interval: 10s
       timeout: 5s
       retries: 5
+    deploy:
+      replicas: 1
     networks:
-      - aom-network
+      - aom-net
 
   redis:
     image: redis:7-alpine
-    container_name: aom-redis
-    restart: unless-stopped
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     command: >
@@ -47,26 +98,23 @@ services:
       --save 60 1
     volumes:
       - redis_data:/data
-    ports:
-      - "${REDIS_PORT:-6379}:6379"
     healthcheck:
       test: ["CMD-SHELL", "redis-cli --no-auth-warning -a \"$REDIS_PASSWORD\" ping | grep PONG"]
       interval: 10s
       timeout: 5s
       retries: 5
+    deploy:
+      replicas: 1
     networks:
-      - aom-network
+      - aom-net
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0
-    container_name: aom-kafka
-    restart: unless-stopped
     environment:
-      # KRaft mode (sem Zookeeper) — mesma imagem usada nos testes Testcontainers
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
-      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:9094
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
@@ -78,30 +126,38 @@ services:
       KAFKA_NUM_PARTITIONS: 3
       KAFKA_LOG_RETENTION_HOURS: 168
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+      KAFKA_HEAP_OPTS: -Xms512m -Xmx512m
     volumes:
       - kafka_data:/var/lib/kafka/data
-    ports:
-      - "${KAFKA_PORT:-9094}:9094"
     healthcheck:
       test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list"]
       interval: 15s
       timeout: 10s
       retries: 10
       start_period: 30s
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+      restart_policy:
+        condition: any
     networks:
-      - aom-network
+      - aom-net
 
-  # Cria os tópicos Kafka na primeira execução e sai
   kafka-init:
     image: confluentinc/cp-kafka:7.5.0
-    container_name: aom-kafka-init
-    restart: "no"
-    depends_on:
-      kafka:
-        condition: service_healthy
     command: >
       bash -c "
-        echo 'Criando tópicos Kafka...' &&
+        echo 'Aguardando Kafka ficar disponivel...' &&
+        for i in \$(seq 1 30); do
+          kafka-topics --bootstrap-server kafka:9092 --list >/dev/null 2>&1 && break;
+          echo \"Tentativa \$i de 30...\";
+          sleep 5;
+        done &&
+        echo 'Criando topicos Kafka...' &&
         kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic user-events          --partitions 3 --replication-factor 1 &&
         kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic user.registered     --partitions 3 --replication-factor 1 &&
         kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic user.login.success  --partitions 3 --replication-factor 1 &&
@@ -112,24 +168,21 @@ services:
         kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic fraud.detected        --partitions 3 --replication-factor 1 &&
         kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic order.created         --partitions 3 --replication-factor 1 &&
         kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic order.paid            --partitions 3 --replication-factor 1 &&
-        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic order.cancelled         --partitions 3 --replication-factor 1 &&
-        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic transaction.refunded   --partitions 3 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic order.cancelled       --partitions 3 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic transaction.refunded  --partitions 3 --replication-factor 1 &&
         echo 'Topicos criados com sucesso.'
       "
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: none
     networks:
-      - aom-network
+      - aom-net
 
-  # ─── Serviços de Aplicação (profile: app) ──────────────────────────────────
-  # Iniciar com: docker compose --profile app up --build
+  # ─── Serviços de Aplicação ──────────────────────────────
 
   api-gateway:
-    build:
-      context: ./services/api-gateway
-      dockerfile: Dockerfile
     image: aom/api-gateway:latest
-    container_name: aom-api-gateway
-    restart: unless-stopped
-    profiles: ["app"]
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SERVER_PORT: 8080
@@ -143,30 +196,35 @@ services:
       INTERNAL_SECRET: ${INTERNAL_SECRET}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-api-gateway
-    ports:
-      - "8080:8080"
-    depends_on:
-      redis:
-        condition: service_healthy
-      user-service:
-        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:8080/actuator/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 60s
+      start_period: 90s
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1024M
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+      restart_policy:
+        condition: any
+        delay: 5s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gateway.rule=PathPrefix(`/api`)"
+      - "traefik.http.services.gateway.loadbalancer.server.port=8080"
+      - "traefik.http.routers.gateway.entrypoints=web"
     networks:
-      - aom-network
+      - aom-net
+      - traefik-net
 
   user-service:
-    build:
-      context: ./services/user-service
-      dockerfile: Dockerfile
     image: aom/user-service:latest
-    #container_name: aom-user-service
-    restart: unless-stopped
-    profiles: ["app"]
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SERVER_PORT: 8081
@@ -188,32 +246,28 @@ services:
       MAIL_PASSWORD: ${MAIL_PASSWORD}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-user-service
-    #ports:
-    #  - "8081:8081"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:8081/actuator/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 60s
+      start_period: 90s
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1024M
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+      restart_policy:
+        condition: any
     networks:
-      - aom-network
+      - aom-net
 
   payment-service:
-    build:
-      context: ./services/payment-service
-      dockerfile: Dockerfile
     image: aom/payment-service:latest
-    #container_name: aom-payment-service
-    restart: unless-stopped
-    profiles: ["app"]
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SERVER_PORT: 8082
@@ -225,46 +279,34 @@ services:
       SPRING_DATA_REDIS_PASSWORD: ${REDIS_PASSWORD}
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       MERCADOPAGO_ACCESS_TOKEN: ${MERCADOPAGO_ACCESS_TOKEN}
-      MERCADOPAGO_WEBHOOK_SECRET: ${MERCADOPAGO_WEBHOOK_SECRET}
-      MERCADOPAGO_NOTIFICATION_URL: https://squabble-engulf-ocean.ngrok-free.dev/api/v1/webhooks/mercadopago
-      MERCADOPAGO_TIMEOUT_MS: ${MERCADOPAGO_TIMEOUT_MS:-10000}
-      MERCADOPAGO_PAYER_EMAIL: guilherme.dias4501@gmail.com
       FRAUD_SERVICE_URL: http://fraud-service:8085
       ORDER_SERVICE_URL: http://order-service:8083
       USER_SERVICE_URL: http://user-service:8081
       INTERNAL_SECRET: ${INTERNAL_SECRET}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-payment-service
-    #ports:
-    #  - "8082:8082"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
-      fraud-service:
-        condition: service_healthy
-      order-service:
-        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:8082/actuator/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 60s
+      start_period: 90s
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1024M
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+      restart_policy:
+        condition: any
     networks:
-      - aom-network
+      - aom-net
 
   order-service:
-    build:
-      context: ./services/order-service
-      dockerfile: Dockerfile
     image: aom/order-service:latest
-    #container_name: aom-order-service
-    restart: unless-stopped
-    profiles: ["app"]
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SERVER_PORT: 8083
@@ -278,32 +320,28 @@ services:
       INTERNAL_SECRET: ${INTERNAL_SECRET}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-order-service
-    #ports:
-    #  - "8083:8083"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:8083/actuator/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 60s
+      start_period: 90s
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+      restart_policy:
+        condition: any
     networks:
-      - aom-network
+      - aom-net
 
   notification-service:
-    build:
-      context: ./services/notification-service
-      dockerfile: Dockerfile
     image: aom/notification-service:latest
-    #container_name: aom-notification-service
-    restart: unless-stopped
-    profiles: ["app"]
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SERVER_PORT: 8084
@@ -318,30 +356,28 @@ services:
       MAIL_FROM: ${MAIL_FROM:-noreply@acaboumony.com}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-notification-service
-    #ports:
-    #  - "8084:8084"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:8084/actuator/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 60s
+      start_period: 90s
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+      restart_policy:
+        condition: any
     networks:
-      - aom-network
+      - aom-net
 
   fraud-service:
-    build:
-      context: ./services/fraud-service
-      dockerfile: Dockerfile
     image: aom/fraud-service:latest
-    #container_name: aom-fraud-service
-    restart: unless-stopped
-    profiles: ["app"]
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SERVER_PORT: 8085
@@ -356,30 +392,38 @@ services:
       INTERNAL_SECRET: ${INTERNAL_SECRET}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: aom-fraud-service
-    # Porta exposta para testes de carga k6 (apenas interno em produção)
-    #ports:
-    #  - "8085:8085"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:8085/actuator/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 60s
+      start_period: 90s
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1024M
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+      restart_policy:
+        condition: any
     networks:
-      - aom-network
+      - aom-net
 
 networks:
-  aom-network:
-    driver: bridge
+  aom-net:
+    driver: overlay
+    attachable: true
+  traefik-net:
+    driver: overlay
+    attachable: true
 
 volumes:
   postgres_data:
+    driver: local
   redis_data:
+    driver: local
   kafka_data:
+    driver: local
