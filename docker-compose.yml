@@ -1,10 +1,12 @@
 ﻿name: acabou-o-mony
 
 # Uso:
-#   Infra apenas:    docker compose up
-#   Tudo (Sprint 1): docker compose --profile app up --build
-#   Escalar para 2 de cada servico:
-#   docker compose --profile app up -d --scale payment-service=2 --scale order-service=2 --scale user-service=2 --scale fraud-service=2 --scale notification-service=2
+#   Infra apenas:        docker compose up
+#   App completo:        docker compose --profile app up --build
+#   Monitoramento:       docker compose --profile monitoring up -d
+#   App + monitoramento: docker compose --profile app --profile monitoring up --build
+#   Teste de carga:      docker compose --profile k6 run --rm k6 run -o experimental-prometheus-rw /scripts/fraud-score.js
+#   Escalar (Swarm):     docker compose --profile app up -d --scale payment-service=2 --scale order-service=2 --scale user-service=2 --scale fraud-service=2 --scale notification-service=2
 #
 # Pré-requisito: copie .env.example → .env e preencha os valores
 
@@ -142,7 +144,10 @@ services:
       SPRING_DATA_REDIS_PASSWORD: ${REDIS_PASSWORD}
       INTERNAL_SECRET: ${INTERNAL_SECRET}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
+      NEW_RELIC_ACCOUNT_ID: ${NEW_RELIC_ACCOUNT_ID}
       NEW_RELIC_APP_NAME: aom-api-gateway
+      NEW_RELIC_ENABLED: ${NEW_RELIC_ENABLED:-false}
+      APP_ENV: production
     ports:
       - "8080:8080"
     depends_on:
@@ -187,7 +192,10 @@ services:
       MAIL_USERNAME: ${MAIL_USERNAME}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
+      NEW_RELIC_ACCOUNT_ID: ${NEW_RELIC_ACCOUNT_ID}
       NEW_RELIC_APP_NAME: aom-user-service
+      NEW_RELIC_ENABLED: ${NEW_RELIC_ENABLED:-false}
+      APP_ENV: production
     #ports:
     #  - "8081:8081"
     depends_on:
@@ -234,7 +242,10 @@ services:
       USER_SERVICE_URL: http://user-service:8081
       INTERNAL_SECRET: ${INTERNAL_SECRET}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
+      NEW_RELIC_ACCOUNT_ID: ${NEW_RELIC_ACCOUNT_ID}
       NEW_RELIC_APP_NAME: aom-payment-service
+      NEW_RELIC_ENABLED: ${NEW_RELIC_ENABLED:-false}
+      APP_ENV: production
     #ports:
     #  - "8082:8082"
     depends_on:
@@ -277,7 +288,10 @@ services:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       INTERNAL_SECRET: ${INTERNAL_SECRET}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
+      NEW_RELIC_ACCOUNT_ID: ${NEW_RELIC_ACCOUNT_ID}
       NEW_RELIC_APP_NAME: aom-order-service
+      NEW_RELIC_ENABLED: ${NEW_RELIC_ENABLED:-false}
+      APP_ENV: production
     #ports:
     #  - "8083:8083"
     depends_on:
@@ -317,7 +331,10 @@ services:
       MAIL_PASSWORD: ${MAIL_PASSWORD}
       MAIL_FROM: ${MAIL_FROM:-noreply@acaboumony.com}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
+      NEW_RELIC_ACCOUNT_ID: ${NEW_RELIC_ACCOUNT_ID}
       NEW_RELIC_APP_NAME: aom-notification-service
+      NEW_RELIC_ENABLED: ${NEW_RELIC_ENABLED:-false}
+      APP_ENV: production
     #ports:
     #  - "8084:8084"
     depends_on:
@@ -355,7 +372,10 @@ services:
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       INTERNAL_SECRET: ${INTERNAL_SECRET}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
+      NEW_RELIC_ACCOUNT_ID: ${NEW_RELIC_ACCOUNT_ID}
       NEW_RELIC_APP_NAME: aom-fraud-service
+      NEW_RELIC_ENABLED: ${NEW_RELIC_ENABLED:-false}
+      APP_ENV: production
     # Porta exposta para testes de carga k6 (apenas interno em produção)
     #ports:
     #  - "8085:8085"
@@ -375,6 +395,82 @@ services:
     networks:
       - aom-network
 
+  # ─── Monitoramento (profile: monitoring) ───────────────────────────────────
+  # Iniciar com: docker compose --profile monitoring up -d
+
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: aom-prometheus
+    restart: unless-stopped
+    profiles: ["monitoring", "k6"]
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.enable-remote-write-receiver'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=7d'
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:9090/-/healthy"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - aom-network
+
+  grafana:
+    image: grafana/grafana:10.4.0
+    container_name: aom-grafana
+    restart: unless-stopped
+    profiles: ["monitoring", "k6"]
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_SERVER_ROOT_URL: http://localhost:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "3000:3000"
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:3000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - aom-network
+
+  # ─── k6 (profile: k6) ───────────────────────────────────────────────────────
+  # Rodar teste específico:
+  #   docker compose --profile k6 run --rm k6 run -o experimental-prometheus-rw /scripts/fraud-score.js
+  #   docker compose --profile k6 run --rm k6 run -o experimental-prometheus-rw /scripts/e2e-flow.js
+  #   docker compose --profile k6 run --rm k6 run -o experimental-prometheus-rw /scripts/create-transaction.js
+
+  k6:
+    image: grafana/k6:latest
+    container_name: aom-k6
+    profiles: ["k6"]
+    volumes:
+      - ./scripts/k6:/scripts:ro
+    environment:
+      K6_PROMETHEUS_RW_SERVER_URL: http://prometheus:9090/api/v1/write
+      K6_PROMETHEUS_RW_TREND_STATS: p(50),p(90),p(95),p(99),max,min
+      API_GATEWAY_URL: http://api-gateway:8080
+      PAYMENT_SERVICE_URL: http://payment-service:8082
+      FRAUD_SERVICE_URL: http://fraud-service:8085
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    networks:
+      - aom-network
+
 networks:
   aom-network:
     driver: bridge
@@ -383,3 +479,5 @@ volumes:
   postgres_data:
   redis_data:
   kafka_data:
+  prometheus_data:
+  grafana_data:

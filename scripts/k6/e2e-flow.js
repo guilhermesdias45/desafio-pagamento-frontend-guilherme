@@ -2,7 +2,7 @@ import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { randomId } from './options.js';
 
-const API_GATEWAY = 'http://localhost:8080';
+const API_GATEWAY = __ENV.API_GATEWAY_URL || 'http://localhost:8080';
 
 export const options = {
   vus: 3,

@@ -37,7 +37,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/actuator/health",
                                 "/actuator/info",
-                                "/actuator/metrics"
+                                "/actuator/metrics",
+                                "/actuator/prometheus"
                         ).permitAll()
                         // Internal routes — protected by InternalSecretFilter
                         .requestMatchers("/internal/**").permitAll()

@@ -49,6 +49,8 @@ public class SecurityConfig {
                                 "/api/v1/auth/2fa/verify",
                                 "/api/v1/auth/2fa/recovery",
                                 "/actuator/health",
+                                "/actuator/prometheus",
+                                "/actuator/metrics",
                                 "/api-docs/**",
                                 "/swagger-ui/**"
                         ).permitAll()

@@ -48,10 +48,26 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info,metrics,prometheus
   endpoint:
     health:
       show-details: always
+    prometheus:
+      enabled: true
+  newrelic:
+    metrics:
+      export:
+        enabled: ${NEW_RELIC_ENABLED:false}
+        api-key: ${NEW_RELIC_LICENSE_KEY:disabled}
+        account-id: ${NEW_RELIC_ACCOUNT_ID:0}
+        step: 30s
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      environment: ${APP_ENV:local}
+  tracing:
+    sampling:
+      probability: ${TRACING_SAMPLE_RATE:1.0}
 
 springdoc:
   api-docs:
