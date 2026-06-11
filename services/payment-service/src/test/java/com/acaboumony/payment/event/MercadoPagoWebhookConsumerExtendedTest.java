@@ -16,6 +16,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.HexFormat;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -35,9 +36,12 @@ class MercadoPagoWebhookConsumerExtendedTest {
 
     @BeforeEach
     void setUp() {
-        consumer = new MercadoPagoWebhookConsumer(transactionService, WEBHOOK_SECRET);
+        consumer = new MercadoPagoWebhookConsumer(transactionService, WEBHOOK_SECRET, objectMapper);
         mockMvc = MockMvcBuilders.standaloneSetup(consumer).build();
     }
+
+    private final String TEST_X_REQUEST_ID = UUID.randomUUID().toString();
+    private final String TEST_DATA_ID = "123456";
 
     private ObjectNode buildPayload(long mpPaymentId, String action) {
         var payload = objectMapper.createObjectNode();
@@ -45,7 +49,6 @@ class MercadoPagoWebhookConsumerExtendedTest {
         payload.put("action", action);
         var data = objectMapper.createObjectNode();
         data.put("id", mpPaymentId);
-        data.put("created_at", Instant.now().toEpochMilli());
         payload.set("data", data);
         return payload;
     }
@@ -56,21 +59,17 @@ class MercadoPagoWebhookConsumerExtendedTest {
         payload.put("action", action);
         var data = objectMapper.createObjectNode();
         data.put("id", mpPaymentId);
-        data.put("created_at", Instant.now().toEpochMilli());
         payload.set("data", data);
         return payload;
     }
 
-    private String signPayload(ObjectNode payload, long tsSeconds) {
-        var dataId = payload.path("data").path("id").asText();
-        var createdAt = payload.path("data").path("created_at").asText("");
-        var body = payload.toString();
-        var payloadToSign = "id" + dataId + "created-at" + createdAt + body;
-
+    private String signPayload(String dataId, String xRequestId, long tsSeconds) {
         try {
+            var template = MercadoPagoWebhookConsumer.buildSignatureTemplate(dataId, xRequestId, String.valueOf(tsSeconds));
+
             var mac = Mac.getInstance("HmacSHA256");
             mac.init(new SecretKeySpec(WEBHOOK_SECRET.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
-            var hash = HexFormat.of().formatHex(mac.doFinal(payloadToSign.getBytes(StandardCharsets.UTF_8)));
+            var hash = HexFormat.of().formatHex(mac.doFinal(template.getBytes(StandardCharsets.UTF_8)));
             return "ts=" + tsSeconds + ",v1=" + hash;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -78,14 +77,15 @@ class MercadoPagoWebhookConsumerExtendedTest {
     }
 
     @Test
-    void handleWebhook_blankSignature_returnsUnauthorized() throws Exception {
+    void handleWebhook_blankSignature_returnsOk() throws Exception {
         var payload = buildPayload(123456L, "payment.updated");
+        var rawBody = payload.toString();
 
         mockMvc.perform(post("/api/v1/webhooks/mercadopago")
                 .contentType("application/json")
                 .header("x-signature", "  ")
-                .content(payload.toString()))
-            .andExpect(status().isUnauthorized());
+                .content(rawBody))
+            .andExpect(status().isOk());
 
         verify(transactionService, never()).handlePaymentWebhook(anyLong(), anyString(), any());
     }
@@ -93,13 +93,16 @@ class MercadoPagoWebhookConsumerExtendedTest {
     @Test
     void handleWebhook_nonPaymentType_returnsOk() throws Exception {
         var payload = buildPayloadWithType(123456L, "payment.updated", "charge");
+        var rawBody = payload.toString();
         var ts = Instant.now().getEpochSecond();
-        var signature = signPayload(payload, ts);
+        var signature = signPayload(TEST_DATA_ID, TEST_X_REQUEST_ID, ts);
 
         mockMvc.perform(post("/api/v1/webhooks/mercadopago")
                 .contentType("application/json")
                 .header("x-signature", signature)
-                .content(payload.toString()))
+                .header("x-request-id", TEST_X_REQUEST_ID)
+                .param("data.id", TEST_DATA_ID)
+                .content(rawBody))
             .andExpect(status().isOk());
 
         verify(transactionService, never()).handlePaymentWebhook(anyLong(), anyString(), any());
@@ -108,8 +111,9 @@ class MercadoPagoWebhookConsumerExtendedTest {
     @Test
     void handleWebhook_serviceThrowsException_returns500() throws Exception {
         var payload = buildPayload(123456L, "payment.updated");
+        var rawBody = payload.toString();
         var ts = Instant.now().getEpochSecond();
-        var signature = signPayload(payload, ts);
+        var signature = signPayload(TEST_DATA_ID, TEST_X_REQUEST_ID, ts);
 
         doThrow(new RuntimeException("DB error"))
             .when(transactionService).handlePaymentWebhook(eq(123456L), eq("payment.updated"), any());
@@ -117,74 +121,81 @@ class MercadoPagoWebhookConsumerExtendedTest {
         mockMvc.perform(post("/api/v1/webhooks/mercadopago")
                 .contentType("application/json")
                 .header("x-signature", signature)
-                .content(payload.toString()))
+                .header("x-request-id", TEST_X_REQUEST_ID)
+                .param("data.id", TEST_DATA_ID)
+                .content(rawBody))
             .andExpect(status().isInternalServerError());
     }
 
     @Test
     void handleWebhook_invalidFormatSignature_returnsForbidden() throws Exception {
         var payload = buildPayload(123456L, "payment.updated");
-        var ts = Instant.now().getEpochSecond();
+        var rawBody = payload.toString();
 
         mockMvc.perform(post("/api/v1/webhooks/mercadopago")
                 .contentType("application/json")
                 .header("x-signature", "invalid-format-no-ts-or-v1")
-                .content(payload.toString()))
+                .content(rawBody))
             .andExpect(status().isForbidden());
     }
 
     @Test
     void handleWebhook_invalidTsNumber_returnsForbidden() throws Exception {
         var payload = buildPayload(123456L, "payment.updated");
+        var rawBody = payload.toString();
 
         mockMvc.perform(post("/api/v1/webhooks/mercadopago")
                 .contentType("application/json")
                 .header("x-signature", "ts=not-a-number,v1=abc")
-                .content(payload.toString()))
+                .content(rawBody))
             .andExpect(status().isForbidden());
     }
 
     @Test
     void handleWebhook_signatureOnlyTs_returnsForbidden() throws Exception {
         var payload = buildPayload(123456L, "payment.updated");
+        var rawBody = payload.toString();
 
         mockMvc.perform(post("/api/v1/webhooks/mercadopago")
                 .contentType("application/json")
                 .header("x-signature", "ts=12345")
-                .content(payload.toString()))
+                .content(rawBody))
             .andExpect(status().isForbidden());
     }
 
     @Test
     void handleWebhook_signatureOnlyV1_returnsForbidden() throws Exception {
         var payload = buildPayload(123456L, "payment.updated");
+        var rawBody = payload.toString();
 
         mockMvc.perform(post("/api/v1/webhooks/mercadopago")
                 .contentType("application/json")
                 .header("x-signature", "v1=abc123")
-                .content(payload.toString()))
+                .content(rawBody))
             .andExpect(status().isForbidden());
     }
 
     @Test
     void handleWebhook_emptyTsValue_returnsForbidden() throws Exception {
         var payload = buildPayload(123456L, "payment.updated");
+        var rawBody = payload.toString();
 
         mockMvc.perform(post("/api/v1/webhooks/mercadopago")
                 .contentType("application/json")
                 .header("x-signature", "ts=,v1=abc")
-                .content(payload.toString()))
+                .content(rawBody))
             .andExpect(status().isForbidden());
     }
 
     @Test
     void handleWebhook_emptyV1Value_returnsForbidden() throws Exception {
         var payload = buildPayload(123456L, "payment.updated");
+        var rawBody = payload.toString();
 
         mockMvc.perform(post("/api/v1/webhooks/mercadopago")
                 .contentType("application/json")
                 .header("x-signature", "ts=12345,v1=")
-                .content(payload.toString()))
+                .content(rawBody))
             .andExpect(status().isForbidden());
     }
 }

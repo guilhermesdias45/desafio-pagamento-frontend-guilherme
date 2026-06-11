@@ -20,7 +20,6 @@ internal:
 
 mercadopago:
   access-token: TEST-ACCESS-TOKEN
-  sponsor-id: 567831283
   base-url: http://localhost:8089
   timeout-ms: 800
 

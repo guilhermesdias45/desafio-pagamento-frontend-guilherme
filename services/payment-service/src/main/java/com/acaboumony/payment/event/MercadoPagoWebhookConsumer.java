@@ -1,7 +1,10 @@
 package com.acaboumony.payment.event;
 
 import com.acaboumony.payment.service.TransactionService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,31 +30,46 @@ public class MercadoPagoWebhookConsumer {
 
     private final TransactionService transactionService;
     private final String webhookSecret;
+    private final ObjectMapper objectMapper;
 
     public MercadoPagoWebhookConsumer(TransactionService transactionService,
-                                       @Value("${mercadopago.webhook-secret:}") String webhookSecret) {
+                                       @Value("${mercadopago.webhook-secret:}") String webhookSecret,
+                                       ObjectMapper objectMapper) {
         this.transactionService = transactionService;
         this.webhookSecret = webhookSecret;
+        this.objectMapper = objectMapper;
     }
 
     @PostMapping("/api/v1/webhooks/mercadopago")
     public ResponseEntity<Void> handleWebhook(
-            @RequestBody JsonNode payload,
-            @RequestHeader(value = "x-signature", required = false) String signature) {
+            @RequestBody String rawBody,
+            @RequestHeader(value = "x-signature", required = false) String signature,
+            @RequestHeader(value = "x-request-id", required = false) String xRequestId,
+            HttpServletRequest request) {
+
+        JsonNode payload;
+        try {
+            payload = objectMapper.readTree(rawBody);
+        } catch (JsonProcessingException e) {
+            log.warn("Failed to parse webhook payload: {}", e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
 
         log.info("Received MP webhook: type={}", payload.path("type").asText());
-
-        if (signature == null || signature.isBlank()) {
-            log.warn("Webhook sem assinatura x-signature — ignorando");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
 
         if (webhookSecret == null || webhookSecret.isBlank()) {
             log.error("MERCADOPAGO_WEBHOOK_SECRET not configured — rejecting webhook for security");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        if (!validateSignature(payload, signature)) {
+        if (signature == null || signature.isBlank()) {
+            log.warn("Webhook sem assinatura x-signature — ACK 200, ignorando payload");
+            return ResponseEntity.ok().build();
+        }
+
+        var dataIdFromQuery = request.getParameter("data.id");
+
+        if (!validateSignature(payload, signature, xRequestId, dataIdFromQuery)) {
             log.warn("Invalid x-signature for webhook — rejecting");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -74,7 +92,7 @@ public class MercadoPagoWebhookConsumer {
         return ResponseEntity.ok().build();
     }
 
-    private boolean validateSignature(JsonNode payload, String signature) {
+    private boolean validateSignature(JsonNode payload, String signature, String xRequestId, String dataIdFromQuery) {
         try {
             var tsAndV1 = parseSignatureHeader(signature);
             if (tsAndV1 == null) {
@@ -99,18 +117,16 @@ public class MercadoPagoWebhookConsumer {
                 return false;
             }
 
-            var dataId = payload.path("data").path("id").asText();
-            var createdAt = payload.path("data").path("created_at").asText("");
-            var body = payload.toString();
-
-            var payloadToSign = "id" + dataId + "created-at" + createdAt + body;
+            var template = buildSignatureTemplate(dataIdFromQuery, xRequestId, ts);
 
             var mac = Mac.getInstance(HMAC_ALGO);
             mac.init(new SecretKeySpec(webhookSecret.getBytes(StandardCharsets.UTF_8), HMAC_ALGO));
-            var expectedHash = HexFormat.of().formatHex(mac.doFinal(payloadToSign.getBytes(StandardCharsets.UTF_8)));
+            var expectedHash = HexFormat.of().formatHex(mac.doFinal(template.getBytes(StandardCharsets.UTF_8)));
+
+            log.debug("HMAC template: {} | expected={} | received={}", template, expectedHash, v1);
 
             if (!expectedHash.equals(v1)) {
-                log.warn("x-signature HMAC mismatch");
+                log.warn("x-signature HMAC mismatch (expected={}, received={})", expectedHash, v1);
                 return false;
             }
 
@@ -119,6 +135,19 @@ public class MercadoPagoWebhookConsumer {
             log.error("Error validating webhook signature: {}", e.getMessage());
             return false;
         }
+    }
+
+    static String buildSignatureTemplate(String dataId, String xRequestId, String ts) {
+        var sb = new StringBuilder();
+        if (dataId != null && !dataId.isBlank()) {
+            var normalized = dataId.chars().allMatch(Character::isDigit) ? dataId : dataId.toLowerCase();
+            sb.append("id:").append(normalized).append(";");
+        }
+        if (xRequestId != null && !xRequestId.isBlank()) {
+            sb.append("request-id:").append(xRequestId).append(";");
+        }
+        sb.append("ts:").append(ts).append(";");
+        return sb.toString();
     }
 
     private String[] parseSignatureHeader(String header) {

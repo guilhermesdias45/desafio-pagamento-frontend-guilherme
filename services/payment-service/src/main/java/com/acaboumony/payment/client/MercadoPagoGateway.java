@@ -12,7 +12,6 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -29,37 +28,27 @@ public class MercadoPagoGateway {
     private final PaymentClient paymentClient;
     private final ExecutorService executor;
     private final long timeoutMs;
+    private final String notificationUrl;
     private final CircuitBreaker circuitBreaker;
-    @Nullable
-    private final Long sponsorId;
 
     public MercadoPagoGateway(
             @Value("${mercadopago.timeout-ms:800}") long timeoutMs,
-            @Value("${mercadopago.sponsor-id:}") String sponsorIdStr,
+            @Value("${mercadopago.notification-url:}") String notificationUrl,
             CircuitBreakerRegistry circuitBreakerRegistry) {
         this.paymentClient = new PaymentClient();
         this.executor = Executors.newVirtualThreadPerTaskExecutor();
         this.timeoutMs = timeoutMs;
-        this.sponsorId = sponsorIdStr != null && !sponsorIdStr.isBlank()
-            ? Long.valueOf(sponsorIdStr) : null;
+        this.notificationUrl = notificationUrl;
         this.circuitBreaker = circuitBreakerRegistry.circuitBreaker("mercadoPago");
     }
 
     public PaymentResult createPayment(String cardToken, Long amountInCents,
                                         String paymentMethodId, Integer installments,
                                         UUID orderId, String customerEmail) {
-        return createPayment(cardToken, amountInCents, paymentMethodId,
-            installments, orderId, customerEmail, null);
-    }
-
-    public PaymentResult createPayment(String cardToken, Long amountInCents,
-                                        String paymentMethodId, Integer installments,
-                                        UUID orderId, String customerEmail,
-                                        @Nullable String sellerAccessToken) {
         try {
             return circuitBreaker.executeSupplier(() ->
                 doCreatePayment(cardToken, amountInCents, paymentMethodId,
-                    installments, orderId, customerEmail, sellerAccessToken));
+                    installments, orderId, customerEmail));
         } catch (Exception e) {
             log.warn("MP gateway circuit breaker fallback: {}", e.getMessage(), e);
             return PaymentResult.timeout();
@@ -68,38 +57,25 @@ public class MercadoPagoGateway {
 
     private PaymentResult doCreatePayment(String cardToken, Long amountInCents,
                                            String paymentMethodId, Integer installments,
-                                           UUID orderId, String customerEmail,
-                                           @Nullable String sellerAccessToken) {
+                                           UUID orderId, String customerEmail) {
         var start = Instant.now();
         var future = CompletableFuture.supplyAsync(() -> {
             try {
-                var request = PaymentCreateRequest.builder()
+                var requestBuilder = PaymentCreateRequest.builder()
                     .transactionAmount(new BigDecimal(amountInCents).divide(new BigDecimal(100)))
                     .token(cardToken)
                     .description("Acabou o Mony - Pedido " + orderId)
                     .installments(installments)
                     .paymentMethodId(paymentMethodId)
                     .payer(PaymentPayerRequest.builder()
-                        .email(customerEmail).build())
-                    .build();
+                        .email(customerEmail).build());
 
-                if (sellerAccessToken != null) {
-                    var builder = PaymentCreateRequest.builder()
-                        .transactionAmount(new BigDecimal(amountInCents).divide(new BigDecimal(100)))
-                        .token(cardToken)
-                        .description("Acabou o Mony - Pedido " + orderId)
-                        .installments(installments)
-                        .paymentMethodId(paymentMethodId)
-                        .payer(PaymentPayerRequest.builder()
-                            .email(customerEmail).build());
-                    if (sponsorId != null) {
-                        builder.sponsorId(sponsorId);
-                    }
-                    var requestOptions = MPRequestOptions.builder()
-                        .accessToken(sellerAccessToken)
-                        .build();
-                    return paymentClient.create(builder.build(), requestOptions);
+                if (!notificationUrl.isBlank()) {
+                    requestBuilder.notificationUrl(notificationUrl);
                 }
+
+                var request = requestBuilder.build();
+
                 return paymentClient.create(request);
             } catch (MPApiException e) {
                 throw new CompletionException(e);

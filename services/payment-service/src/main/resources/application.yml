@@ -35,15 +35,9 @@ server:
 
 mercadopago:
   access-token: ${MERCADOPAGO_ACCESS_TOKEN}
-  sponsor-id: 567831283
   webhook-secret: ${MERCADOPAGO_WEBHOOK_SECRET:}
-  payer-email: test@testuser.com
-  encryption:
-    key: ${MERCADOPAGO_ENCRYPTION_KEY:}
-  oauth:
-    client-id: ${MP_CLIENT_ID:}
-    client-secret: ${MP_CLIENT_SECRET:}
-    redirect-uri: ${MP_OAUTH_REDIRECT_URI:http://localhost:8082/api/v1/admin/mp-oauth/callback}
+  notification-url: ${MERCADOPAGO_NOTIFICATION_URL:https://squabble-engulf-ocean.ngrok-free.dev/api/v1/webhooks/mercadopago}
+  payer-email: guilherme.dias4501@gmail.com
 
 fraud:
   service:

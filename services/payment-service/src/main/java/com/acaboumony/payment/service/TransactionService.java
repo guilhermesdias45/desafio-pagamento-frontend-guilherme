@@ -21,7 +21,6 @@ import com.acaboumony.payment.repository.TransactionRepository;
 import com.acaboumony.payment.result.TransactionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,7 +53,6 @@ public class TransactionService {
     private final TransactionMapper mapper;
     private final ObjectMapper objectMapper;
     private final String payerEmail;
-    private final MpTestAccountService mpTestAccountService;
     private final Counter approvedCounter;
     private final Counter failedCounter;
     private final Timer processingTimer;
@@ -70,8 +68,7 @@ public class TransactionService {
                               TransactionMapper mapper,
                               ObjectMapper objectMapper,
                               MeterRegistry meterRegistry,
-                              @Value("${mercadopago.payer-email}") String payerEmail,
-                              ObjectProvider<MpTestAccountService> mpTestAccountServiceProvider) {
+                              @Value("${mercadopago.payer-email}") String payerEmail) {
         this.transactionRepository = transactionRepository;
         this.auditLogRepository = auditLogRepository;
         this.redis = redis;
@@ -83,7 +80,6 @@ public class TransactionService {
         this.mapper = mapper;
         this.objectMapper = objectMapper;
         this.payerEmail = payerEmail;
-        this.mpTestAccountService = mpTestAccountServiceProvider.getIfAvailable();
         this.approvedCounter = Counter.builder("payment.transactions.approved")
             .description("Approved transactions").register(meterRegistry);
         this.failedCounter = Counter.builder("payment.transactions.failed")
@@ -162,12 +158,10 @@ public class TransactionService {
             return fail("SUSPECTED_FRAUD", "Transaction blocked by fraud analysis", false, start);
         }
 
-        var sellerAccessToken = mpTestAccountService != null
-            ? mpTestAccountService.getSellerAccessToken().orElse(null) : null;
         var gatewayResult = mpGateway.createPayment(
             request.cardToken(), request.amountInCents(),
             request.paymentMethodId(), request.installments() != null ? request.installments() : 1,
-            request.orderId(), payerEmail, sellerAccessToken
+            request.orderId(), payerEmail
         );
 
         if (!gatewayResult.success()) {

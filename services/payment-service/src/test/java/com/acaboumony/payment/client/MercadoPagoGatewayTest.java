@@ -9,8 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MercadoPagoGatewayTest {
 
-    private final MercadoPagoGateway gateway = new MercadoPagoGateway(800L,
-        "567831283", CircuitBreakerRegistry.ofDefaults());
+    private final MercadoPagoGateway gateway = new MercadoPagoGateway(800L, "",
+        CircuitBreakerRegistry.ofDefaults());
 
     @Test
     void createPayment_whenMpUnavailable_returnsTimeout() {
