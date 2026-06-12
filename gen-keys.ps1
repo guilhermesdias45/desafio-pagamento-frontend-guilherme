@@ -1,3 +1,10 @@
+# Compatibilidade com diferentes versões do .NET
+$assemblies = [System.Reflection.Assembly]::LoadWithPartialName("System.Security")
+if (-not $assemblies) {
+    Write-Host "ERRO: Não foi possível carregar o assembly System.Security" -ForegroundColor Red
+    exit 1
+}
+
 function New-DerLen([int]$n) {
     if ($n -lt 128)  { return [byte[]]@($n) }
     if ($n -le 255)  { return [byte[]]@(0x81, $n) }
@@ -14,8 +21,21 @@ function New-DerSeq([byte[]]$body) {
     return [byte[]]([byte[]]@(0x30) + (New-DerLen $body.Length) + $body)
 }
 
-$rsa = New-Object System.Security.Cryptography.RSACryptoServiceProvider 2048
-$k   = $rsa.ExportParameters($true)
+# Criar RSA com fallback para versões mais recentes do .NET
+try {
+    $rsa = New-Object System.Security.Cryptography.RSACryptoServiceProvider 2048
+    $k = $rsa.ExportParameters($true)
+} catch {
+    try {
+        # Tentar usar o RSA type class
+        $rsaType = [System.Security.Cryptography.RSA]
+        $rsa = $rsaType.Create(2048)
+        $k = $rsa.ExportParameters($true)
+    } catch {
+        Write-Host "ERRO: Não foi possível criar RSA. Certifique-se de que o .NET Framework está instalado." -ForegroundColor Red
+        exit 1
+    }
+}
 
 [byte[]]$privDer = New-DerSeq ([byte[]](
     (New-DerInt @([byte]0)) +

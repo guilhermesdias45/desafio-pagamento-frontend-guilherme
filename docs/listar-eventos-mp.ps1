@@ -32,6 +32,16 @@ $mpApiBase = "https://api.mercadopago.com/v1/payments"
 
 Write-Host "Consultando ngrok API: $ngrokApi" -ForegroundColor Cyan
 
+if (!(Get-Command curl.exe -ErrorAction SilentlyContinue)) {
+    Write-Host "ERRO: curl.exe não encontrado. Certifique-se de que está no PATH." -ForegroundColor Red
+    exit 1
+}
+
+if (!(Test-NetConnection -ComputerName "127.0.0.1" -Port 4040 -InformationAction SilentlyContinue)) {
+    Write-Host "ERRO: Ngrok não está rodando em localhost:4040. Execute 'ngrok http 8082' primeiro." -ForegroundColor Red
+    exit 1
+}
+
 try {
     $raw = curl.exe -s $ngrokApi 2>&1
     if ($LASTEXITCODE -ne 0) {
@@ -96,6 +106,8 @@ if ($uniqueIds.Count -gt 0) {
             if ($LASTEXITCODE -eq 0) {
                 $mpJson = $mpRaw | ConvertFrom-Json -ErrorAction Stop
                 $paymentCache[$id] = $mpJson
+            } else {
+                Write-Warning ("Falha ao buscar pagamento {0}: exit code $LASTEXITCODE" -f $id)
             }
         }
         catch {

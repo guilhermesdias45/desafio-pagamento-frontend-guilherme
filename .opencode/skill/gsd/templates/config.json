@@ -1,0 +1,24 @@
+{
+  "workflow": {
+    "auto_advance": false,
+    "default_executor_model": "opencode",
+    "commit_docs": true,
+    "max_plan_iterations": 3,
+    "verify_before_ship": true
+  },
+  "editor": "vscode",
+  "runtime": "opencode",
+  "phase_loop": {
+    "research_before_plan": true,
+    "verify_after_execute": true,
+    "review_before_ship": false
+  },
+  "tdd": {
+    "enforce_gates": true,
+    "fail_fast_on_red_pass": true
+  },
+  "mvp": {
+    "default_mode": false,
+    "emit_skeleton_on_phase1": true
+  }
+}
