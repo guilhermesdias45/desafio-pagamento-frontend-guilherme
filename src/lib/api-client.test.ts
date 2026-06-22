@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ApiClient } from './api-client';
-import { ApiError } from '../types';
+import { ApiClient, ApiError } from './api-client';
 
 const mockToken = 'test-jwt-token';
 let client: ApiClient;

@@ -49,10 +49,16 @@ describe('GuestRoute', () => {
   });
 
   it('renders children when not authenticated', async () => {
-    createMockFetch(
-      { ok: false, status: 401 },
-      { data: null, errors: [{ code: 'TOKEN_EXPIRED', message: 'Token expirado', retryable: false }] } as any,
-    );
+
+
+
+
+    vi.mocked(global.fetch).mockResolvedValueOnce({
+      ok: false,
+      status: 401,
+      headers: new Headers(),
+      json: async () => ({ data: null, errors: [{ code: 'TOKEN_EXPIRED', message: 'Token expirado', retryable: false }] }),
+    } as Response);
     renderGuest();
     const content = await screen.findByText('Login Form');
     expect(content).toBeInTheDocument();
