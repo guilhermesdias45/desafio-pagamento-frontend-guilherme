@@ -27,7 +27,7 @@ const truncate = (str: string, max: number) =>
   str.length > max ? str.substring(0, max) + '\u2026' : str;
 
 export function TransactionsListPage({ apiClient: externalClient, navigate }: Props) {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const apiClient = useMemo(() => externalClient ?? new ApiClient(() => token), [externalClient, token]);
   const goTo = useCallback((path: string) => {
     if (navigate) navigate(path);
@@ -51,7 +51,7 @@ export function TransactionsListPage({ apiClient: externalClient, navigate }: Pr
         sort: 'createdAt,desc',
       };
 
-      const result = await apiClient.get<PaginatedResponse<TransactionSummary>>('/api/v1/transactions', { params });
+      const result = await apiClient.get<PaginatedResponse<TransactionSummary>>('/api/v1/transactions', { params, merchantId: user?.merchantId ?? undefined });
 
       setTransactions(result.content);
       setTotalPages(result.totalPages);
@@ -107,7 +107,7 @@ export function TransactionsListPage({ apiClient: externalClient, navigate }: Pr
 
       {loading ? (
         <div className="flex justify-center py-12" role="status">
-          <Spinner size="lg" />
+          <Spinner size="md" />
         </div>
       ) : transactions.length === 0 ? (
         <div className="text-center py-12 text-gray-500">

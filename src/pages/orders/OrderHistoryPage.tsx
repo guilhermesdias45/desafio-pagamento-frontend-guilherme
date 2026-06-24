@@ -22,13 +22,18 @@ const statusColors: Record<string, string> = {
   PARTIALLY_REFUNDED: 'bg-yellow-100 text-yellow-800',
 };
 
+const statusLabels: Record<string, string> = {
+  PENDING: 'Pendente',
+  PROCESSING: 'Processando',
+  PAID: 'Pago',
+  CANCELLED: 'Cancelado',
+  REFUNDED: 'Estornado',
+  PARTIALLY_REFUNDED: 'Parcialmente estornado',
+};
+
 const statusOptions = [
   { value: '', label: 'Todos' },
-  { value: 'PENDING', label: 'PENDING' },
-  { value: 'PROCESSING', label: 'PROCESSING' },
-  { value: 'PAID', label: 'PAID' },
-  { value: 'CANCELLED', label: 'CANCELLED' },
-  { value: 'REFUNDED', label: 'REFUNDED' },
+  ...Object.entries(statusLabels).map(([value, label]) => ({ value, label })),
 ];
 
 const formatDate = (iso: string) =>
@@ -183,7 +188,7 @@ export function OrderHistoryPage({ apiClient: externalClient, navigate }: Props)
                       <span
                         className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${statusColors[order.status] || 'bg-gray-100 text-gray-800'}`}
                       >
-                        {order.status}
+                        {statusLabels[order.status] || order.status}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-sm text-right font-medium">

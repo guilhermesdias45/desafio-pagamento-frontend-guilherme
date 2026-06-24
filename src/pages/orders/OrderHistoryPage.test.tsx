@@ -61,7 +61,7 @@ describe('OrderHistoryPage', () => {
     return screen.getAllByText(text).find((el) => el.tagName === 'SPAN')!;
   }
 
-  it('displays status badge with correct color for PAID', async () => {
+  it('displays status badge with correct color for PAID / Pago', async () => {
     mockClient.get.mockResolvedValue({
       content: mockOrders,
       totalPages: 1,
@@ -72,12 +72,12 @@ describe('OrderHistoryPage', () => {
     render(<OrderHistoryPage apiClient={mockClient as never} navigate={mockNavigate} />);
 
     await waitFor(() => {
-      const badge = findBadge('PAID');
+      const badge = findBadge('Pago');
       expect(badge.className).toContain('green');
     });
   });
 
-  it('displays status badge with correct color for PENDING', async () => {
+  it('displays status badge with correct color for PENDING / Pendente', async () => {
     mockClient.get.mockResolvedValue({
       content: mockOrders,
       totalPages: 1,
@@ -88,7 +88,7 @@ describe('OrderHistoryPage', () => {
     render(<OrderHistoryPage apiClient={mockClient as never} navigate={mockNavigate} />);
 
     await waitFor(() => {
-      const badge = findBadge('PENDING');
+      const badge = findBadge('Pendente');
       expect(badge.className).toContain('gray');
     });
   });
@@ -198,11 +198,8 @@ describe('OrderHistoryPage', () => {
     fireEvent.click(screen.getByText(/próximo/i));
 
     await waitFor(() => {
-      const calls = mockClient.get.mock.calls;
-      const callWithPage1 = calls.find((c: unknown[]) => {
-        const args = c as [string, Record<string, unknown>];
-        return args[1]?.params?.page === 1;
-      });
+      const calls = mockClient.get.mock.calls as Array<[string, Record<string, { params?: Record<string, unknown> }>]>;
+      const callWithPage1 = calls.find(([, opts]) => (opts?.params as Record<string, unknown> | undefined)?.page === 1);
       expect(callWithPage1).toBeTruthy();
     });
   });
@@ -225,10 +222,11 @@ describe('OrderHistoryPage', () => {
     fireEvent.change(select, { target: { value: 'PAID' } });
 
     await waitFor(() => {
-      const calls = mockClient.get.mock.calls;
-      const lastCall = calls[calls.length - 1] as [string, Record<string, unknown>];
-      expect(lastCall[1]?.params?.status).toBe('PAID');
-      expect(lastCall[1]?.params?.page).toBe(0);
+      const calls = mockClient.get.mock.calls as Array<[string, Record<string, { params?: Record<string, unknown> }>]>;
+      const lastCall = calls[calls.length - 1];
+      const params = lastCall[1]?.params as Record<string, unknown> | undefined;
+      expect(params?.status).toBe('PAID');
+      expect(params?.page).toBe(0);
     });
   });
 });

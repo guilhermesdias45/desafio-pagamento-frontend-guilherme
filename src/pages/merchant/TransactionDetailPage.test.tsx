@@ -82,7 +82,7 @@ describe('TransactionDetailPage', () => {
       expect(screen.getByText('txn_001')).toBeInTheDocument();
       expect(screen.getByText('R$ 1.000,00')).toBeInTheDocument();
       expect(screen.getByText(/visa/)).toBeInTheDocument();
-      expect(screen.getByText('4242')).toBeInTheDocument();
+      expect(screen.getByText('4242', { exact: false })).toBeInTheDocument();
     });
   });
 

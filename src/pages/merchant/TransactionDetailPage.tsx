@@ -48,7 +48,7 @@ export function TransactionDetailPage({ transactionId, apiClient: externalClient
     setError(null);
 
     try {
-      const result = await apiClient.get<TransactionDetail>(`/api/v1/transactions/${transactionId}`);
+      const result = await apiClient.get<TransactionDetail>(`/api/v1/transactions/${transactionId}`, { merchantId: user?.merchantId ?? undefined });
       setTransaction(result);
     } catch (err: unknown) {
       const apiErr = err as { status?: number; errors?: Array<{ code: string; message: string }> };
@@ -216,6 +216,7 @@ export function TransactionDetailPage({ transactionId, apiClient: externalClient
           onRefundError={handleRefundError}
           apiClient={apiClient}
           userId={user?.id || ''}
+          merchantId={user?.merchantId ?? undefined}
         />
       )}
     </div>

@@ -1,10 +1,10 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { ApiClient } from '@/lib/api-client';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Spinner } from '@/components/ui/Spinner';
-import type { CreateOrderResponse } from '@/types/order';
+import type { CreateOrderRequest, CreateOrderResponse } from '@/types/order';
 
 interface Props {
   apiClient?: ApiClient;
@@ -13,11 +13,6 @@ interface Props {
 
 const formatBRL = (cents: number) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(cents / 100);
-
-let itemIdCounter = 0;
-function newItemId() {
-  return `item_${++itemIdCounter}`;
-}
 
 interface ItemRow {
   id: string;
@@ -28,6 +23,7 @@ interface ItemRow {
 }
 
 export function CreateOrderPage({ apiClient: externalClient, navigate }: Props) {
+  const itemIdCounter = useRef(0);
   const { user, token } = useAuth();
   const apiClient = useMemo(() => externalClient ?? new ApiClient(() => token), [externalClient, token]);
   const goTo = useCallback((path: string) => {
@@ -42,9 +38,10 @@ export function CreateOrderPage({ apiClient: externalClient, navigate }: Props) 
   const [inlineErrors, setInlineErrors] = useState<Record<string, string>>({});
 
   const addItem = () => {
+    const id = `item_${++itemIdCounter.current}`;
     setItems((prev) => [
       ...prev,
-      { id: newItemId(), productId: '', description: '', quantity: 1, unitPriceInCents: 0 },
+      { id, productId: '', description: '', quantity: 1, unitPriceInCents: 0 },
     ]);
     setError(null);
   };
@@ -100,15 +97,16 @@ export function CreateOrderPage({ apiClient: externalClient, navigate }: Props) 
     setSubmitting(true);
 
     try {
-      const response = await apiClient.post(
+      const idempotencyKey = crypto.randomUUID();
+      const response = await apiClient.post<CreateOrderRequest, CreateOrderResponse>(
         '/api/v1/orders',
         {
           customerId: user?.id ?? '',
           merchantId,
           items: items.map(({ id, ...rest }) => rest),
-          idempotencyKey: crypto.randomUUID(),
+          idempotencyKey,
         },
-        { merchantId, idempotencyKey: crypto.randomUUID() },
+        { merchantId, idempotencyKey },
       );
 
       if (response?.data?.orderId) {
@@ -120,7 +118,16 @@ export function CreateOrderPage({ apiClient: externalClient, navigate }: Props) 
         const code = apiErr.errors[0].code;
         const message = apiErr.errors[0].message;
 
-        if (code === 'EMPTY_ORDER') {
+        if (code === 'DUPLICATE_ORDER' && apiErr.status === 409) {
+          if (message) {
+            const orderId = message.includes(': ') ? message.split(': ').pop()?.trim() : message;
+            if (orderId) {
+              goTo(`/orders/${orderId}`);
+              return;
+            }
+          }
+          setError('Pedido já processado');
+        } else if (code === 'EMPTY_ORDER') {
           setError('Adicione pelo menos um item ao pedido');
         } else if (code === 'MERCHANT_NOT_FOUND') {
           setError('Merchant não encontrado. Verifique o CNPJ ou selecione outro.');

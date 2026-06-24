@@ -69,7 +69,7 @@ describe('TransactionsListPage', () => {
     render(<TransactionsListPage apiClient={mockClient as never} navigate={mockNavigate} />);
 
     await waitFor(() => {
-      expect(screen.getByText('txn_uuid_001a…')).toBeInTheDocument();
+      expect(screen.getByText(/txn_uuid_001/)).toBeInTheDocument();
       expect(screen.getByText('R$ 1.234,56')).toBeInTheDocument();
       expect(screen.getByText('R$ 50,00')).toBeInTheDocument();
     });
@@ -181,11 +181,8 @@ describe('TransactionsListPage', () => {
     fireEvent.click(screen.getByText(/próximo/i));
 
     await waitFor(() => {
-      const calls = mockClient.get.mock.calls;
-      const callWithPage1 = calls.find((c: unknown[]) => {
-        const args = c as [string, Record<string, unknown>];
-        return args[1]?.params?.page === 1;
-      });
+      const calls = mockClient.get.mock.calls as Array<[string, Record<string, { params?: Record<string, unknown> }>]>;
+      const callWithPage1 = calls.find(([, opts]) => (opts?.params as Record<string, unknown> | undefined)?.page === 1);
       expect(callWithPage1).toBeTruthy();
     });
   });
@@ -201,10 +198,10 @@ describe('TransactionsListPage', () => {
     render(<TransactionsListPage apiClient={mockClient as never} navigate={mockNavigate} />);
 
     await waitFor(() => {
-      expect(screen.getByText('txn_uuid_001a…')).toBeInTheDocument();
+      expect(screen.getByText(/txn_uuid_001/)).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('txn_uuid_001a…'));
+    fireEvent.click(screen.getByText(/txn_uuid_001/));
     expect(mockNavigate).toHaveBeenCalledWith('/merchant/transactions/txn_uuid_001abc');
   });
 

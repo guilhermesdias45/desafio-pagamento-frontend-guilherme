@@ -6,6 +6,7 @@ import type {
   PaymentResultData,
   MercadoPagoCardTokenRequest,
   MercadoPagoCardTokenResponse,
+  MercadoPagoInstance,
 } from '@/types/checkout';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -14,6 +15,9 @@ export interface CardFormProps {
   orderId: string;
   amountInCents: number;
   customerId: string;
+  merchantId?: string;
+  authToken?: string;
+  mercadoPagoInstance?: MercadoPagoInstance;
   onPaymentComplete: (result: PaymentResultData) => void;
   onError: (error: string) => void;
   postTransaction?: (url: string, body: unknown) => Promise<{
@@ -125,6 +129,9 @@ export function CardForm({
   orderId,
   amountInCents,
   customerId,
+  merchantId,
+  authToken,
+  mercadoPagoInstance,
   onPaymentComplete,
   onError,
   postTransaction,
@@ -210,9 +217,7 @@ export function CardForm({
     try {
       let tokenId: string;
 
-      const MP = (window as any).MercadoPago;
-      if (typeof MP === 'function') {
-        const mpInstance = new MP('TEST-123', { locale: 'pt-BR' });
+      if (mercadoPagoInstance) {
         const mpData: MercadoPagoCardTokenRequest = {
           cardNumber: cardNumber,
           expirationMonth: formData.expiryMonth,
@@ -220,18 +225,32 @@ export function CardForm({
           securityCode: cvv,
           cardholderName: cardholderName,
         };
-        const tokenResponse: MercadoPagoCardTokenResponse = await mpInstance.cardToken(mpData);
+        const tokenResponse: MercadoPagoCardTokenResponse = await mercadoPagoInstance.cardToken(mpData);
         tokenId = tokenResponse.id;
       } else {
-        throw new Error('MP_SDK_ERROR');
+        const MP = (window as any).MercadoPago;
+        if (typeof MP === 'function') {
+          const mpInstance = new MP('TEST-123', { locale: 'pt-BR' });
+          const mpData: MercadoPagoCardTokenRequest = {
+            cardNumber: cardNumber,
+            expirationMonth: formData.expiryMonth,
+            expirationYear: formData.expiryYear,
+            securityCode: cvv,
+            cardholderName: cardholderName,
+          };
+          const tokenResponse: MercadoPagoCardTokenResponse = await mpInstance.cardToken(mpData);
+          tokenId = tokenResponse.id;
+        } else {
+          throw new Error('MP_SDK_ERROR');
+        }
       }
 
       const postFn = postTransaction || ((url: string, body: unknown) => {
-        const token = (window as any).__AUTH_TOKEN__;
         const headers: Record<string, string> = {
           'Content-Type': 'application/json',
-          'Authorization': token ? `Bearer ${token}` : '',
+          'Authorization': authToken ? `Bearer ${authToken}` : '',
           'Idempotency-Key': crypto.randomUUID(),
+          'X-Merchant-Id': merchantId || '',
           'X-Forwarded-For': '',
         };
         return fetch(url, {

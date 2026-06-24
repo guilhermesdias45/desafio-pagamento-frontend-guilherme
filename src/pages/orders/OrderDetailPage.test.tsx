@@ -72,7 +72,7 @@ describe('OrderDetailPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('ord_001')).toBeInTheDocument();
-      expect(screen.getByText('PAID')).toBeInTheDocument();
+      expect(screen.getByText('Pago')).toBeInTheDocument();
       expect(screen.getByText('R$ 350,00')).toBeInTheDocument();
     });
 
@@ -119,7 +119,7 @@ describe('OrderDetailPage', () => {
     });
   });
 
-  it('cancels order and shows CANCELLED status', async () => {
+  it('cancels order and shows Cancelado status', async () => {
     mockClient.get.mockResolvedValue(pendingOrder);
     mockClient.delete.mockResolvedValue(undefined);
 

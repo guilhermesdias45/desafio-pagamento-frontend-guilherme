@@ -12,6 +12,7 @@ export interface RefundModalProps {
   onRefundError?: (code: string) => void;
   apiClient?: ApiClient;
   userId?: string;
+  merchantId?: string;
 }
 
 const formatBRL = (cents: number) =>
@@ -25,6 +26,7 @@ export function RefundModal({
   onRefundError,
   apiClient: externalClient,
   userId: externalUserId,
+  merchantId: externalMerchantId,
 }: RefundModalProps) {
   const apiClient = useMemo(() => externalClient ?? new ApiClient(() => null), [externalClient]);
 
@@ -108,7 +110,7 @@ export function RefundModal({
       }).post(
         `/api/v1/transactions/${transaction.transactionId}/refund`,
         body,
-        { idempotencyKey },
+        { idempotencyKey, merchantId: externalMerchantId },
       );
 
       resetForm();
@@ -285,6 +287,9 @@ export function RefundModal({
               {serverError && (
                 <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
                   <p className="text-sm text-red-700">{serverError}</p>
+                  <Button variant="ghost" onClick={handleRetry} className="mt-2 text-sm">
+                    Tentar novamente
+                  </Button>
                 </div>
               )}
             </div>

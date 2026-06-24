@@ -123,10 +123,9 @@ describe('CreateOrderPage', () => {
   });
 
   it('redirects on DUPLICATE_ORDER (409)', async () => {
-    mockClient.post.mockResolvedValue({
-      data: { orderId: 'order_dup', status: 'PAID', totalInCents: 10000, items: [], expiresAt: '', createdAt: '' },
-      meta: { timestamp: '', requestId: '' },
-      errors: [],
+    mockClient.post.mockRejectedValue({
+      status: 409,
+      errors: [{ code: 'DUPLICATE_ORDER', message: 'order_dup_existing_id_12345', retryable: false }],
     });
 
     render(<CreateOrderPage apiClient={mockClient as never} navigate={mockNavigate} />);
@@ -141,7 +140,7 @@ describe('CreateOrderPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /criar pedido/i }));
 
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/orders/order_dup');
+      expect(mockNavigate).toHaveBeenCalledWith('/orders/order_dup_existing_id_12345');
     });
   });
 

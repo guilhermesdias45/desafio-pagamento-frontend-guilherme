@@ -70,9 +70,8 @@ export function LoginPage({ apiClient, authContext, navigate }: LoginPageProps) 
         return;
       }
 
-      if ((data as LoginRequiresTwoFactorResponse).requiresTwoFactor) {
-        const twoFactorData = data as LoginRequiresTwoFactorResponse;
-        redirect(`/auth/2fa/verify?token=${encodeURIComponent(twoFactorData.twoFactorToken)}&email=${encodeURIComponent(email)}`);
+      if (data.requiresTwoFactor) {
+        redirect(`/auth/2fa/verify?token=${encodeURIComponent(data.twoFactorToken)}&email=${encodeURIComponent(email)}`);
         return;
       }
 

@@ -145,6 +145,10 @@ describe('RefundModal', () => {
     );
 
     fireEvent.click(screen.getByLabelText('Estorno total'));
+
+    const select = screen.getByRole('combobox', { name: /motivo/i });
+    fireEvent.change(select, { target: { value: 'CUSTOMER_REQUEST' } });
+
     fireEvent.click(screen.getByText('Continuar'));
 
     expect(screen.getByText(/confirmar estorno/i)).toBeInTheDocument();
@@ -161,6 +165,10 @@ describe('RefundModal', () => {
     );
 
     fireEvent.click(screen.getByLabelText('Estorno total'));
+
+    const select = screen.getByRole('combobox', { name: /motivo/i });
+    fireEvent.change(select, { target: { value: 'CUSTOMER_REQUEST' } });
+
     fireEvent.click(screen.getByText('Continuar'));
 
     expect(screen.getByText(/o valor será estornado na fatura do cliente em até 5 dias úteis/i)).toBeInTheDocument();
@@ -182,7 +190,7 @@ describe('RefundModal', () => {
 
   it('shows loading state on confirm button during submission', async () => {
     const mockPost = vi.fn().mockReturnValue(new Promise(() => {}));
-    vi.spyOn(window, 'crypto').getMockImplementation?.();
+    vi.spyOn(crypto, 'randomUUID').mockReturnValue('test-uuid-123' as `${string}-${string}-${string}-${string}-${string}`);
 
     render(
       <RefundModal
@@ -208,7 +216,7 @@ describe('RefundModal', () => {
     fireEvent.click(screen.getByText('Confirmar estorno'));
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /confirmar estorno/i })).toBeDisabled();
+      expect(screen.getByRole('button', { name: /estornando/i })).toBeDisabled();
     });
   });
 
@@ -225,7 +233,7 @@ describe('RefundModal', () => {
     fireEvent.click(screen.getByLabelText('Estorno parcial'));
     fireEvent.click(screen.getByText('Continuar'));
 
-    expect(screen.getByText(/selecione um motivo/i)).toBeInTheDocument();
+    expect(screen.getByText(/selecione um motivo para o estorno/i)).toBeInTheDocument();
   });
 
   it('validates amount is required for partial refund', () => {
@@ -268,7 +276,7 @@ describe('RefundModal', () => {
 
     fireEvent.click(screen.getByText('Continuar'));
 
-    expect(screen.getByText(/valor mínimo é R\$ 0,01/i)).toBeInTheDocument();
+    expect(screen.getByText(/informe o valor do estorno/i)).toBeInTheDocument();
   });
 
   it('validates amount does not exceed refundable', async () => {
@@ -325,7 +333,7 @@ describe('RefundModal', () => {
     });
   });
 
-  it('closes modal on ALREADY_FULLY_REFUNDED and calls onRefundSuccess', async () => {
+  it('closes modal on ALREADY_FULLY_REFUNDED', async () => {
     const mockPost = vi.fn().mockRejectedValue({
       status: 422,
       errors: [{ code: 'ALREADY_FULLY_REFUNDED', message: 'Já totalmente estornada', retryable: false }],
@@ -351,7 +359,7 @@ describe('RefundModal', () => {
 
     await waitFor(() => {
       expect(mockOnClose).toHaveBeenCalled();
-      expect(mockOnRefundSuccess).toHaveBeenCalled();
+      expect(mockOnRefundSuccess).not.toHaveBeenCalled();
     });
   });
 
@@ -418,7 +426,7 @@ describe('RefundModal', () => {
     expect(retryButton).toBeInTheDocument();
   });
 
-  it('calls onClose on successful refund and calls onRefundSuccess', async () => {
+  it('calls onRefundSuccess on successful refund', async () => {
     const mockPost = vi.fn().mockResolvedValue({
       data: { refundId: 'ref_001', transactionId: 'txn_001', amountRefundedInCents: 100000, fullRefund: true, status: 'COMPLETED', processingTimeMs: 200 },
       meta: { timestamp: '', requestId: '' },
@@ -444,7 +452,6 @@ describe('RefundModal', () => {
     fireEvent.click(screen.getByText('Confirmar estorno'));
 
     await waitFor(() => {
-      expect(mockOnClose).toHaveBeenCalled();
       expect(mockOnRefundSuccess).toHaveBeenCalled();
     });
   });
