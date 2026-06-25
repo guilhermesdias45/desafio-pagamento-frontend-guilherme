@@ -9,8 +9,8 @@ import type {
 } from '@/types/auth';
 
 interface TwoFactorVerifyPageProps {
-  apiClient: IApiClient;
-  authContext: IAuthContext;
+  apiClient?: IApiClient;
+  authContext?: IAuthContext;
   navigate?: (path: string) => void;
   twoFactorToken?: string;
   email?: string;

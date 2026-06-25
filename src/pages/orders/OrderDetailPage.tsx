@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { ApiClient } from '@/lib/api-client';
 import { Spinner } from '@/components/ui/Spinner';
@@ -7,7 +8,7 @@ import { Button } from '@/components/ui/Button';
 import type { OrderDetail, OrderStatus } from '@/types/order';
 
 interface Props {
-  orderId: string;
+  orderId?: string;
   apiClient?: ApiClient;
   navigate?: (path: string) => void;
 }
@@ -42,7 +43,9 @@ const formatDate = (iso: string) =>
     minute: '2-digit',
   }).format(new Date(iso));
 
-export function OrderDetailPage({ orderId, apiClient: externalClient, navigate }: Props) {
+export function OrderDetailPage({ orderId: propOrderId, apiClient: externalClient, navigate }: Props) {
+  const { orderId: paramOrderId } = useParams<{ orderId: string }>();
+  const orderId = propOrderId ?? paramOrderId ?? '';
   const { token } = useAuth();
   const apiClient = useMemo(() => externalClient ?? new ApiClient(() => token), [externalClient, token]);
   const goTo = useCallback((path: string) => {

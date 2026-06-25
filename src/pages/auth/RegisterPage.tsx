@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 import type { IApiClient, IAuthContext, UserRole, RegisterRequest, RegisterResponse, ApiError } from '@/types/auth';
 
 interface RegisterPageProps {
-  apiClient: IApiClient;
+  apiClient?: IApiClient;
   authContext?: IAuthContext;
   navigate?: (path: string) => void;
 }
@@ -136,7 +136,7 @@ export function RegisterPage({ apiClient, navigate }: RegisterPageProps) {
         return;
       }
 
-      redirect(`/auth/confirm-email?email=${encodeURIComponent(email)}`);
+      redirect(`/confirm-email?email=${encodeURIComponent(email)}`);
     } catch {
       setServerError('Erro de conexão. Tente novamente.');
     } finally {

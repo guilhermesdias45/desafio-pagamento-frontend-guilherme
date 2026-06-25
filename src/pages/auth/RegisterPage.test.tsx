@@ -74,7 +74,7 @@ describe('RegisterPage', () => {
       );
     });
 
-    expect(navigate).toHaveBeenCalledWith('/auth/confirm-email?email=test%40test.com');
+    expect(navigate).toHaveBeenCalledWith('/confirm-email?email=test%40test.com');
   });
 
   it('submits MERCHANT_OWNER registration with company data', async () => {

@@ -1,13 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { ApiClient } from '@/lib/api-client';
+import { useAuth } from '@/contexts/AuthContext';
 import { Spinner } from '@/components/ui/Spinner';
 import { ErrorMessage } from '@/components/ui/ErrorMessage';
 import { CardForm } from '@/pages/checkout/CardForm';
 import type { OrderDetail } from '@/types/order';
-import type { PaymentResultData } from '@/types/checkout';
+import type { PaymentResultData, MercadoPagoInstance } from '@/types/checkout';
 
-export function CheckoutPage() {
+interface Props {
+  apiClient?: ApiClient;
+}
+
+export function CheckoutPage({ apiClient: externalClient }: Props = {}) {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const orderId = searchParams.get('orderId') || '';
@@ -15,6 +20,17 @@ export function CheckoutPage() {
   const [order, setOrder] = useState<OrderDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const apiClient = useMemo(() => externalClient ?? new ApiClient(() => null), [externalClient]);
+  const { token: authToken } = useAuth();
+
+  const mercadoPagoInstance = useMemo<MercadoPagoInstance | null>(() => {
+    const MP = (window as any).MercadoPago;
+    if (typeof MP === 'function') {
+      return new MP('TEST-123', { locale: 'pt-BR' }) as MercadoPagoInstance;
+    }
+    return null;
+  }, []);
 
   useEffect(() => {
     if (!orderId) {
@@ -31,7 +47,6 @@ export function CheckoutPage() {
     setError(null);
 
     try {
-      const apiClient = new ApiClient(() => null);
       const result = await apiClient.get<OrderDetail>(`/api/v1/orders/${orderId}`);
       setOrder(result);
     } catch (err: unknown) {
@@ -39,16 +54,12 @@ export function CheckoutPage() {
       if (apiErr.errors && apiErr.errors.length > 0) {
         setError(apiErr.errors[0].message || 'Erro ao carregar pedido');
       } else {
-        setError('Erro de conexão. Verifique sua internet.');
+        setError('Falha na conexão com o servidor');
       }
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchOrder();
-  }, [orderId]);
 
   const handlePaymentComplete = (result: PaymentResultData) => {
     if (result.status === 'APPROVED') {
@@ -162,15 +173,24 @@ export function CheckoutPage() {
       </div>
 
       {order.status === 'PENDING' ? (
-        <CardForm
-          orderId={orderId}
-          amountInCents={order.totalInCents}
-          customerId={order.customerId}
-          merchantId={order.merchantId}
-          authToken={null}
-          onPaymentComplete={handlePaymentComplete}
-          onError={handleError}
-        />
+        mercadoPagoInstance ? (
+          <CardForm
+            orderId={orderId}
+            amountInCents={order.totalInCents}
+            customerId={order.customerId}
+            merchantId={order.merchantId}
+            authToken={authToken}
+            mercadoPagoInstance={mercadoPagoInstance}
+            onPaymentComplete={handlePaymentComplete}
+            onError={handleError}
+          />
+        ) : (
+          <div className="bg-red-50 border border-red-200 rounded-md p-4">
+            <p className="text-sm text-red-800">
+              SDK de pagamento não carregado. Tente novamente mais tarde.
+            </p>
+          </div>
+        )
       ) : (
         <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
           <p className="text-sm text-yellow-800">

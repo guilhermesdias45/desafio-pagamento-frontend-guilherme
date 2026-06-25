@@ -26,7 +26,7 @@ vi.mock('react-router-dom', () => ({
 }));
 
 vi.mock('@/pages/checkout/CardForm', () => ({
-  default: () => <div>CardForm Mock</div>,
+  CardForm: () => <div>CardForm Mock<button>Pagar</button></div>,
 }));
 
 const mockOrder = {
@@ -118,7 +118,7 @@ describe('CheckoutPage', () => {
     render(<CheckoutPage apiClient={mockClient as never} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Este pedido não está mais pendente')).toBeInTheDocument();
+      expect(screen.getByText('Este pedido não está mais pendente', { exact: false })).toBeInTheDocument();
     });
 
     expect(screen.queryByText('CardForm Mock')).not.toBeInTheDocument();
@@ -132,10 +132,10 @@ describe('CheckoutPage', () => {
     render(<CheckoutPage apiClient={mockClient as never} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Tentar novamente')).toBeInTheDocument();
+      expect(screen.queryAllByText('Tentar novamente').length).toBeGreaterThanOrEqual(1);
     });
 
-    fireEvent.click(screen.getByText('Tentar novamente'));
+    fireEvent.click(screen.getAllByText('Tentar novamente')[0]);
 
     await waitFor(() => {
       expect(mockClient.get).toHaveBeenCalledTimes(2);

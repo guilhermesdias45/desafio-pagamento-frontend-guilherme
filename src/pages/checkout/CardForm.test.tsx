@@ -7,6 +7,10 @@ const mockOnPaymentComplete = vi.fn();
 const mockOnError = vi.fn();
 const mockPostTransaction = vi.fn();
 
+function createMockMercadoPago(resolvedValue: { id: string }) {
+  return { cardToken: vi.fn().mockResolvedValue(resolvedValue) };
+}
+
 const defaultProps = {
   orderId: 'ord_123',
   amountInCents: 123456,
@@ -14,6 +18,7 @@ const defaultProps = {
   onPaymentComplete: mockOnPaymentComplete,
   onError: mockOnError,
   postTransaction: mockPostTransaction,
+  mercadoPagoInstance: createMockMercadoPago({ id: 'tok_default' }),
 };
 
 function fillForm(overrides?: Record<string, string>) {
@@ -205,10 +210,7 @@ describe('CardForm', () => {
 
   describe('Loading state (CHECKOUT-05)', () => {
     it('shows spinner and disables button during submission', async () => {
-      const mpCardToken = vi.fn().mockResolvedValue({ id: 'tok_test_123' });
-      (window as any).MercadoPago = vi.fn().mockImplementation(() => ({
-        cardToken: mpCardToken,
-      }));
+      const mpMock = createMockMercadoPago({ id: 'tok_test_123' });
 
       const postMock = vi.fn().mockImplementation(
         () =>
@@ -231,7 +233,7 @@ describe('CardForm', () => {
       );
 
       render(
-        <CardForm {...defaultProps} postTransaction={postMock} />,
+        <CardForm {...defaultProps} postTransaction={postMock} mercadoPagoInstance={mpMock} />,
       );
 
       fillForm();
@@ -245,10 +247,7 @@ describe('CardForm', () => {
 
   describe('Full submission flow (CHECKOUT-03, CHECKOUT-04)', () => {
     it('calls MercadoPago.cardToken and POST on valid form', async () => {
-      const mpCardToken = vi.fn().mockResolvedValue({ id: 'tok_test_456' });
-      (window as any).MercadoPago = vi.fn().mockImplementation(() => ({
-        cardToken: mpCardToken,
-      }));
+      const mpMock = createMockMercadoPago({ id: 'tok_test_456' });
 
       const postMock = vi.fn().mockResolvedValue({
         data: {
@@ -262,14 +261,14 @@ describe('CardForm', () => {
       });
 
       render(
-        <CardForm {...defaultProps} postTransaction={postMock} />,
+        <CardForm {...defaultProps} postTransaction={postMock} mercadoPagoInstance={mpMock} />,
       );
 
       fillForm();
       fireEvent.click(screen.getByRole('button', { name: /pagar/i }));
 
       await waitFor(() => {
-        expect(mpCardToken).toHaveBeenCalledWith(
+        expect(mpMock.cardToken).toHaveBeenCalledWith(
           expect.objectContaining({
             cardNumber: '4111111111111111',
             cardholderName: 'João Silva',
@@ -303,10 +302,7 @@ describe('CardForm', () => {
     });
 
     it('handles API error response with failure details', async () => {
-      const mpCardToken = vi.fn().mockResolvedValue({ id: 'tok_test_err' });
-      (window as any).MercadoPago = vi.fn().mockImplementation(() => ({
-        cardToken: mpCardToken,
-      }));
+      const mpMock = createMockMercadoPago({ id: 'tok_test_err' });
 
       const postMock = vi.fn().mockResolvedValue({
         data: null,
@@ -314,7 +310,7 @@ describe('CardForm', () => {
       });
 
       render(
-        <CardForm {...defaultProps} postTransaction={postMock} />,
+        <CardForm {...defaultProps} postTransaction={postMock} mercadoPagoInstance={mpMock} />,
       );
 
       fillForm();

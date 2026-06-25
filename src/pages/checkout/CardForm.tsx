@@ -17,7 +17,7 @@ export interface CardFormProps {
   customerId: string;
   merchantId?: string;
   authToken?: string;
-  mercadoPagoInstance?: MercadoPagoInstance;
+  mercadoPagoInstance: MercadoPagoInstance;
   onPaymentComplete: (result: PaymentResultData) => void;
   onError: (error: string) => void;
   postTransaction?: (url: string, body: unknown) => Promise<{
@@ -217,33 +217,15 @@ export function CardForm({
     try {
       let tokenId: string;
 
-      if (mercadoPagoInstance) {
-        const mpData: MercadoPagoCardTokenRequest = {
-          cardNumber: cardNumber,
-          expirationMonth: formData.expiryMonth,
-          expirationYear: formData.expiryYear,
-          securityCode: cvv,
-          cardholderName: cardholderName,
-        };
-        const tokenResponse: MercadoPagoCardTokenResponse = await mercadoPagoInstance.cardToken(mpData);
-        tokenId = tokenResponse.id;
-      } else {
-        const MP = (window as any).MercadoPago;
-        if (typeof MP === 'function') {
-          const mpInstance = new MP('TEST-123', { locale: 'pt-BR' });
-          const mpData: MercadoPagoCardTokenRequest = {
-            cardNumber: cardNumber,
-            expirationMonth: formData.expiryMonth,
-            expirationYear: formData.expiryYear,
-            securityCode: cvv,
-            cardholderName: cardholderName,
-          };
-          const tokenResponse: MercadoPagoCardTokenResponse = await mpInstance.cardToken(mpData);
-          tokenId = tokenResponse.id;
-        } else {
-          throw new Error('MP_SDK_ERROR');
-        }
-      }
+      const mpData: MercadoPagoCardTokenRequest = {
+        cardNumber: cardNumber,
+        expirationMonth: formData.expiryMonth,
+        expirationYear: formData.expiryYear,
+        securityCode: cvv,
+        cardholderName: cardholderName,
+      };
+      const tokenResponse: MercadoPagoCardTokenResponse = await mercadoPagoInstance.cardToken(mpData);
+      tokenId = tokenResponse.id;
 
       const postFn = postTransaction || ((url: string, body: unknown) => {
         const headers: Record<string, string> = {
@@ -295,12 +277,8 @@ export function CardForm({
           retryable: data.retryable,
         });
       }
-    } catch (err: any) {
-      if (err.message === 'MP_SDK_ERROR') {
-        onError('Não foi possível processar seu cartão. Tente novamente.');
-      } else {
-        onError('Erro de conexão. Tente novamente.');
-      }
+    } catch {
+      onError('Erro de conexão. Tente novamente.');
     } finally {
       setSubmitting(false);
     }

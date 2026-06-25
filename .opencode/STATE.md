@@ -1,6 +1,6 @@
 # State — Frontend Pipeline
 
-**Last updated:** 2026-06-22
+**Last updated:** 2026-06-25
 
 ## Current Cycle
 
@@ -13,7 +13,7 @@
     | 3 | Code | Order + Checkout | ✅ Complete |
     | 4 | Analyse | Merchant | ✅ Complete |
     | 4 | Code | Merchant | ✅ Complete |
-    | 5 | Integration | Checkout + E2E + STATE update | 🔄 In Progress |
+    | 5 | Integration | App.tsx DI + AuthProvider + E2E + Docker + STATE update | 🔄 In Progress |
 
 ## Area Status
 
@@ -41,18 +41,25 @@
   - CHECKOUT-15 (CheckoutPage integration with front-order)
 
 - **Verificações de Qualidade:**
-  - **TSLint/TypeCheck:** ✅ 0 erros
+  - **TSLint/TypeCheck:** ⚠️ 11 erros no App.tsx (props obrigatórias não injetadas nas rotas)
   - **Build:** ✅ `vite build` bem-sucedido
-  - **Testes:** ✅ 224/233 pass (9 pré-existentes)
+   - **Testes:** ✅ 231/240 pass (9 pré-existentes: contrast 1, AuthContext 3, ConfirmEmail 5)
   - **E2E:** ⚠️ Não configurado (requer Playwright setup)
 
-- **Conclusão:** Todos os requisitos CHECKOUT estão implementados e testados unitariamente. O pipeline de Integração-Phase 5 requer apenas a configuração de E2E e atualização final do STATE.md.
+- **Conclusão:** Código de todas as 5 áreas completo (spec + código + review + docs + testes). Integração Phase 5 está em andamento — os itens restantes são de orquestração (App.tsx, AuthProvider, E2E, Docker) e correções de qualidade (TS errors, testes pré-existentes, interfaces inconsistentes).
 
 ## Active Blockers
 
 | ID | Area | Description | Status |
 |----|------|-------------|--------|
-| — | — | — | — |
+| B01 | App | AuthProvider não envolve as rotas — `useAuth()` quebra em runtime | 🔴 Open |
+| B02 | App | Páginas auth exigem `apiClient`/`authContext` como props required mas não recebem | 🔴 Open |
+| B03 | App | `OrderDetailPage` exige `orderId` prop required — rota `/orders/:orderId` crasha | 🔴 Open |
+| B04 | App | `TransactionDetailPage` exige `transactionId` prop required — rota crasha | 🔴 Open |
+| B05 | App | `PaymentResult` exige `result`/`onRetry`/`onViewOrder` — rota `/checkout/result` crasha | 🔴 Open |
+| B06 | checkout | `CardForm` usa `window.MercadoPago` e `window.__AUTH_TOKEN__` — viola DIP/PCI | 🟡 Open |
+| B07 | shared | `IAuthContext` interface difere do `AuthContext` real — DI contract quebrado | 🟡 Open |
+| B08 | shared | `IApiClient.get()` retorna `Promise<ApiResponse<T>>` mas real retorna `Promise<T>` | 🟡 Open |
 
 ## Decisions Log
 

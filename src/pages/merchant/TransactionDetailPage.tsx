@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { ApiClient } from '@/lib/api-client';
 import { Spinner } from '@/components/ui/Spinner';
@@ -9,7 +10,7 @@ import type { TransactionDetail } from '@/types/merchant';
 import { STATUS_BADGE_CLASSES, STATUS_LABELS } from '@/types/merchant';
 
 interface Props {
-  transactionId: string;
+  transactionId?: string;
   apiClient?: ApiClient;
   navigate?: (path: string) => void;
 }
@@ -29,7 +30,9 @@ const formatDate = (iso: string) =>
 const isRefundable = (status: string) =>
   status === 'APPROVED' || status === 'PARTIALLY_REFUNDED';
 
-export function TransactionDetailPage({ transactionId, apiClient: externalClient, navigate }: Props) {
+export function TransactionDetailPage({ transactionId: propTransactionId, apiClient: externalClient, navigate }: Props) {
+  const { transactionId: paramTransactionId } = useParams<{ transactionId: string }>();
+  const transactionId = propTransactionId ?? paramTransactionId ?? '';
   const { token, user } = useAuth();
   const apiClient = useMemo(() => externalClient ?? new ApiClient(() => token), [externalClient, token]);
   const goBack = useCallback(() => {

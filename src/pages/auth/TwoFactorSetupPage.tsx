@@ -6,8 +6,8 @@ import type {
 } from '@/types/auth';
 
 interface TwoFactorSetupPageProps {
-  apiClient: IApiClient;
-  authContext: IAuthContext;
+  apiClient?: IApiClient;
+  authContext?: IAuthContext;
   navigate?: (path: string) => void;
 }
 

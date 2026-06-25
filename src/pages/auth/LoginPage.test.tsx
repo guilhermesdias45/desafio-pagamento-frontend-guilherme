@@ -86,7 +86,7 @@ describe('LoginPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Entrar' }));
 
     await waitFor(() => {
-      expect(navigate).toHaveBeenCalledWith('/auth/2fa/verify?token=2fa_token_abc&email=user%40test.com');
+      expect(navigate).toHaveBeenCalledWith('/2fa/verify?token=2fa_token_abc&email=user%40test.com');
     });
   });
 
@@ -136,7 +136,7 @@ describe('LoginPage', () => {
       expect(screen.getByText('Confirme seu email antes de fazer login')).toBeInTheDocument();
       expect(screen.getByRole('link', { name: 'Confirmar email' })).toHaveAttribute(
         'href',
-        '/auth/confirm-email?email=user%40test.com'
+        '/confirm-email?email=user%40test.com'
       );
     });
   });

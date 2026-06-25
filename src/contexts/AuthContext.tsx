@@ -26,6 +26,7 @@ interface AuthContextValue {
   login: (email: string, password: string, totpCode?: string) => Promise<void>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
+  setSession: (accessToken: string, userData: User) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -98,6 +99,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser(data.data.user);
   }
 
+  async function setSession(accessToken: string, userData: User) {
+    setToken(accessToken);
+    setUser(userData);
+  }
+
   async function logout() {
     try {
       await fetch('/api/v1/auth/logout', {
@@ -120,6 +126,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     login,
     logout,
     refresh,
+    setSession,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

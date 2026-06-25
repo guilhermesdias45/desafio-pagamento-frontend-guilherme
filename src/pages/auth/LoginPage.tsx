@@ -8,8 +8,8 @@ import type {
 } from '@/types/auth';
 
 interface LoginPageProps {
-  apiClient: IApiClient;
-  authContext: IAuthContext;
+  apiClient?: IApiClient;
+  authContext?: IAuthContext;
   navigate?: (path: string) => void;
 }
 
@@ -71,7 +71,7 @@ export function LoginPage({ apiClient, authContext, navigate }: LoginPageProps) 
       }
 
       if (data.requiresTwoFactor) {
-        redirect(`/auth/2fa/verify?token=${encodeURIComponent(data.twoFactorToken)}&email=${encodeURIComponent(email)}`);
+        redirect(`/2fa/verify?token=${encodeURIComponent(data.twoFactorToken)}&email=${encodeURIComponent(email)}`);
         return;
       }
 
@@ -96,9 +96,9 @@ export function LoginPage({ apiClient, authContext, navigate }: LoginPageProps) 
       {serverError && (
         <div style={{ color: 'red', marginBottom: 8, fontSize: 14 }}>
           {serverError}
-          {serverError.includes('Confirme seu email') && (
-            <span> <a href={`/auth/confirm-email?email=${encodeURIComponent(email)}`}>Confirmar email</a></span>
-          )}
+            {serverError.includes('Confirme seu email') && (
+              <span> <a href={`/confirm-email?email=${encodeURIComponent(email)}`}>Confirmar email</a></span>
+            )}
         </div>
       )}
 

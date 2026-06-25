@@ -2,7 +2,7 @@ import { useState, useEffect, type FormEvent } from 'react';
 import type { IApiClient, ConfirmEmailRequest } from '@/types/auth';
 
 interface ConfirmEmailPageProps {
-  apiClient: IApiClient;
+  apiClient?: IApiClient;
   navigate?: (path: string) => void;
 }
 
@@ -49,7 +49,7 @@ export function ConfirmEmailPage({ apiClient, navigate }: ConfirmEmailPageProps)
       }
 
       setSuccess(true);
-      setTimeout(() => redirect('/auth/login'), 1500);
+      setTimeout(() => redirect('/login'), 1500);
     } catch {
       setError('Erro de conexão. Tente novamente.');
     } finally {
