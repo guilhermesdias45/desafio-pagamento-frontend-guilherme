@@ -4,8 +4,8 @@ import { hexToRgb, relativeLuminance, contrastRatio } from './contrast';
 
 describe('contrast utilities', () => {
   describe('hexToRgb', () => {
-    it('converts #5B8DEE correctly', () => {
-      expect(hexToRgb('#5B8DEE')).toEqual([91, 141, 238]);
+    it('converts #3366CC correctly', () => {
+      expect(hexToRgb('#3366CC')).toEqual([51, 102, 204]);
     });
 
     it('converts #FFFFFF correctly', () => {

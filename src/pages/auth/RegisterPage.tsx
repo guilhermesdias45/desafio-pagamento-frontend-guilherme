@@ -59,7 +59,8 @@ function getErrorMessage(code: string): string | null {
   }
 }
 
-export function RegisterPage({ apiClient, navigate }: RegisterPageProps) {
+export function RegisterPage({ apiClient: _apiClient, navigate }: RegisterPageProps) {
+  const apiClient = _apiClient!;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');

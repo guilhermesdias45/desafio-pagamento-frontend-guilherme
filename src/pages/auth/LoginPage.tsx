@@ -13,7 +13,9 @@ interface LoginPageProps {
   navigate?: (path: string) => void;
 }
 
-export function LoginPage({ apiClient, authContext, navigate }: LoginPageProps) {
+export function LoginPage({ apiClient: _apiClient, authContext: _authContext, navigate }: LoginPageProps) {
+  const apiClient = _apiClient!;
+  const authContext = _authContext!;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [serverError, setServerError] = useState<string | null>(null);

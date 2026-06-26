@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { COLORS } from './palette';
 
 describe('Palette', () => {
-  it('primary should be #5B8DEE', () => {
-    expect(COLORS.primary).toBe('#5B8DEE');
+  it('primary should be #3366CC', () => {
+    expect(COLORS.primary).toBe('#3366CC');
   });
 
   it('cream should be #FEFCF5', () => {

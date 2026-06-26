@@ -11,7 +11,9 @@ interface TwoFactorSetupPageProps {
   navigate?: (path: string) => void;
 }
 
-export function TwoFactorSetupPage({ apiClient, authContext, navigate }: TwoFactorSetupPageProps) {
+export function TwoFactorSetupPage({ apiClient: _apiClient, authContext: _authContext, navigate }: TwoFactorSetupPageProps) {
+  const apiClient = _apiClient!;
+  const authContext = _authContext!;
   const [setup, setSetup] = useState<TwoFactorSetupResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

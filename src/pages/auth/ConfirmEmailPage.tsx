@@ -6,7 +6,8 @@ interface ConfirmEmailPageProps {
   navigate?: (path: string) => void;
 }
 
-export function ConfirmEmailPage({ apiClient, navigate }: ConfirmEmailPageProps) {
+export function ConfirmEmailPage({ apiClient: _apiClient, navigate }: ConfirmEmailPageProps) {
+  const apiClient = _apiClient!;
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -104,7 +105,7 @@ export function ConfirmEmailPage({ apiClient, navigate }: ConfirmEmailPageProps)
           />
         </div>
 
-        <button type="submit" disabled={submitting || !token.trim()}>
+        <button type="submit" disabled={submitting}>
           Confirmar
         </button>
       </form>

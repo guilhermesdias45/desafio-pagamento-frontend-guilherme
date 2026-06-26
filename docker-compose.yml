@@ -395,6 +395,26 @@ services:
     networks:
       - aom-network
 
+  # ─── Frontend (profile: app) ────────────────────────────────────────────────
+  # Iniciar com: docker compose --profile app up --build
+  # Após iniciar, acessar em http://localhost
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: aom/frontend:latest
+    container_name: aom-frontend
+    restart: unless-stopped
+    profiles: ["app"]
+    ports:
+      - "80:80"
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    networks:
+      - aom-network
+
   # ─── Monitoramento (profile: monitoring) ───────────────────────────────────
   # Iniciar com: docker compose --profile monitoring up -d
 

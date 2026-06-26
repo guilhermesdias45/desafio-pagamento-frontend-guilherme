@@ -10,6 +10,12 @@ function createMockClient() {
   };
 }
 
+import type { MercadoPagoInstance } from '@/types/checkout';
+
+const mockMercadoPagoInstance: MercadoPagoInstance = {
+  cardToken: vi.fn().mockResolvedValue({ id: 'tok_test' }),
+};
+
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => ({
     user: { id: 'customer_123', email: 'test@test.com', fullName: 'Test', role: 'CUSTOMER' },
@@ -102,7 +108,7 @@ describe('CheckoutPage', () => {
   it('renders CardForm when order is PENDING', async () => {
     mockClient.get.mockResolvedValue(mockOrder);
 
-    render(<CheckoutPage apiClient={mockClient as never} />);
+    render(<CheckoutPage apiClient={mockClient as never} mercadoPagoInstance={mockMercadoPagoInstance} />);
 
     await waitFor(() => {
       expect(screen.getByText('CardForm Mock')).toBeInTheDocument();

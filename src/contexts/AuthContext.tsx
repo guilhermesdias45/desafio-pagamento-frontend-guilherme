@@ -64,6 +64,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (!response.ok) {
         setIsLoading(false);
+        window.location.href = '/login';
         return;
       }
 
@@ -71,12 +72,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setToken(data.data.accessToken);
       setUser(data.data.user);
       setIsLoading(false);
-    } catch (error) {
+    } catch {
       setIsLoading(false);
-      // If refresh fails and we were authenticated, redirect to login
-      if (user) {
-        window.location.href = '/login';
-      }
+      window.location.href = '/login';
     }
   }
 

@@ -10,9 +10,10 @@ import type { PaymentResultData, MercadoPagoInstance } from '@/types/checkout';
 
 interface Props {
   apiClient?: ApiClient;
+  mercadoPagoInstance?: MercadoPagoInstance;
 }
 
-export function CheckoutPage({ apiClient: externalClient }: Props = {}) {
+export function CheckoutPage({ apiClient: externalClient, mercadoPagoInstance: externalMp }: Props = {}) {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const orderId = searchParams.get('orderId') || '';
@@ -25,12 +26,13 @@ export function CheckoutPage({ apiClient: externalClient }: Props = {}) {
   const { token: authToken } = useAuth();
 
   const mercadoPagoInstance = useMemo<MercadoPagoInstance | null>(() => {
+    if (externalMp) return externalMp;
     const MP = (window as any).MercadoPago;
     if (typeof MP === 'function') {
       return new MP('TEST-123', { locale: 'pt-BR' }) as MercadoPagoInstance;
     }
     return null;
-  }, []);
+  }, [externalMp]);
 
   useEffect(() => {
     if (!orderId) {
@@ -179,7 +181,7 @@ export function CheckoutPage({ apiClient: externalClient }: Props = {}) {
             amountInCents={order.totalInCents}
             customerId={order.customerId}
             merchantId={order.merchantId}
-            authToken={authToken}
+            authToken={authToken ?? undefined}
             mercadoPagoInstance={mercadoPagoInstance}
             onPaymentComplete={handlePaymentComplete}
             onError={handleError}

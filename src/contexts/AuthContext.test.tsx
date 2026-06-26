@@ -69,17 +69,24 @@ describe('AuthContext', () => {
       );
       const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
 
-      await waitFor(() => {
-        expect(result.current.isLoading).toBe(true);
+      await vi.waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
       });
+
+      expect(result.current.isAuthenticated).toBe(false);
+      expect(result.current.user).toBeNull();
+      expect(result.current.token).toBeNull();
     });
   });
 
   describe('login', () => {
     it('calls POST /api/v1/auth/login and stores token + user', async () => {
-      createMockFetch({ ok: true, status: 200 }, { data: mockAuthResponse, errors: [] });
+      createMockFetch({ ok: true, status: 200 }, { data: mockAuthResponse, errors: [] }); // refresh on mount
+      createMockFetch({ ok: true, status: 200 }, { data: mockAuthResponse, errors: [] }); // login
 
       const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+
+      await vi.waitFor(() => expect(result.current.isLoading).toBe(false));
 
       await act(async () => {
         await result.current.login('test@acaboumony.com', 'password123');
@@ -119,10 +126,13 @@ describe('AuthContext', () => {
 
   describe('logout', () => {
     it('calls POST /api/v1/auth/logout and clears state', async () => {
-      createMockFetch({ ok: true, status: 200 }, { data: mockAuthResponse, errors: [] });
-      createMockFetch({ ok: true, status: 200 }, { data: null, errors: [] });
+      createMockFetch({ ok: true, status: 200 }, { data: mockAuthResponse, errors: [] }); // refresh on mount
+      createMockFetch({ ok: true, status: 200 }, { data: mockAuthResponse, errors: [] }); // login
+      createMockFetch({ ok: true, status: 200 }, { data: null, errors: [] }); // logout
 
       const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+
+      await vi.waitFor(() => expect(result.current.isLoading).toBe(false));
 
       await act(async () => {
         await result.current.login('test@acaboumony.com', 'password123');

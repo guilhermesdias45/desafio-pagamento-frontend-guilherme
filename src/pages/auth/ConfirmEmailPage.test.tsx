@@ -21,12 +21,8 @@ function errorResponse(code: string): ApiResponse<null> {
 }
 
 describe('ConfirmEmailPage', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
   afterEach(() => {
-    vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('renders form with email and token inputs when no token in URL', () => {

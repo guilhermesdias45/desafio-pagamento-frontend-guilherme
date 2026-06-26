@@ -17,12 +17,14 @@ interface TwoFactorVerifyPageProps {
 }
 
 export function TwoFactorVerifyPage({
-  apiClient,
-  authContext,
+  apiClient: _apiClient,
+  authContext: _authContext,
   navigate,
   twoFactorToken: tokenProp,
   email: emailProp,
 }: TwoFactorVerifyPageProps) {
+  const apiClient = _apiClient!;
+  const authContext = _authContext!;
   const [totpCode, setTotpCode] = useState('');
   const [recoveryCode, setRecoveryCode] = useState('');
   const [useRecovery, setUseRecovery] = useState(false);
@@ -152,7 +154,7 @@ export function TwoFactorVerifyPage({
             {submitting ? 'Verificando...' : 'Verificar'}
           </button>
 
-          <button type="button" onClick={() => { setUseRecovery(true); setError(null); }} style={{ background: 'none', border: 'none', color: '#5B8DEE', cursor: 'pointer', textDecoration: 'underline', marginTop: 8 }}>
+          <button type="button" onClick={() => { setUseRecovery(true); setError(null); }} style={{ background: 'none', border: 'none', color: '#3366CC', cursor: 'pointer', textDecoration: 'underline', marginTop: 8 }}>
             Usar código de recuperação
           </button>
         </form>
@@ -174,7 +176,7 @@ export function TwoFactorVerifyPage({
             {submitting ? 'Verificando...' : 'Verificar'}
           </button>
 
-          <button type="button" onClick={() => { setUseRecovery(false); setError(null); }} style={{ background: 'none', border: 'none', color: '#5B8DEE', cursor: 'pointer', textDecoration: 'underline', marginTop: 8 }}>
+          <button type="button" onClick={() => { setUseRecovery(false); setError(null); }} style={{ background: 'none', border: 'none', color: '#3366CC', cursor: 'pointer', textDecoration: 'underline', marginTop: 8 }}>
             Usar código TOTP
           </button>
         </form>
