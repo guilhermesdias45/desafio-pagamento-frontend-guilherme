@@ -1,9 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 
-const API_BASE = 'http://localhost:8080';
-
 async function mockRefresh(page: Page, status = 401) {
-  await page.route(`${API_BASE}/api/v1/auth/refresh`, async (route) => {
+  await page.route('**/api/v1/auth/refresh', async (route) => {
     await route.fulfill({
       status,
       contentType: 'application/json',
@@ -17,7 +15,7 @@ async function mockRefresh(page: Page, status = 401) {
 }
 
 async function mockLogin(page: Page, status = 200, overrides: Record<string, unknown> = {}) {
-  await page.route(`${API_BASE}/api/v1/auth/login`, async (route) => {
+  await page.route('**/api/v1/auth/login', async (route) => {
     const body = JSON.stringify({
       data: {
         accessToken: 'eyJhbGciOiJIUzI1NiJ9.mock',
@@ -77,7 +75,7 @@ test.describe('Login Page', () => {
   });
 
   test('shows error on network failure', async ({ page }) => {
-    await page.route(`${API_BASE}/api/v1/auth/login`, async (route) => {
+    await page.route('**/api/v1/auth/login', async (route) => {
       await route.abort('connectionrefused');
     });
     await page.goto('/login');

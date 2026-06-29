@@ -133,6 +133,11 @@ export function LoginPage({ apiClient: _apiClient, authContext: _authContext, na
           {submitting ? 'Entrando...' : 'Entrar'}
         </button>
       </form>
+
+      <p style={{ marginTop: 16, fontSize: 14, textAlign: 'center' }}>
+        Não tem conta?{' '}
+        <a href="/register">Cadastre-se</a>
+      </p>
     </div>
   );
 }

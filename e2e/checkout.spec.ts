@@ -1,7 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
 
-const API_BASE = 'http://localhost:8080';
-
 const MOCK_USER = {
   id: 'user-123',
   email: 'user@test.com',
@@ -14,7 +12,7 @@ const MOCK_USER = {
 };
 
 async function mockAuthenticatedSession(page: Page) {
-  await page.route(`${API_BASE}/api/v1/auth/refresh`, async (route) => {
+  await page.route('**/api/v1/auth/refresh', async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -31,7 +29,7 @@ async function mockAuthenticatedSession(page: Page) {
     });
   });
 
-  await page.route(`${API_BASE}/api/v1/auth/logout`, async (route) => {
+  await page.route('**/api/v1/auth/logout', async (route) => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
   });
 }

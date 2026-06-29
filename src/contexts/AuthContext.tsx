@@ -43,6 +43,8 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+const PUBLIC_ROUTES = ['/login', '/register', '/confirm-email', '/2fa/verify', '/2fa/setup'];
+
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -51,7 +53,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const isAuthenticated = !!user && !!token;
 
   useEffect(() => {
-    // Try to restore session on mount
     refresh();
   }, []);
 
@@ -64,7 +65,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (!response.ok) {
         setIsLoading(false);
-        window.location.href = '/login';
+        if (!PUBLIC_ROUTES.includes(window.location.pathname)) {
+          window.location.href = '/login';
+        }
         return;
       }
 
@@ -74,7 +77,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setIsLoading(false);
     } catch {
       setIsLoading(false);
-      window.location.href = '/login';
+      if (!PUBLIC_ROUTES.includes(window.location.pathname)) {
+        window.location.href = '/login';
+      }
     }
   }
 
