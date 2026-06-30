@@ -1,4 +1,5 @@
 import React from 'react';
+import { DesignTokens } from '@/lib/design-tokens';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -10,15 +11,33 @@ export function Input({ label, error, className = '', id, ...props }: InputProps
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={inputId} className="text-sm font-medium text-gray-700">
+      <label
+        htmlFor={inputId}
+        className="text-sm font-medium"
+        style={{ color: DesignTokens.colors.text.secondary }}
+      >
         {label}
       </label>
       <input
         id={inputId}
-        className={`px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${className}`.trim()}
+        className={`px-3 py-2 border rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${className}`.trim()}
+        style={{
+          borderColor: error ? DesignTokens.colors.status.error.value : DesignTokens.colors.border.default,
+          ':focus': {
+            borderColor: error ? DesignTokens.colors.status.error.value : DesignTokens.colors.border.focus,
+            ringColor: error ? DesignTokens.colors.status.error.value : DesignTokens.colors.border.focus,
+          },
+        }}
         {...props}
       />
-      {error && <span className="text-sm text-red-600">{error}</span>}
+      {error && (
+        <span
+          className="text-sm font-medium"
+          style={{ color: DesignTokens.colors.status.error.value }}
+        >
+          {error}
+        </span>
+      )}
     </div>
   );
 }

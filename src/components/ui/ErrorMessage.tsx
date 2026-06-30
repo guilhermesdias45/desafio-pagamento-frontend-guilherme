@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from './Button';
+import { DesignTokens } from '@/lib/design-tokens';
 
 export interface ErrorMessageProps {
   title: string;
@@ -9,10 +10,18 @@ export interface ErrorMessageProps {
 
 export function ErrorMessage({ title, message, onRetry }: ErrorMessageProps) {
   return (
-    <div className="bg-red-50 border border-red-200 rounded-md p-4">
+    <div
+      className="rounded-md p-4 shadow-md"
+      style={{
+        backgroundColor: DesignTokens.colors.status.error.light,
+        borderColor: DesignTokens.colors.status.error.value,
+        borderWidth: '1px',
+      }}
+    >
       <div className="flex items-start gap-3">
         <svg
-          className="h-6 w-6 text-red-600 flex-shrink-0"
+          className="h-6 w-6 flex-shrink-0"
+          style={{ color: DesignTokens.colors.status.error.value }}
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -26,11 +35,31 @@ export function ErrorMessage({ title, message, onRetry }: ErrorMessageProps) {
           />
         </svg>
         <div className="flex-1">
-          <h3 className="text-sm font-medium text-red-800">{title}</h3>
-          <p className="mt-1 text-sm text-red-700">{message}</p>
+          <h3
+            className="text-sm font-semibold"
+            style={{ color: DesignTokens.colors.status.error.dark }}
+          >
+            {title}
+          </h3>
+          <p
+            className="mt-1 text-sm"
+            style={{ color: DesignTokens.colors.status.error.value }}
+          >
+            {message}
+          </p>
           {onRetry && (
             <div className="mt-3">
-              <Button variant="danger" onClick={onRetry} className="text-sm">
+              <Button
+                variant="danger"
+                onClick={onRetry}
+                className="text-sm px-3 py-1.5"
+                style={{
+                  backgroundColor: DesignTokens.colors.status.error.value,
+                  ':hover': {
+                    backgroundColor: DesignTokens.colors.status.error.dark,
+                  },
+                }}
+              >
                 Tentar novamente
               </Button>
             </div>

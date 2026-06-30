@@ -1,5 +1,8 @@
 import { useState, type FormEvent } from 'react';
 import type { IApiClient, IAuthContext, UserRole, RegisterRequest, RegisterResponse, ApiError } from '@/types/auth';
+import { Card, Button } from '@/components/ui';
+import { Input } from '@/components/ui/Input';
+import { DesignTokens } from '@/lib/design-tokens';
 
 interface RegisterPageProps {
   apiClient?: IApiClient;

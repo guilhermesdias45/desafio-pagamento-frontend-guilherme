@@ -6,6 +6,9 @@ import type {
   LoginRequiresTwoFactorResponse,
   AuthUser,
 } from '@/types/auth';
+import { decodeJwt } from '@/lib/jwt';
+import { Card, Button } from '@/components/ui';
+import { Input } from '@/components/ui/Input';
 
 interface LoginPageProps {
   apiClient?: IApiClient;
@@ -77,11 +80,12 @@ export function LoginPage({ apiClient: _apiClient, authContext: _authContext, na
         return;
       }
 
+      const claims = decodeJwt(data.accessToken);
       authContext.login(data.accessToken, {
-        userId: '',
-        email,
-        role: 'CUSTOMER',
-        merchantId: null,
+        userId: claims?.sub ?? '',
+        email: claims?.email ?? email,
+        role: claims?.role ?? 'CUSTOMER',
+        merchantId: claims?.merchantId ?? null,
       } as AuthUser);
       redirect('/');
     } catch {
@@ -92,52 +96,66 @@ export function LoginPage({ apiClient: _apiClient, authContext: _authContext, na
   };
 
   return (
-    <div>
-      <h1>Entrar</h1>
+    <Card className="w-full max-w-md mx-auto">
+      <h1 className="text-2xl font-bold mb-6 text-center">Entrar</h1>
 
       {serverError && (
-        <div style={{ color: 'red', marginBottom: 8, fontSize: 14 }}>
-          {serverError}
-            {serverError.includes('Confirme seu email') && (
-              <span> <a href={`/confirm-email?email=${encodeURIComponent(email)}`}>Confirmar email</a></span>
-            )}
+        <div
+          className="bg-red-50 border border-red-200 rounded-md p-3 mb-4"
+          role="alert"
+        >
+          <p className="text-sm text-red-700 font-medium">{serverError}</p>
+          {serverError.includes('Confirme seu email') && (
+            <p className="text-sm mt-2">
+              <a
+                href={`/confirm-email?email=${encodeURIComponent(email)}`}
+                className="text-blue-600 hover:underline font-medium"
+              >
+                Confirmar email
+              </a>
+            </p>
+          )}
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="seu@email.com"
-          />
-        </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Input
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="seu@email.com"
+          required
+          disabled={submitting}
+        />
 
-        <div>
-          <label htmlFor="password">Senha</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            placeholder="Sua senha"
-          />
-        </div>
+        <Input
+          label="Senha"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Sua senha"
+          required
+          disabled={submitting}
+        />
 
-        <button type="submit" disabled={submitting || cooldownUntil !== null}>
+        <Button
+          type="submit"
+          fullWidth
+          loading={submitting}
+          disabled={submitting || cooldownUntil !== null}
+          className="text-base font-semibold"
+        >
           {submitting ? 'Entrando...' : 'Entrar'}
-        </button>
+        </Button>
       </form>
 
-      <p style={{ marginTop: 16, fontSize: 14, textAlign: 'center' }}>
+      <p className="mt-6 text-center text-sm text-gray-600">
         Não tem conta?{' '}
-        <a href="/register">Cadastre-se</a>
+        <a href="/register" className="text-blue-600 hover:underline font-medium">
+          Cadastre-se
+        </a>
       </p>
-    </div>
+    </Card>
   );
 }

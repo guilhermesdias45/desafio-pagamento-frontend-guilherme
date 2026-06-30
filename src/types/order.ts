@@ -18,10 +18,8 @@ export interface OrderItemDetail extends OrderItem {
 }
 
 export interface CreateOrderRequest {
-  customerId: string;
   merchantId: string;
   items: OrderItem[];
-  idempotencyKey: string;
 }
 
 export interface CreateOrderResponse {

@@ -8,7 +8,7 @@ export interface GuestRouteProps {
 }
 
 export function GuestRoute({ children }: GuestRouteProps) {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
 
   if (isLoading) {
     return (
@@ -19,7 +19,11 @@ export function GuestRoute({ children }: GuestRouteProps) {
   }
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
+    // Redirect authenticated users to dashboard based on role
+    if (user?.role === 'MERCHANT_OWNER') {
+      return <Navigate to="/merchant/transactions" replace />;
+    }
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;

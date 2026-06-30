@@ -1,4 +1,5 @@
 import React from 'react';
+import { DesignTokens } from '@/lib/design-tokens';
 
 export type SpinnerSize = 'sm' | 'md' | 'lg';
 
@@ -16,6 +17,7 @@ export function Spinner({ size = 'md' }: SpinnerProps) {
   return (
     <svg
       className={`animate-spin ${sizeClasses[size]}`}
+      style={{ color: DesignTokens.colors.primary[500] }}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
@@ -27,6 +29,7 @@ export function Spinner({ size = 'md' }: SpinnerProps) {
         r="10"
         stroke="currentColor"
         strokeWidth="4"
+        strokeOpacity="0.25"
       ></circle>
       <path
         className="opacity-75"

@@ -16,7 +16,7 @@ export function createOrder(
   const idempotencyKey = crypto.randomUUID();
   return apiClient.post<CreateOrderRequest, CreateOrderResponse>(
     '/api/v1/orders',
-    { ...data, idempotencyKey },
+    data,
     { merchantId, idempotencyKey },
   );
 }

@@ -3,22 +3,19 @@ import { render, screen } from '@testing-library/react';
 import { AuthProvider } from '../contexts/AuthContext';
 import { ProtectedRoute } from './ProtectedRoute';
 import { MemoryRouter } from 'react-router-dom';
+import { createMockJwt } from '@/test/jwt-helper';
 
-const mockUser = {
-  id: 'user_1',
+const mockToken = createMockJwt({
+  sub: 'user_1',
   email: 'test@acaboumony.com',
-  fullName: 'Test User',
-  role: 'CUSTOMER' as const,
-  emailVerified: true,
-  twoFactorEnabled: false,
-  createdAt: '2026-01-01T00:00:00.000Z',
-};
+  role: 'CUSTOMER',
+  merchantId: null,
+});
 
 const mockAuthResponse = {
-  accessToken: 'test-jwt',
+  accessToken: mockToken,
   tokenType: 'Bearer' as const,
   expiresIn: 3600,
-  user: mockUser,
 };
 
 function createMockFetch(body: unknown) {

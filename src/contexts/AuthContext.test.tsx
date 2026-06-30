@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, renderHook, act, waitFor } from '@testing-library/react';
 import { AuthProvider, useAuth } from './AuthContext';
+import { createMockJwt } from '@/test/jwt-helper';
 
 const mockUser = {
   id: 'user_1',
@@ -12,8 +13,15 @@ const mockUser = {
   createdAt: '2026-01-01T00:00:00.000Z',
 };
 
+const mockToken = createMockJwt({
+  sub: 'user_1',
+  email: 'test@acaboumony.com',
+  role: 'CUSTOMER',
+  merchantId: null,
+});
+
 const mockAuthResponse = {
-  accessToken: 'test-jwt',
+  accessToken: mockToken,
   tokenType: 'Bearer' as const,
   expiresIn: 3600,
   user: mockUser,
@@ -58,8 +66,10 @@ describe('AuthContext', () => {
       });
 
       expect(result.current.isAuthenticated).toBe(true);
-      expect(result.current.user).toEqual(mockUser);
-      expect(result.current.token).toBe('test-jwt');
+      expect(result.current.token).toBe(mockToken);
+      expect(result.current.user?.id).toBe('user_1');
+      expect(result.current.user?.email).toBe('test@acaboumony.com');
+      expect(result.current.user?.role).toBe('CUSTOMER');
     });
 
     it('remains unauthenticated when refresh fails with 401', async () => {
@@ -100,8 +110,10 @@ describe('AuthContext', () => {
         }),
       );
       expect(result.current.isAuthenticated).toBe(true);
-      expect(result.current.user).toEqual(mockUser);
-      expect(result.current.token).toBe('test-jwt');
+      expect(result.current.token).toBe(mockToken);
+      expect(result.current.user?.id).toBe('user_1');
+      expect(result.current.user?.email).toBe('test@acaboumony.com');
+      expect(result.current.user?.role).toBe('CUSTOMER');
     });
 
     it('throws ApiError on login failure', async () => {
@@ -147,7 +159,7 @@ describe('AuthContext', () => {
       expect(fetch).toHaveBeenCalledWith('/api/v1/auth/logout', expect.objectContaining({
         method: 'POST',
         headers: expect.objectContaining({
-          Authorization: 'Bearer test-jwt',
+          Authorization: `Bearer ${mockToken}`,
         }),
       }));
       expect(result.current.isAuthenticated).toBe(false);

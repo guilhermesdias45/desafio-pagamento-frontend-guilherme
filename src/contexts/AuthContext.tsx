@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { decodeJwt } from '@/lib/jwt';
 
 interface User {
   id: string;
@@ -9,13 +10,6 @@ interface User {
   emailVerified: boolean;
   twoFactorEnabled: boolean;
   createdAt: string;
-}
-
-interface AuthResponse {
-  accessToken: string;
-  tokenType: 'Bearer';
-  expiresIn: number;
-  user: User;
 }
 
 interface AuthContextValue {
@@ -71,9 +65,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return;
       }
 
-      const data: { data: AuthResponse; errors: [] } = await response.json();
-      setToken(data.data.accessToken);
-      setUser(data.data.user);
+      const json = await response.json();
+      const accessToken = json.accessToken ?? json.data?.accessToken;
+
+      if (!accessToken) {
+        setIsLoading(false);
+        if (!PUBLIC_ROUTES.includes(window.location.pathname)) {
+          window.location.href = '/login';
+        }
+        return;
+      }
+
+      setToken(accessToken);
+
+      const claims = decodeJwt(accessToken);
+      if (claims) {
+        setUser({
+          id: claims.sub,
+          email: claims.email,
+          fullName: claims.email,
+          role: claims.role === 'STAFF' ? 'CUSTOMER' : claims.role,
+          merchantId: claims.merchantId ?? undefined,
+          emailVerified: true,
+          twoFactorEnabled: false,
+          createdAt: new Date().toISOString(),
+        });
+      }
+
       setIsLoading(false);
     } catch {
       setIsLoading(false);
@@ -94,12 +112,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.errors[0]?.message || 'Login failed');
+      throw new Error(errorData.errors?.[0]?.message || 'Login failed');
     }
 
-    const data: { data: AuthResponse; errors: [] } = await response.json();
-    setToken(data.data.accessToken);
-    setUser(data.data.user);
+    const json = await response.json();
+    const accessToken = json.accessToken ?? json.data?.accessToken;
+
+    if (accessToken) {
+      setToken(accessToken);
+      const claims = decodeJwt(accessToken);
+      if (claims) {
+        setUser({
+          id: claims.sub,
+          email: claims.email,
+          fullName: claims.email,
+          role: claims.role === 'STAFF' ? 'CUSTOMER' : claims.role,
+          merchantId: claims.merchantId ?? undefined,
+          emailVerified: true,
+          twoFactorEnabled: false,
+          createdAt: new Date().toISOString(),
+        });
+      }
+    }
   }
 
   async function setSession(accessToken: string, userData: User) {

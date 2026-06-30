@@ -1,4 +1,5 @@
 import React from 'react';
+import { DesignTokens } from '@/lib/design-tokens';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost';
 
@@ -10,11 +11,13 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-primary text-white hover:bg-blue-600',
-  secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300',
-  danger: 'bg-red-600 text-white hover:bg-red-700',
-  ghost: 'bg-transparent text-primary hover:bg-gray-100',
+  primary: `bg-[${DesignTokens.colors.primary[500]}] text-white hover:bg-[${DesignTokens.colors.primary[600]}] focus:ring-2 focus:ring-[${DesignTokens.colors.primary[400]}] focus:ring-offset-2`,
+  secondary: `bg-[${DesignTokens.colors.background.gray[200]}] text-[${DesignTokens.colors.text.primary}] hover:bg-[${DesignTokens.colors.background.gray[300]}] focus:ring-2 focus:ring-[${DesignTokens.colors.background.gray[400]}] focus:ring-offset-2`,
+  danger: `bg-[${DesignTokens.colors.status.error.value}] text-white hover:bg-[${DesignTokens.colors.status.error.dark}] focus:ring-2 focus:ring-[${DesignTokens.colors.status.error.value}] focus:ring-offset-2`,
+  ghost: `bg-transparent text-[${DesignTokens.colors.primary[500]}] hover:bg-[${DesignTokens.colors.background.gray[50]}] focus:ring-2 focus:ring-[${DesignTokens.colors.primary[400]}] focus:ring-offset-2`,
 };
+
+const baseClasses = 'px-4 py-2 rounded-md font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none';
 
 export function Button({
   variant = 'primary',
@@ -25,7 +28,6 @@ export function Button({
   disabled,
   ...props
 }: ButtonProps) {
-  const baseClasses = 'px-4 py-2 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
   const widthClass = fullWidth ? 'w-full' : '';
   const variantClass = variantClasses[variant];
 
@@ -37,7 +39,12 @@ export function Button({
     >
       {loading ? (
         <span className="flex items-center justify-center gap-2">
-          <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg
+            className="animate-spin h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path
               className="opacity-75"

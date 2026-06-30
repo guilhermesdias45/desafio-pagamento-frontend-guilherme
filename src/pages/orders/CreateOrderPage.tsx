@@ -101,10 +101,8 @@ export function CreateOrderPage({ apiClient: externalClient, navigate }: Props) 
       const response = await apiClient.post<CreateOrderRequest, CreateOrderResponse>(
         '/api/v1/orders',
         {
-          customerId: user?.id ?? '',
           merchantId,
           items: items.map(({ id, ...rest }) => rest),
-          idempotencyKey,
         },
         { merchantId, idempotencyKey },
       );

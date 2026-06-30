@@ -192,13 +192,13 @@ export function OrderDetailPage({ orderId: propOrderId, apiClient: externalClien
           )}
         </div>
 
-        {isPaid && (
-          <div className="pt-2">
-            <Button variant="primary" onClick={() => goTo(`/transactions/${order.transactionId}`)}>
-              Ver Transação
-            </Button>
-          </div>
-        )}
+      {isPaid && (
+        <div className="pt-2">
+          <Button variant="primary" onClick={() => goTo(`/merchant/transactions/${order.transactionId}`)}>
+            Ver Transação
+          </Button>
+        </div>
+      )}
       </div>
 
       <div className="mt-6">

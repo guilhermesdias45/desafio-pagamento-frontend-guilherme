@@ -76,25 +76,33 @@ export class ApiClient {
         headers,
       });
 
-      const data: ApiResponse<T> = await response.json();
+      const json = await response.json();
+
+      // Detecta se é formato { data: T, errors: [] } ou JSON puro
+      const isWrapped = json && typeof json === 'object' && 'data' in json;
 
       if (!response.ok) {
-        // Handle 401 - try refresh and retry once
-        if (response.status === 401 && url !== '/api/v1/auth/refresh') {
-          try {
-            await this.refreshToken();
-            // Retry the original request
-            return this.request<T>(url, options);
-          } catch {
-            // Refresh failed, throw original error
-            throw new ApiError(response.status, data.errors, data.meta?.requestId);
+        if (isWrapped) {
+          const wrapped = json as ApiResponse<T>;
+          // Handle 401 - try refresh and retry once
+          if (response.status === 401 && url !== '/api/v1/auth/refresh') {
+            try {
+              await this.refreshToken();
+              return this.request<T>(url, options);
+            } catch {
+              throw new ApiError(response.status, wrapped.errors, wrapped.meta?.requestId);
+            }
           }
+          throw new ApiError(response.status, wrapped.errors, wrapped.meta?.requestId);
         }
 
-        throw new ApiError(response.status, data.errors, data.meta?.requestId);
+        // JSON puro (user-service style) — tenta extrair de ProblemDetail
+        const errCode = json?.errorCode || 'UNKNOWN';
+        const errMsg = json?.detail || json?.message || 'Erro desconhecido';
+        throw new ApiError(response.status, [{ code: errCode, message: errMsg, retryable: false }]);
       }
 
-      return data.data as T;
+      return isWrapped ? (json.data as T) : (json as T);
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
