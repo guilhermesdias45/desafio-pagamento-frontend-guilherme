@@ -1,12 +1,10 @@
 import { useState, type FormEvent } from 'react';
-import type { IApiClient, IAuthContext, UserRole, RegisterRequest, RegisterResponse, ApiError } from '@/types/auth';
+import type { IApiClient, UserRole, RegisterRequest, RegisterResponse } from '@/types/auth';
 import { Card, Button } from '@/components/ui';
 import { Input } from '@/components/ui/Input';
-import { DesignTokens } from '@/lib/design-tokens';
 
 interface RegisterPageProps {
   apiClient?: IApiClient;
-  authContext?: IAuthContext;
   navigate?: (path: string) => void;
 }
 
@@ -61,6 +59,12 @@ function getErrorMessage(code: string): string | null {
       return null;
   }
 }
+
+const roleStyles = `
+  w-full px-3 py-2 border rounded-md transition-all duration-200
+  focus:outline-none focus:ring-2 focus:ring-offset-2
+  text-base bg-white
+`;
 
 export function RegisterPage({ apiClient: _apiClient, navigate }: RegisterPageProps) {
   const apiClient = _apiClient!;
@@ -149,63 +153,69 @@ export function RegisterPage({ apiClient: _apiClient, navigate }: RegisterPagePr
   };
 
   return (
-    <div>
-      <h1>Criar Conta</h1>
+    <Card className="w-full max-w-md mx-auto">
+      <h1 className="text-2xl font-bold mb-6 text-center">Criar Conta</h1>
 
       {serverError && (
-        <div style={{ color: 'red', marginBottom: 8 }}>{serverError}</div>
+        <div
+          className="bg-red-50 border border-red-200 rounded-md p-3 mb-4"
+          role="alert"
+        >
+          <p className="text-sm text-red-700 font-medium">{serverError}</p>
+        </div>
       )}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="seu@email.com"
-          />
-        </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Input
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="seu@email.com"
+          required
+          disabled={submitting}
+        />
+
+        <Input
+          label="Senha"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Mínimo 8 caracteres"
+          required
+          disabled={submitting}
+          error={weakPasswordErrors ? 'Requisitos de senha' : undefined}
+        />
+        {weakPasswordErrors && (
+          <ul className="text-xs text-red-600 space-y-0.5 -mt-3">
+            {weakPasswordErrors.map((err, i) => (
+              <li key={i} className="flex items-center gap-1">
+                <span>•</span> {err}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <Input
+          label="Nome Completo"
+          type="text"
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
+          placeholder="Seu nome completo"
+          required
+          disabled={submitting}
+        />
 
         <div>
-          <label htmlFor="password">Senha</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            placeholder="Mínimo 8 caracteres"
-          />
-          {weakPasswordErrors && (
-            <ul style={{ color: 'red', fontSize: 12 }}>
-              {weakPasswordErrors.map((err, i) => (
-                <li key={i}>{err}</li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="fullName">Nome Completo</label>
-          <input
-            id="fullName"
-            type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-            placeholder="Seu nome completo"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="role">Tipo de Conta</label>
+          <label htmlFor="role" className="block text-sm font-medium mb-1">
+            Tipo de Conta
+          </label>
           <select
             id="role"
             value={role}
             onChange={(e) => setRole(e.target.value as UserRole)}
+            className={roleStyles}
+            disabled={submitting}
           >
             <option value="CUSTOMER">Cliente</option>
             <option value="MERCHANT_OWNER">Proprietário de Loja</option>
@@ -214,43 +224,47 @@ export function RegisterPage({ apiClient: _apiClient, navigate }: RegisterPagePr
 
         {role === 'MERCHANT_OWNER' && (
           <>
-            <div>
-              <label htmlFor="companyName">Nome da Empresa</label>
-              <input
-                id="companyName"
-                type="text"
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
-                placeholder="Razão social"
-                data-missing={missingMerchantFields?.includes('companyName') ? 'true' : undefined}
-              />
-              {missingMerchantFields?.includes('companyName') && (
-                <span style={{ color: 'red' }}>Campo obrigatório</span>
-              )}
-            </div>
+            <Input
+              label="Nome da Empresa"
+              type="text"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              placeholder="Razão social"
+              required
+              disabled={submitting}
+              error={missingMerchantFields?.includes('companyName') ? 'Campo obrigatório' : undefined}
+            />
 
-            <div>
-              <label htmlFor="cnpj">CNPJ</label>
-              <input
-                id="cnpj"
-                type="text"
-                value={cnpj}
-                onChange={(e) => handleCnpjChange(e.target.value)}
-                placeholder="XX.XXX.XXX/XXXX-XX"
-                maxLength={18}
-                data-missing={missingMerchantFields?.includes('cnpj') ? 'true' : undefined}
-              />
-              {missingMerchantFields?.includes('cnpj') && (
-                <span style={{ color: 'red' }}>Campo obrigatório</span>
-              )}
-            </div>
+            <Input
+              label="CNPJ"
+              type="text"
+              value={cnpj}
+              onChange={(e) => handleCnpjChange(e.target.value)}
+              placeholder="XX.XXX.XXX/XXXX-XX"
+              required
+              disabled={submitting}
+              error={missingMerchantFields?.includes('cnpj') ? 'Campo obrigatório' : undefined}
+            />
           </>
         )}
 
-        <button type="submit" disabled={submitting}>
+        <Button
+          type="submit"
+          fullWidth
+          loading={submitting}
+          disabled={submitting}
+          className="text-base font-semibold"
+        >
           {submitting ? 'Cadastrando...' : 'Cadastrar'}
-        </button>
+        </Button>
       </form>
-    </div>
+
+      <p className="mt-6 text-center text-sm text-gray-600">
+        Já tem conta?{' '}
+        <a href="/login" className="text-blue-600 hover:underline font-medium">
+          Entrar
+        </a>
+      </p>
+    </Card>
   );
 }

@@ -23,10 +23,6 @@ export function Input({ label, error, className = '', id, ...props }: InputProps
         className={`px-3 py-2 border rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${className}`.trim()}
         style={{
           borderColor: error ? DesignTokens.colors.status.error.value : DesignTokens.colors.border.default,
-          ':focus': {
-            borderColor: error ? DesignTokens.colors.status.error.value : DesignTokens.colors.border.focus,
-            ringColor: error ? DesignTokens.colors.status.error.value : DesignTokens.colors.border.focus,
-          },
         }}
         {...props}
       />

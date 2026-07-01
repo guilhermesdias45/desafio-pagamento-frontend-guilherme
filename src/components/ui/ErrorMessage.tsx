@@ -55,9 +55,6 @@ export function ErrorMessage({ title, message, onRetry }: ErrorMessageProps) {
                 className="text-sm px-3 py-1.5"
                 style={{
                   backgroundColor: DesignTokens.colors.status.error.value,
-                  ':hover': {
-                    backgroundColor: DesignTokens.colors.status.error.dark,
-                  },
                 }}
               >
                 Tentar novamente
